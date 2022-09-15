@@ -17,11 +17,13 @@
     "jsx": "react-jsx",
     "baseUrl": "./",
     "paths": {
-      "@routes/*": ["src/routes/*"],
+      "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
-      "@store/*": ["src/store/*"],
-      "@lib/*": ["src/lib/*"],
       "@hooks/*": ["src/hooks/*"],
+      "@lib/*": ["src/lib/*"],
+      "@routes/*": ["src/routes/*"],
+      "@store/*": ["src/store/*"],
+      "@styles/*": ["src/styles/*"],
       "@typedef/*": ["src/typedef/*"]
     }
   },

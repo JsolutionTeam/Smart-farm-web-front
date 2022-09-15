@@ -4,11 +4,13 @@
   border: 0;
   outline: 0;
   box-sizing: border-box;
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: 'Noto Sans KR', sans-serif;
   list-style: none;
   text-decoration: none;
 }
 
 html {
+  width: 100vw;
+  height: 100vh;
   font-size: 16px;
-}/*# sourceMappingURL=core.css.map */
+} /*# sourceMappingURL=core.css.map */
