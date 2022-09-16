@@ -4,12 +4,14 @@ import img from '@assets/image';
 const Login = () => {
   return (
     <Main>
-      <header>로그인</header>
-      <Inputs>
-        <input autoFocus placeholder='아이디' />
-        <input placeholder='비밀번호' />
-        <button type='button'>로그인</button>
-      </Inputs>
+      <LoginBox>
+        <header>로그인</header>
+        <Inputs>
+          <input autoFocus placeholder='아이디' />
+          <input placeholder='비밀번호' />
+          <button type='button'>로그인</button>
+        </Inputs>
+      </LoginBox>
     </Main>
   );
 };
@@ -20,6 +22,18 @@ const radius = '8px';
 const space = '60px';
 
 export const Main = styled.main`
+  width: 100%;
+  height: 100%;
+  ${({ theme }) => theme.flex.col}
+  align-items: center;
+  justify-content: center;
+
+  @media ${({ theme }) => theme.media.mobile} {
+    padding: 0 40px;
+  }
+`;
+
+export const LoginBox = styled.main`
   width: 508px;
   ${({ theme }) => theme.flex.col}
   align-items: center;

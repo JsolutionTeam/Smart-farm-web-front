@@ -10,9 +10,9 @@ const RootNavigation = () => {
       <Header>
         <h3>스마트팜 혁신밸리</h3>
       </Header>
-      <Body isLogin>
+      <Body>
         <Routes>
-          <Route path='*' element={<LoginContainer />} />
+          <Route path='*' element={<MainNavigation />} />
         </Routes>
         <Copyright>
           Copyright &copy; 스마트팜 혁신밸리 All Rights Reserved.
@@ -40,14 +40,12 @@ const Header = styled.header`
 `;
 
 // 헤더 외 전체 영역
-const Body = styled.section<{ isLogin?: boolean }>`
+const Body = styled.section`
   width: 100%;
-  height: calc(100vh - 90px);
-  ${({ theme }) => theme.flex.col}
-  align-items: ${({ isLogin }) => isLogin && 'center'};
-  justify-content: ${({ isLogin }) => isLogin && 'center'};
-  padding: ${({ isLogin }) => isLogin && '40px'};
+  height: 100%;
+  min-height: calc(100vh - 90px);
   background-color: #edf1f2;
+  position: relative;
 `;
 
 // 카피라이트
