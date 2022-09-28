@@ -1,15 +1,31 @@
 import styled from 'styled-components';
 import img from '@assets/image';
 
-const Login = () => {
+type Props = {
+  onChangeInputs: (e: { target: HTMLInputElement }) => void;
+  onClickLogin: () => Promise<void>;
+};
+
+const Login = ({ onChangeInputs, onClickLogin }: Props) => {
   return (
     <Main>
       <LoginBox>
         <header>로그인</header>
         <Inputs>
-          <input autoFocus placeholder='아이디' />
-          <input placeholder='비밀번호' />
-          <button type='button'>로그인</button>
+          <input
+            name='id'
+            onChange={onChangeInputs}
+            autoFocus
+            placeholder='아이디'
+          />
+          <input
+            name='passwd'
+            onChange={onChangeInputs}
+            placeholder='비밀번호'
+          />
+          <button type='button' onClick={onClickLogin}>
+            로그인
+          </button>
         </Inputs>
       </LoginBox>
     </Main>
@@ -37,7 +53,6 @@ export const LoginBox = styled.main`
   width: 508px;
   ${({ theme }) => theme.flex.col}
   align-items: center;
-  transform: translate(0, -90px); // 헤더 포함 수직 정렬
   background-color: #fff;
   border: 1px solid #d8d8d8;
   border-radius: ${radius};

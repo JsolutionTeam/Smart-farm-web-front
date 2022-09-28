@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import GNBContainer from '@components/Common/GNB/containers/GNBContainer';
 import HomeContainer from '@components/Home/containers/HomeContainer';
 import PeriodContainer from '@components/Period/containers/PeriodContainer';
+import CompareContainer from '@components/Compare/containers/CompareContainer';
 import NotFound from '@components/Common/NotFound/NotFound';
 
 const MainNavigation = () => {
@@ -11,7 +12,8 @@ const MainNavigation = () => {
       <GNBContainer />
       <Routes>
         <Route path='/' element={<HomeContainer />} />
-        <Route path='/2' element={<PeriodContainer />} />
+        <Route path='/period' element={<PeriodContainer />} />
+        <Route path='/compare' element={<CompareContainer />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </Body>

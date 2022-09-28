@@ -1,8 +1,23 @@
 import Home from '../Home';
+import { useState, useEffect } from 'react';
+import { apiRoute, requestSecureGet } from '@lib/api';
 
-type Props = {};
+// 5초
+const HomeContainer = () => {
+  const getRealTimeData = async () => {
+    const { config, data } = await requestSecureGet(
+      apiRoute.site + `$/realtime`,
+      {},
+      'token',
+    );
+    if (config.status >= 200 && config.status < 400) {
+    }
+  };
 
-const HomeContainer = (props: Props) => {
+  useEffect(() => {
+    getRealTimeData();
+  }, []);
+
   return <Home />;
 };
 

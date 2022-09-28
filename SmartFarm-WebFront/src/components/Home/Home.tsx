@@ -34,7 +34,6 @@ const Home = (props: Props) => {
 export default Home;
 
 const Main = styled.main`
-  flex: 1;
   ${({ theme }) => theme.flex.col}
   align-items: center;
 `;
@@ -76,7 +75,7 @@ const Content = styled.div`
       font-weight: 500;
     }
     .big {
-      font-size: 40px;
+      font-size: 54px;
     }
   }
 

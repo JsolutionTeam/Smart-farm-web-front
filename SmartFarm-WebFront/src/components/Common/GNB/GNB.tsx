@@ -5,8 +5,8 @@ const GNB = () => {
   return (
     <GNBBox>
       <NavLink to='/'>실시간</NavLink>
-      <NavLink to='/2'>기간</NavLink>
-      <NavLink to='/3'>비교</NavLink>
+      <NavLink to='/period'>기간</NavLink>
+      <NavLink to='/compare'>비교</NavLink>
     </GNBBox>
   );
 };

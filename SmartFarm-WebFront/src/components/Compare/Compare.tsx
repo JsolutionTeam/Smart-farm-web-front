@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 import LineChart from '@components/Common/CChart/LineChart';
 import { ChartDataTypes } from '@typedef/components/Common/chart.data.types';
-import ReactDatePicker from 'react-datepicker';
 
-const Period = () => {
+const Compare = () => {
   return (
     <Main>
       <Contents>
@@ -14,9 +13,7 @@ const Period = () => {
           <option value='4'>그래프항목명</option>
         </select>
         <ChartBox>
-          <header>
-            <ReactDatePicker onChange={() => console.log()} selectsRange />
-          </header>
+          <header>날짜선택</header>
           <Chart>
             <h3>그래프제목</h3>
             <LineChart data={data} />
@@ -27,7 +24,7 @@ const Period = () => {
   );
 };
 
-export default Period;
+export default Compare;
 
 const Main = styled.main`
   ${({ theme }) => theme.flex.col}
@@ -89,6 +86,12 @@ const data: ChartDataTypes = {
       data: labels.map((_, idx) => 100 + idx),
       borderColor: '#058b6b',
       backgroundColor: '#058b6b',
+    },
+    {
+      label: 'Dataset 1',
+      data: labels.map((_, idx) => 120 + idx),
+      borderColor: '#ffa20d',
+      backgroundColor: '#ffa20d',
     },
   ],
 };

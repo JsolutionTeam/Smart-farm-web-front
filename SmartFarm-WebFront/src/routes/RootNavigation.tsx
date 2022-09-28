@@ -1,10 +1,13 @@
 import styled from 'styled-components';
 import { Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
+import useToken from '@hooks/useToken';
 import MainNavigation from './components/MainNavigation';
 import LoginContainer from '@components/Login/containers/LoginContainer';
 
 const RootNavigation = () => {
+  const { getToken } = useToken();
+
   return (
     <BrowserRouter>
       <Header>
@@ -12,7 +15,10 @@ const RootNavigation = () => {
       </Header>
       <Body>
         <Routes>
-          <Route path='*' element={<MainNavigation />} />
+          <Route
+            path='*'
+            element={getToken() ? <MainNavigation /> : <LoginContainer />}
+          />
         </Routes>
         <Copyright>
           Copyright &copy; 스마트팜 혁신밸리 All Rights Reserved.
