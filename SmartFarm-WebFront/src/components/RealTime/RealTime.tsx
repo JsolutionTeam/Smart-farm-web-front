@@ -1,29 +1,29 @@
 import styled from 'styled-components';
 import img from '@assets/image';
+import { realTimeListTypes } from '@typedef/components/RealTime/real.time.list.types';
+import { UnitTypes } from '@typedef/components/RealTime/unit.types';
 
-type Props = {};
+type Props = {
+  realTimeDataList: realTimeListTypes[];
+  setClassName: (unit: UnitTypes) => '' | 'big';
+};
 
-const Home = (props: Props) => {
+const RealTime = ({ realTimeDataList, setClassName }: Props) => {
   return (
     <Main>
       <Contents>
-        {temp.map((temp) => (
-          <Content key={temp.name}>
+        {realTimeDataList.map((content) => (
+          <Content key={content.name}>
             <section>
-              <p className='name'>{temp.name}</p>
+              <p className='name'>{content.name}</p>
               <p className='value'>
-                {temp.value}
-                <span
-                  className={
-                    temp.unit === '°C' || temp.unit === '%' || temp.unit === '°'
-                      ? 'big'
-                      : ''
-                  }>
-                  {temp.unit}
+                {content.value ? Math.round(content.value) : 0}
+                <span className={setClassName(content.unit)}>
+                  {content.unit}
                 </span>
               </p>
             </section>
-            <img src={temp.icon} alt={`${temp.name} 아이콘`} />
+            <img src={content.icon} alt={`${content.name} 아이콘`} />
           </Content>
         ))}
       </Contents>
@@ -31,7 +31,7 @@ const Home = (props: Props) => {
   );
 };
 
-export default Home;
+export default RealTime;
 
 const Main = styled.main`
   ${({ theme }) => theme.flex.col}
@@ -97,54 +97,3 @@ const Content = styled.div`
     }
   }
 `;
-
-const temp = [
-  {
-    name: '온도',
-    value: 12,
-    unit: '°C',
-    icon: img.IconTemperature,
-  },
-  {
-    name: '습도',
-    value: 12,
-    unit: '%',
-    icon: img.IconHumidity,
-  },
-  {
-    name: '일사량',
-    value: 12,
-    unit: 'W/㎡',
-    icon: img.IconSun,
-  },
-  {
-    name: 'CO2농도',
-    value: 12,
-    unit: 'ppm',
-    icon: img.IconCO2,
-  },
-  {
-    name: '강우량',
-    value: 12,
-    unit: 'mm',
-    icon: img.IconRain,
-  },
-  {
-    name: '지온',
-    value: 12,
-    unit: '°C',
-    icon: img.IconGeothermal,
-  },
-  {
-    name: '풍향',
-    value: 12,
-    unit: '°',
-    icon: img.IconWindDirection,
-  },
-  {
-    name: '풍속',
-    value: 12,
-    unit: 'm/s',
-    icon: img.IconWindSpeed,
-  },
-];

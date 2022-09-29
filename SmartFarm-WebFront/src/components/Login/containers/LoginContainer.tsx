@@ -2,9 +2,11 @@ import Login from '../Login';
 import { useState } from 'react';
 import { apiRoute, requestPost } from '@lib/api';
 import useToken from '@hooks/useToken';
+import useUser from '@hooks/useUser';
 
 const LoginContainer = () => {
   const { setToken } = useToken();
+  const { setUser } = useUser();
   const [inputs, setInputs] = useState<{ id: string; passwd: string }>({
     id: '',
     passwd: '',
@@ -20,7 +22,11 @@ const LoginContainer = () => {
 
   const onClickLogin = async () => {
     if (inputs.id && inputs.passwd) {
-      const { config, data } = await requestPost<{ accessToken: string }>(
+      const { config, data } = await requestPost<{
+        accessToken: string;
+        role: 'ROLE_ADMIN' | 'ROLE_USER';
+        siteSeq: number;
+      }>(
         apiRoute.auth.login,
         {},
         {
@@ -30,6 +36,10 @@ const LoginContainer = () => {
       );
       if (config.status >= 200 && config.status < 400) {
         setToken(data.accessToken);
+        setUser({
+          role: data.role,
+          siteSeq: data.siteSeq,
+        });
         window.location.reload();
       } else {
         alert('아이디 또는 비밀번호를 잘못 입력했습니다.');

@@ -85,12 +85,12 @@ export const Inputs = styled.section`
     font-size: 16px;
 
     &:first-child {
-      background-image: url(${img.IconId});
+      background-image: url(${img.IcId});
       border-radius: ${radius} ${radius} 0 0;
     }
 
     &:nth-child(2) {
-      background-image: url(${img.IconPasswd});
+      background-image: url(${img.IcPasswd});
       border-radius: 0 0 ${radius} ${radius};
     }
 
