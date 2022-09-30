@@ -38,7 +38,8 @@ const LoginContainer = () => {
         setToken(data.accessToken);
         setUser({
           role: data.role,
-          siteSeq: data.siteSeq,
+          siteSeq: 13,
+          // siteSeq: data.siteSeq,
         });
         window.location.reload();
       } else {

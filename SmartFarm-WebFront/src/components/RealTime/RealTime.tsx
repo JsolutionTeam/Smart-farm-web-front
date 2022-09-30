@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import img from '@assets/image';
 import { realTimeListTypes } from '@typedef/components/RealTime/real.time.list.types';
 import { UnitTypes } from '@typedef/components/RealTime/unit.types';
 

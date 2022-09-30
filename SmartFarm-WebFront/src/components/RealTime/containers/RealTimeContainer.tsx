@@ -11,6 +11,7 @@ import img from '@assets/image';
 const RealTimeContainer = () => {
   const { getToken } = useToken();
   const { getUser } = useUser();
+  const siteSeq = useMemo(() => getUser().siteSeq, [getUser]);
   const [realTimeData, setRealTimeData] = useState<RealTimeTypes>({
     co2: 0,
     co2RegTime: 0,
@@ -23,7 +24,6 @@ const RealTimeContainer = () => {
     windDirection: 0,
     windSpeed: 0,
   });
-  const siteSeq = useMemo(() => getUser().siteSeq, [getUser]);
   const realTimeDataList: realTimeListTypes[] = useMemo(
     () => [
       {
@@ -90,19 +90,19 @@ const RealTimeContainer = () => {
 
   const getRealTimeData = useCallback(async () => {
     const { config, data } = await requestSecureGet<RealTimeTypes[]>(
-      apiRoute.site + `13/realtime`,
+      apiRoute.site + `${siteSeq}/realtime`,
       {},
       getToken()!,
     );
     if (config.status >= 200 && config.status < 400) {
       setRealTimeData(data[0]);
     }
-  }, [getToken]);
+  }, [siteSeq, getToken]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       getRealTimeData();
-    }, 5000);
+    }, 50000000);
     return () => {
       clearInterval(interval);
     };

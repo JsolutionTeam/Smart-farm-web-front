@@ -1,25 +1,41 @@
 import styled from 'styled-components';
+import CSelectContainer from '@components/Common/CSelect/containers/CSelectContainer';
+import CDatePicker from '@components/Common/CDatePicker/CDatePicker';
 import LineChart from '@components/Common/CChart/LineChart';
 import { ChartDataTypes } from '@typedef/components/Common/chart.data.types';
-import ReactDatePicker from 'react-datepicker';
+import { ContentTypes } from '@typedef/assets/content.types';
 
-const Period = () => {
+type Props = {
+  selectedContent: ContentTypes;
+  onChangeContent: (content: ContentTypes) => void;
+  dateRange: {
+    start: Date;
+    end: Date;
+  };
+  onChangeDate: (name: 'start' | 'end', date: Date) => void;
+  applyDate: () => void;
+  chartData: ChartDataTypes;
+};
+
+const Period = ({
+  selectedContent,
+  onChangeContent,
+  dateRange,
+  onChangeDate,
+  applyDate,
+  chartData,
+}: Props) => {
   return (
     <Main>
       <Contents>
-        <select name='temp' id='temp'>
-          <option value='1'>그래프항목명</option>
-          <option value='2'>그래프항목명</option>
-          <option value='3'>그래프항목명</option>
-          <option value='4'>그래프항목명</option>
-        </select>
+        <CSelectContainer selected={selectedContent} func={onChangeContent} />
         <ChartBox>
           <header>
-            <ReactDatePicker onChange={() => console.log()} selectsRange />
+            <CDatePicker dateRange={dateRange} func={onChangeDate} />
           </header>
           <Chart>
-            <h3>그래프제목</h3>
-            <LineChart data={data} />
+            <h3>{selectedContent.name}</h3>
+            <LineChart data={chartData} />
           </Chart>
         </ChartBox>
       </Contents>
@@ -64,7 +80,9 @@ const ChartBox = styled.section`
   overflow: hidden;
   header {
     width: 100%;
-    height: 56px;
+    ${({ theme }) => theme.flex.row}
+    align-items: center;
+    justify-items: center;
     padding: 18px 30px;
     background-color: rgba(118, 118, 118, 0.05);
   }
@@ -78,17 +96,3 @@ const Chart = styled.section`
     font-size: 20px;
   }
 `;
-
-const labels = ['1일', '5일', '10일', '15일', '20일', '25일'];
-
-const data: ChartDataTypes = {
-  labels: labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: labels.map((_, idx) => 100 + idx),
-      borderColor: '#058b6b',
-      backgroundColor: '#058b6b',
-    },
-  ],
-};
