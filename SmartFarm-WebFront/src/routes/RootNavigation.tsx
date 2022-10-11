@@ -4,14 +4,19 @@ import { BrowserRouter } from 'react-router-dom';
 import useToken from '@hooks/useToken';
 import MainNavigation from './components/MainNavigation';
 import LoginContainer from '@components/Login/containers/LoginContainer';
+import useUser from '@hooks/useUser';
+import { useMemo } from 'react';
 
 const RootNavigation = () => {
   const { getToken } = useToken();
+  const { getUser } = useUser();
+  const role = useMemo(() => getUser().role, [getUser]);
 
   return (
     <BrowserRouter>
       <Header>
         <h3>스마트팜 혁신밸리</h3>
+        {role === 'ROLE_ADMIN' && <div>농장선택</div>}
       </Header>
       <Body>
         <Routes>
@@ -33,12 +38,19 @@ export default RootNavigation;
 // 헤더
 const Header = styled.header`
   width: 100%;
-  height: 90px;
+  height: 4.5vw;
   ${({ theme }) => theme.flex.row}
   align-items: center;
   justify-content: center;
+  border-bottom: 1px solid #e8e8e8;
+
+  div {
+    position: absolute;
+    right: 40px;
+  }
 
   @media ${({ theme }) => theme.media.mobile} {
+    height: 90px;
     h3 {
       font-size: 22px;
     }
@@ -49,7 +61,7 @@ const Header = styled.header`
 const Body = styled.section`
   width: 100%;
   height: 100%;
-  min-height: calc(100vh - 90px);
+  min-height: calc(100vh - 4.5vw);
   background-color: #edf1f2;
   position: relative;
 `;
@@ -57,8 +69,12 @@ const Body = styled.section`
 // 카피라이트
 const Copyright = styled.p`
   position: absolute;
-  bottom: 40px;
+  bottom: 2vw;
   left: 50%;
   transform: translate(-50%, 0);
   color: #999;
+
+  @media ${({ theme }) => theme.media.mobile} {
+    font-size: 12px;
+  }
 `;

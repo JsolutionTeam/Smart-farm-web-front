@@ -1,7 +1,8 @@
 const today = new Date();
 
-// 시작일
-export function getStartDate() {
+// 한 달 전
+// 오늘 날짜를 기준으로 한 달 전 00시 00분 00초
+export function getPrevMonth() {
   const startDate = new Date(
     today.getFullYear(),
     today.getMonth() - 1,
@@ -11,25 +12,13 @@ export function getStartDate() {
   return startDate;
 }
 
-// 종료일
-export function getEndDate() {
-  const endDate = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate(),
-    23,
-    59,
-    59,
-  );
-
-  return endDate;
-}
-
-export function setStartDate(date: Date) {
+// 00시 00분 00초
+export function setStartDate(date?: Date) {
+  const standard = date ?? today;
   const startDate = new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
+    standard.getFullYear(),
+    standard.getMonth(),
+    standard.getDate(),
     0,
     0,
     0,
@@ -38,11 +27,14 @@ export function setStartDate(date: Date) {
   return startDate;
 }
 
-export function setEndDate(date: Date) {
+// 23시 59분 59초
+export function setEndDate(date?: Date) {
+  const standard = date ?? today;
+
   const endDate = new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
+    standard.getFullYear(),
+    standard.getMonth(),
+    standard.getDate(),
     23,
     59,
     59,

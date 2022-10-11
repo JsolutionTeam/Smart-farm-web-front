@@ -1,9 +1,9 @@
 import Period from '../Period';
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import useToken from '@hooks/useToken';
 import useUser from '@hooks/useUser';
 import { apiRoute, requestSecureGet } from '@lib/api';
-import { getStartDate, getEndDate, setStartDate, setEndDate } from '@lib/date';
+import { setStartDate, setEndDate, getPrevMonth } from '@lib/date';
 import { ChartDataTypes } from '@typedef/components/Common/chart.data.types';
 import { ContentTypes } from '@typedef/assets/content.types';
 import { contents } from '@assets/content';
@@ -14,9 +14,9 @@ const PeriodContainer = () => {
   const { getToken } = useToken();
   const { getUser } = useUser();
   const siteSeq = useMemo(() => getUser().siteSeq, [getUser]);
-  const [dateRange, setDateRange] = useState<{ start: Date; end: Date }>({
-    start: getStartDate(),
-    end: getEndDate(),
+  const [selectedDate, setSelectedDate] = useState<{ start: Date; end: Date }>({
+    start: getPrevMonth(),
+    end: setEndDate(),
   });
   const [selectedContent, setSelectedContent] = useState<ContentTypes>(
     contents[0],
@@ -40,7 +40,6 @@ const PeriodContainer = () => {
     }),
     [filteredData, labels, selectedContent.value],
   );
-  const [reload, setReload] = useState<number>(0);
 
   const onChangeContent = (content: ContentTypes) => {
     setSelectedContent(content);
@@ -58,18 +57,15 @@ const PeriodContainer = () => {
       temp = setEndDate(date);
     }
 
-    setDateRange((dateRange) => ({
-      ...dateRange,
+    setSelectedDate((selectedDate) => ({
+      ...selectedDate,
       [name]: temp,
     }));
-
-    // API 재호출
-    setReload((reload) => reload + 1);
   };
 
   // 적용 버튼 선택 시 차트 데이터 변경
   const applyDate = useCallback(() => {
-    const { start, end } = dateRange;
+    const { start, end } = selectedDate;
 
     // 선택한 일 수 (종료일 - 시작일)
     const diffDate = Math.ceil(
@@ -149,9 +145,9 @@ const PeriodContainer = () => {
     }
     setLabels(labels);
     setFilteredData(temp);
-  }, [dateRange, periodData]);
+  }, [selectedDate, periodData]);
 
-  const getPeriodData = useCallback(async () => {
+  const getData = useCallback(async () => {
     function formatDate(date: Date) {
       return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
     }
@@ -159,8 +155,8 @@ const PeriodContainer = () => {
     const { config, data } = await requestSecureGet<PeriodTypes[]>(
       apiRoute.site +
         `${siteSeq}/summary?startTime=${formatDate(
-          dateRange.start,
-        )}&endTime=${formatDate(dateRange.end)}`,
+          selectedDate.start,
+        )}&endTime=${formatDate(selectedDate.end)}`,
       {},
       getToken()!,
     );
@@ -168,11 +164,11 @@ const PeriodContainer = () => {
     if (config.status >= 200 && config.status < 400) {
       setPeriodData(data);
     }
-  }, [siteSeq, getToken, dateRange]);
+  }, [getToken, selectedDate, siteSeq]);
 
   useEffect(() => {
-    getPeriodData();
-  }, [getPeriodData, reload]);
+    getData();
+  }, [getData]);
 
   useEffect(() => {
     applyDate();
@@ -182,10 +178,9 @@ const PeriodContainer = () => {
     <Period
       selectedContent={selectedContent}
       onChangeContent={onChangeContent}
-      dateRange={dateRange}
+      selectedDate={selectedDate}
       onChangeDate={onChangeDate}
       chartData={chartData}
-      applyDate={applyDate}
     />
   );
 };
