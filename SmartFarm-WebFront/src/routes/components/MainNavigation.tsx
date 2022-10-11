@@ -1,15 +1,15 @@
 import styled from 'styled-components';
 import { Route, Routes } from 'react-router-dom';
-import GNBContainer from '@components/Common/GNB/containers/GNBContainer';
 import RealTimeContainer from '@components/RealTime/containers/RealTimeContainer';
 import PeriodContainer from '@components/Period/containers/PeriodContainer';
 import CompareContainer from '@components/Compare/containers/CompareContainer';
 import NotFound from '@components/Common/NotFound/NotFound';
+import GNB from '@components/Common/GNB/GNB';
 
 const MainNavigation = () => {
   return (
     <Body>
-      <GNBContainer />
+      <GNB />
       <Routes>
         <Route path='/' element={<RealTimeContainer />} />
         <Route path='/period' element={<PeriodContainer />} />

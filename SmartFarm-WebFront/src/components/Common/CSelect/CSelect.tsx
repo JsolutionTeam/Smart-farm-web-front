@@ -19,14 +19,17 @@ const CSelect = ({
   selectRef,
 }: Props) => {
   return (
-    <CSelectBox ref={selectRef}>
+    <CSelectBox ref={selectRef} className='cselect'>
       <Selected onClick={onClickSelected}>
         <p>{selected.name}</p>
         <FiChevronDown className={visibleOption ? 'arrow open' : 'arrow'} />
       </Selected>
       <Options visible={visibleOption}>
         {contents.map((content) => (
-          <Option key={content.value} onClick={() => onChangeSelect(content)}>
+          <Option
+            key={content.value}
+            onClick={() => onChangeSelect(content)}
+            selected={content.name === selected.name}>
             {content.name}
           </Option>
         ))}
@@ -38,20 +41,20 @@ const CSelect = ({
 export default CSelect;
 
 const CSelectBox = styled.section`
-  width: 200px;
+  width: 190px;
   position: relative;
 `;
 
 const Selected = styled.button`
   width: 100%;
-  height: 50px;
+  height: 45px;
   ${({ theme }) => theme.flex.row}
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
   background-color: #e4eeee;
   border: 1px solid #45b298;
-  border-radius: 8px;
+  border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
 
@@ -65,16 +68,28 @@ const Selected = styled.button`
 
 const Options = styled.div<{ visible: boolean }>`
   width: 100%;
-  position: absolute;
-  top: 50px;
   display: ${({ visible }) => (visible ? 'block' : 'none')};
+  position: absolute;
+  top: 55px;
   background-color: #e4eeee;
   border: 1px solid #45b298;
-  border-radius: 8px;
+  border-radius: 5px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   z-index: 10;
 `;
 
-const Option = styled.div`
+const Option = styled.div<{ selected: boolean }>`
+  line-height: 45px;
   padding: 0 20px;
+  color: ${({ selected }) => !selected && '#767676'};
+  border-bottom: 1px solid #45b298;
   cursor: pointer;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: rgb(69, 178, 152, 0.2);
+  }
 `;

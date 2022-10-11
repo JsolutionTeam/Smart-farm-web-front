@@ -1,22 +1,55 @@
 import styled from 'styled-components';
 import LineChart from '@components/Common/CChart/LineChart';
 import { ChartDataTypes } from '@typedef/components/Common/chart.data.types';
+import { ContentTypes } from '@typedef/assets/content.types';
+import CSelectContainer from '@components/Common/CSelect/containers/CSelectContainer';
+import CDatePicker from '@components/Common/CDatePicker/CDatePicker';
 
-const Compare = () => {
+type Props = {
+  selectedContent: ContentTypes;
+  onChangeContent: (content: ContentTypes) => void;
+  selectedDate: {
+    first: {
+      start: Date;
+      end: Date;
+    };
+    second: {
+      start: Date;
+      end: Date;
+    };
+  };
+  onChangeDate: (name: 'start' | 'end', date: Date, seq?: 1 | 2) => void;
+  chartData: ChartDataTypes;
+};
+
+const Compare = ({
+  selectedContent,
+  onChangeContent,
+  selectedDate,
+  onChangeDate,
+  chartData,
+}: Props) => {
   return (
     <Main>
       <Contents>
-        <select name='temp' id='temp'>
-          <option value='1'>그래프항목명</option>
-          <option value='2'>그래프항목명</option>
-          <option value='3'>그래프항목명</option>
-          <option value='4'>그래프항목명</option>
-        </select>
+        <CSelectContainer selected={selectedContent} func={onChangeContent} />
         <ChartBox>
-          <header>날짜선택</header>
+          <header>
+            <CDatePicker
+              seq={1}
+              selectedDate={selectedDate.first}
+              func={onChangeDate}
+            />
+            <div className='hyphen'>-</div>
+            <CDatePicker
+              seq={2}
+              selectedDate={selectedDate.second}
+              func={onChangeDate}
+            />
+          </header>
           <Chart>
-            <h3>그래프제목</h3>
-            <LineChart data={data} />
+            <h3>{selectedContent.name}</h3>
+            <LineChart data={chartData} />
           </Chart>
         </ChartBox>
       </Contents>
@@ -36,15 +69,9 @@ const Contents = styled.section`
   ${({ theme }) => theme.flex.col}
   margin-top: 40px;
 
-  select {
-    width: 196px;
-    height: 56px;
+  .cselect {
     align-self: flex-end;
-    margin-bottom: 24px;
-    padding: 0 16px;
-    background-color: #e4eeee;
-    border: 1px solid #45b298;
-    border-radius: 8px;
+    margin-bottom: 20px;
   }
 
   @media ${({ theme }) => theme.media.mobile} {
@@ -61,9 +88,14 @@ const ChartBox = styled.section`
   overflow: hidden;
   header {
     width: 100%;
-    height: 56px;
+    ${({ theme }) => theme.flex.row}
+    align-items: center;
     padding: 18px 30px;
     background-color: rgba(118, 118, 118, 0.05);
+
+    .hyphen {
+      padding: 0 10px;
+    }
   }
 `;
 
@@ -75,23 +107,3 @@ const Chart = styled.section`
     font-size: 20px;
   }
 `;
-
-const labels = ['1일', '5일', '10일', '15일', '20일', '25일'];
-
-const data: ChartDataTypes = {
-  labels: labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: labels.map((_, idx) => 100 + idx),
-      borderColor: '#058b6b',
-      backgroundColor: '#058b6b',
-    },
-    {
-      label: 'Dataset 1',
-      data: labels.map((_, idx) => 120 + idx),
-      borderColor: '#ffa20d',
-      backgroundColor: '#ffa20d',
-    },
-  ],
-};

@@ -8,21 +8,19 @@ import { ContentTypes } from '@typedef/assets/content.types';
 type Props = {
   selectedContent: ContentTypes;
   onChangeContent: (content: ContentTypes) => void;
-  dateRange: {
+  selectedDate: {
     start: Date;
     end: Date;
   };
   onChangeDate: (name: 'start' | 'end', date: Date) => void;
-  applyDate: () => void;
   chartData: ChartDataTypes;
 };
 
 const Period = ({
   selectedContent,
   onChangeContent,
-  dateRange,
+  selectedDate,
   onChangeDate,
-  applyDate,
   chartData,
 }: Props) => {
   return (
@@ -31,7 +29,7 @@ const Period = ({
         <CSelectContainer selected={selectedContent} func={onChangeContent} />
         <ChartBox>
           <header>
-            <CDatePicker dateRange={dateRange} func={onChangeDate} />
+            <CDatePicker selectedDate={selectedDate} func={onChangeDate} />
           </header>
           <Chart>
             <h3>{selectedContent.name}</h3>
@@ -55,15 +53,9 @@ const Contents = styled.section`
   ${({ theme }) => theme.flex.col}
   margin-top: 40px;
 
-  select {
-    width: 196px;
-    height: 56px;
+  .cselect {
     align-self: flex-end;
-    margin-bottom: 24px;
-    padding: 0 16px;
-    background-color: #e4eeee;
-    border: 1px solid #45b298;
-    border-radius: 8px;
+    margin-bottom: 20px;
   }
 
   @media ${({ theme }) => theme.media.mobile} {

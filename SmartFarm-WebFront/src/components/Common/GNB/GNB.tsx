@@ -14,17 +14,17 @@ const GNB = () => {
 export default GNB;
 
 const GNBBox = styled.header`
-  height: 60px;
+  height: 3.5vw;
   ${({ theme }) => theme.flex.row}
   align-items: center;
   justify-content: center;
   background-color: #fff;
-  border-top: 1px solid #e8e8e8;
+  border-bottom: 1px solid #e8e8e8;
 
   a {
     width: 140px;
-    height: 60px;
-    line-height: 60px;
+    height: 3.5vw;
+    line-height: 3.5vw;
     color: #767676;
     text-align: center;
 
@@ -36,11 +36,14 @@ const GNBBox = styled.header`
   }
 
   @media ${({ theme }) => theme.media.mobile} {
+    height: 60px;
     flex-wrap: wrap;
     padding: 0 40px;
 
     a {
       flex: 1;
+      height: 60px;
+      line-height: 60px;
     }
   }
 `;
