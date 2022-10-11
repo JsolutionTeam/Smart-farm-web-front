@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const dev = 'http://192.168.0.108:18080/api';
-const prod = '';
+const prod = 'http://localhost:15005/api';
 
 export const API_ORIGIN = process.env.NODE_ENV === 'development' ? dev : prod;
 
