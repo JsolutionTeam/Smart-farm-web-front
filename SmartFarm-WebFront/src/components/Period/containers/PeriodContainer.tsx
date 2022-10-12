@@ -21,7 +21,7 @@ const PeriodContainer = () => {
   const [selectedContent, setSelectedContent] = useState<ContentTypes>(
     contents[0],
   );
-  const [periodData, setPeriodData] = useState<PeriodTypes[]>([]);
+  const [allData, setAllData] = useState<PeriodTypes[]>([]);
   const [filteredData, setFilteredData] = useState<PeriodTypes[]>([]);
   const [chartLabels, setChartLabels] = useState<string[]>([]);
   const chartData: ChartDataTypes = useMemo(
@@ -41,6 +41,7 @@ const PeriodContainer = () => {
     [filteredData, chartLabels, selectedContent.value],
   );
 
+  // 콘텐츠 선택
   const onChangeContent = (content: ContentTypes) => {
     setSelectedContent(content);
   };
@@ -64,7 +65,7 @@ const PeriodContainer = () => {
   };
 
   // 차트 데이터 변경
-  const applyDate = useCallback(() => {
+  const setChartData = useCallback(() => {
     const { start, end } = selectedDate;
 
     // 선택한 일 수 (종료일 - 시작일)
@@ -125,7 +126,7 @@ const PeriodContainer = () => {
     // 데이터의 시간과 라벨의 시간이 같은 데이터 필터링
     // 존재하지 않는 경우 데이터 0으로 초기화
     for (let i = 0; i < labels.length; i++) {
-      const filtered = periodData.filter(
+      const filtered = allData.filter(
         (period) => period.microRegTime.slice(0, -3) === labels[i],
       );
       if (filtered.length) {
@@ -148,7 +149,7 @@ const PeriodContainer = () => {
 
     setChartLabels(labels);
     setFilteredData(temp);
-  }, [selectedDate, periodData]);
+  }, [selectedDate, allData]);
 
   // 데이터 조회
   const getData = useCallback(async () => {
@@ -166,14 +167,17 @@ const PeriodContainer = () => {
     );
 
     if (config.status >= 200 && config.status < 400) {
-      setPeriodData(data);
-      applyDate();
+      setAllData(data);
     }
-  }, [applyDate, getToken, selectedDate, siteSeq]);
+  }, [getToken, selectedDate, siteSeq]);
 
   useEffect(() => {
     getData();
   }, [getData]);
+
+  useEffect(() => {
+    setChartData();
+  }, [setChartData]);
 
   return (
     <Period

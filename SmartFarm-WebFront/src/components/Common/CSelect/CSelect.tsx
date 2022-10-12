@@ -53,6 +53,7 @@ const Selected = styled.button`
   justify-content: space-between;
   padding: 0 20px;
   background-color: #e4eeee;
+  color: #000;
   border: 1px solid #45b298;
   border-radius: 5px;
   cursor: pointer;

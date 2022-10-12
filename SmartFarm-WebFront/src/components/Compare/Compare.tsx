@@ -18,7 +18,11 @@ type Props = {
       end: Date;
     };
   };
-  onChangeDate: (name: 'start' | 'end', date: Date, seq?: 1 | 2) => void;
+  onChangeDate: (
+    name: 'start' | 'end',
+    date: Date,
+    seq?: 'first' | 'second',
+  ) => void;
   chartData: ChartDataTypes;
 };
 
@@ -35,19 +39,19 @@ const Compare = ({
       <S.Contents>
         <header>
           <CDatePicker
-            seq={1}
             selectedDate={selectedDate.first}
             func={onChangeDate}
+            seq='first'
           />
           <div className='hyphen'>-</div>
           <CDatePicker
-            seq={2}
             selectedDate={selectedDate.second}
             func={onChangeDate}
+            seq='second'
           />
         </header>
+        <h3>{selectedContent.name}</h3>
         <S.ChartBox>
-          <h3>{selectedContent.name}</h3>
           <LineChart data={chartData} />
         </S.ChartBox>
       </S.Contents>

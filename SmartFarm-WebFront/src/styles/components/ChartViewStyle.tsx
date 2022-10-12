@@ -26,20 +26,27 @@ export const Contents = styled.section`
     ${({ theme }) => theme.flex.row}
     align-items: center;
     justify-items: center;
-    padding: 18px 30px;
+    padding: 20px;
     background-color: rgba(118, 118, 118, 0.05);
+  }
+
+  h3 {
+    ${({ theme }) => theme.flex.col}
+    justify-content: center;
+    margin: 20px;
+    margin-bottom: 0;
+    font-size: 20px;
   }
 `;
 
 export const ChartBox = styled.section`
-  padding: 18px 30px;
-  h3 {
-    ${({ theme }) => theme.flex.col}
-    justify-content: center;
-    font-size: 20px;
-    margin-bottom: 20px;
-  }
+  height: 250px;
+  margin: 20px;
 
   @media ${({ theme }) => theme.media.mobile} {
+    height: 400px;
+    canvas {
+      width: 100%;
+    }
   }
 `;

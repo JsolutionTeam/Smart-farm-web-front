@@ -30,8 +30,8 @@ const Period = ({
         <header>
           <CDatePicker selectedDate={selectedDate} func={onChangeDate} />
         </header>
+        <h3>{selectedContent.name}</h3>
         <S.ChartBox>
-          <h3>{selectedContent.name}</h3>
           <LineChart data={chartData} />
         </S.ChartBox>
       </S.Contents>

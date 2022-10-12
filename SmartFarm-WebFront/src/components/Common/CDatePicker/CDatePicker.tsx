@@ -2,12 +2,12 @@ import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import Img from '@assets/image';
 type Props = {
-  seq?: 1 | 2;
   selectedDate: {
     start: Date;
     end: Date;
   };
-  func: (name: 'start' | 'end', date: Date, seq?: 1 | 2) => void;
+  func: (name: 'start' | 'end', date: Date, seq?: 'first' | 'second') => void;
+  seq?: 'first' | 'second';
 };
 const CDatePicker = ({ seq, selectedDate, func }: Props) => {
   return (
