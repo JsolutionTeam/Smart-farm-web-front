@@ -23,6 +23,7 @@ const CDatePicker = ({ seq, selectedDate, func }: Props) => {
         maxDate={selectedDate.end}
         dateFormatCalendar='yyyy년 MM월'
         dateFormat='yyyy.MM.dd'
+        onFocus={(e) => e.target.blur()}
       />
       <p>~</p>
       <DatePicker
@@ -37,6 +38,7 @@ const CDatePicker = ({ seq, selectedDate, func }: Props) => {
         maxDate={new Date()}
         dateFormatCalendar='yyyy년 MM월'
         dateFormat='yyyy.MM.dd'
+        onFocus={(e) => e.target.blur()}
       />
       <img src={Img.IcDate} alt='달력 아이콘' className='icDate' />
     </CDatePickerBox>

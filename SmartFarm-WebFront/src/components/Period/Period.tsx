@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import * as S from '@styles/components/ChartViewStyle';
 import CSelectContainer from '@components/Common/CSelect/containers/CSelectContainer';
 import CDatePicker from '@components/Common/CDatePicker/CDatePicker';
 import LineChart from '@components/Common/CChart/LineChart';
@@ -24,67 +24,19 @@ const Period = ({
   chartData,
 }: Props) => {
   return (
-    <Main>
-      <Contents>
-        <CSelectContainer selected={selectedContent} func={onChangeContent} />
-        <ChartBox>
-          <header>
-            <CDatePicker selectedDate={selectedDate} func={onChangeDate} />
-          </header>
-          <Chart>
-            <h3>{selectedContent.name}</h3>
-            <LineChart data={chartData} />
-          </Chart>
-        </ChartBox>
-      </Contents>
-    </Main>
+    <S.Main>
+      <CSelectContainer selected={selectedContent} func={onChangeContent} />
+      <S.Contents>
+        <header>
+          <CDatePicker selectedDate={selectedDate} func={onChangeDate} />
+        </header>
+        <S.ChartBox>
+          <h3>{selectedContent.name}</h3>
+          <LineChart data={chartData} />
+        </S.ChartBox>
+      </S.Contents>
+    </S.Main>
   );
 };
 
 export default Period;
-
-const Main = styled.main`
-  ${({ theme }) => theme.flex.col}
-  align-items: center;
-`;
-
-const Contents = styled.section`
-  width: 650px;
-  ${({ theme }) => theme.flex.col}
-  margin-top: 40px;
-
-  .cselect {
-    align-self: flex-end;
-    margin-bottom: 20px;
-  }
-
-  @media ${({ theme }) => theme.media.mobile} {
-    width: calc(100vw - 100px);
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(4, 45vw);
-  }
-`;
-
-const ChartBox = styled.section`
-  background-color: #fff;
-  border: 1px solid #d8d8d8;
-  border-radius: 8px;
-  overflow: hidden;
-  header {
-    width: 100%;
-    ${({ theme }) => theme.flex.row}
-    align-items: center;
-    justify-items: center;
-    padding: 18px 30px;
-    background-color: rgba(118, 118, 118, 0.05);
-  }
-`;
-
-const Chart = styled.section`
-  padding: 18px 30px;
-  h3 {
-    ${({ theme }) => theme.flex.col}
-    justify-content: center;
-    font-size: 20px;
-  }
-`;

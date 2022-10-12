@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const dev = 'http://192.168.0.108:18080/api';
+const dev = 'http://14.45.108.75/sf_viewer/backend/api';
 const prod = 'http://14.45.108.75/sf_viewer/backend/api';
 
 export const API_ORIGIN = process.env.NODE_ENV === 'development' ? dev : prod;

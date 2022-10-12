@@ -25,4 +25,8 @@ export default MainNavigation;
 const Body = styled.section`
   height: 100%;
   ${({ theme }) => theme.flex.col}
+
+  @media ${({ theme }) => theme.media.mobile} {
+    margin-bottom: 40px;
+  }
 `;
