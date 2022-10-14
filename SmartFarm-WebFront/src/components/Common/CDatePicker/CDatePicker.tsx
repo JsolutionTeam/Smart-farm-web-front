@@ -1,13 +1,13 @@
-import styled from 'styled-components';
-import DatePicker from 'react-datepicker';
-import Img from '@assets/image';
+import styled from "styled-components";
+import DatePicker from "react-datepicker";
+import Img from "@assets/image";
 type Props = {
   selectedDate: {
-    start: Date;
-    end: Date;
+    start: Date | null;
+    end: Date | null;
   };
-  func: (name: 'start' | 'end', date: Date, seq?: 'first' | 'second') => void;
-  seq?: 'first' | 'second';
+  func: (name: "start" | "end", date: Date, seq?: "first" | "second") => void;
+  seq?: "first" | "second";
 };
 const CDatePicker = ({ seq, selectedDate, func }: Props) => {
   return (
@@ -17,12 +17,12 @@ const CDatePicker = ({ seq, selectedDate, func }: Props) => {
         selected={selectedDate.start}
         onChange={(date) => {
           if (date) {
-            func('start', date, seq);
+            func("start", date, seq);
           }
         }}
         maxDate={selectedDate.end}
-        dateFormatCalendar='yyyy년 MM월'
-        dateFormat='yyyy.MM.dd'
+        dateFormatCalendar="yyyy년 MM월"
+        dateFormat="yyyy.MM.dd"
         onFocus={(e) => e.target.blur()}
       />
       <p>~</p>
@@ -31,16 +31,16 @@ const CDatePicker = ({ seq, selectedDate, func }: Props) => {
         selected={selectedDate.end}
         onChange={(date) => {
           if (date) {
-            func('end', date, seq);
+            func("end", date, seq);
           }
         }}
         minDate={selectedDate.start}
         maxDate={new Date()}
-        dateFormatCalendar='yyyy년 MM월'
-        dateFormat='yyyy.MM.dd'
+        dateFormatCalendar="yyyy년 MM월"
+        dateFormat="yyyy.MM.dd"
         onFocus={(e) => e.target.blur()}
       />
-      <img src={Img.IcDate} alt='달력 아이콘' className='icDate' />
+      <img src={Img.IcDate} alt="달력 아이콘" className="icDate" />
     </CDatePickerBox>
   );
 };

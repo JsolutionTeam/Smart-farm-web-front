@@ -25,7 +25,13 @@ const Login = ({ onChangeInputs, onClickLogin }: Props) => {
             onChange={onChangeInputs}
             placeholder='비밀번호'
           />
-          <button type='button' onClick={onClickLogin}>
+          <button type='button' onClick={onClickLogin}
+          onKeyPress={(e) => {
+            if(e.key === 'Enter') {
+              onClickLogin()
+            }
+          }}
+          >
             로그인
           </button>
         </Inputs>

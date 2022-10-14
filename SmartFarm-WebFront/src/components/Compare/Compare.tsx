@@ -1,9 +1,9 @@
-import * as S from '@styles/components/ChartViewStyle';
-import LineChart from '@components/Common/CChart/LineChart';
-import { ChartDataTypes } from '@typedef/components/Common/chart.data.types';
-import { ContentTypes } from '@typedef/assets/content.types';
-import CSelectContainer from '@components/Common/CSelect/containers/CSelectContainer';
-import CDatePicker from '@components/Common/CDatePicker/CDatePicker';
+import * as S from "@styles/components/ChartViewStyle";
+import LineChart from "@components/Common/CChart/LineChart";
+import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
+import { ContentTypes } from "@typedef/assets/content.types";
+import CSelectContainer from "@components/Common/CSelect/containers/CSelectContainer";
+import CDatePicker from "@components/Common/CDatePicker/CDatePicker";
 
 type Props = {
   selectedContent: ContentTypes;
@@ -14,14 +14,14 @@ type Props = {
       end: Date;
     };
     second: {
-      start: Date;
-      end: Date;
+      start: Date | null;
+      end: Date | null;
     };
   };
   onChangeDate: (
-    name: 'start' | 'end',
+    name: "start" | "end",
     date: Date,
-    seq?: 'first' | 'second',
+    seq?: "first" | "second"
   ) => void;
   chartData: ChartDataTypes;
 };
@@ -41,13 +41,13 @@ const Compare = ({
           <CDatePicker
             selectedDate={selectedDate.first}
             func={onChangeDate}
-            seq='first'
+            seq="first"
           />
-          <div className='hyphen'>-</div>
+          <div className="hyphen">-</div>
           <CDatePicker
             selectedDate={selectedDate.second}
             func={onChangeDate}
-            seq='second'
+            seq="second"
           />
         </header>
         <h3>{selectedContent.name}</h3>
