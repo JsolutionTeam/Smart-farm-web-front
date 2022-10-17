@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Main = styled.main`
   width: 650px;
@@ -23,11 +23,23 @@ export const Contents = styled.section`
   overflow: hidden;
   header {
     width: 100%;
-    ${({ theme }) => theme.flex.row}
-    align-items: center;
-    justify-items: center;
+    ${({ theme }) => theme.flex.col}
+    align-items: flex-start;
+    justify-content: space-between;
     padding: 20px;
     background-color: rgba(118, 118, 118, 0.05);
+  }
+
+  .datePickerBox {
+    ${({ theme }) => theme.flex.row}
+    align-items: center;
+    span {
+      margin-right: 10px;
+    }
+
+    &:first-child {
+      margin-bottom: 10px;
+    }
   }
 
   h3 {

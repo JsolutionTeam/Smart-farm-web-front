@@ -1,12 +1,12 @@
-import { ChartDataTypes } from '@typedef/components/Common/chart.data.types';
-import { Line } from 'react-chartjs-2';
+import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
+import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
-} from 'chart.js';
+} from "chart.js";
 type Props = {
   data: ChartDataTypes;
 };
@@ -19,13 +19,12 @@ const LineChart = ({ data }: Props) => {
       options={{
         maintainAspectRatio: false,
         plugins: {
-          legend: {
-            position: 'top' as const,
-          },
           title: {
-            display: true,
-            text: 'Chart.js Line Chart',
+            display: false,
           },
+        },
+        interaction: {
+          intersect: true,
         },
       }}
       data={data}

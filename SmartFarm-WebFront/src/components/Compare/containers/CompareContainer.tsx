@@ -236,7 +236,7 @@ const CompareContainer = () => {
 
       if (config.status >= 200 && config.status < 400) {
         if (data.length === 1) {
-          alert("해당 날짜에 해당하는 데이터가 없습니다.");
+          alert("해당 기간에 수집된 데이터가 없습니다.");
           return;
         }
         if (isSecond) {
@@ -261,7 +261,7 @@ const CompareContainer = () => {
 
   useEffect(() => {
     getData("isSecond");
-  }, [isSecond]);
+  }, [getData, isSecond]);
 
   useEffect(() => {
     setChartData();

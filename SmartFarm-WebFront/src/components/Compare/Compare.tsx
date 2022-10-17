@@ -38,17 +38,22 @@ const Compare = ({
       <CSelectContainer selected={selectedContent} func={onChangeContent} />
       <S.Contents>
         <header>
-          <CDatePicker
-            selectedDate={selectedDate.first}
-            func={onChangeDate}
-            seq="first"
-          />
-          <div className="hyphen">-</div>
-          <CDatePicker
-            selectedDate={selectedDate.second}
-            func={onChangeDate}
-            seq="second"
-          />
+          <div className="datePickerBox">
+            <span>기준일</span>
+            <CDatePicker
+              selectedDate={selectedDate.first}
+              func={onChangeDate}
+              seq="first"
+            />
+          </div>
+          <div className="datePickerBox">
+            <span>비교일</span>
+            <CDatePicker
+              selectedDate={selectedDate.second}
+              func={onChangeDate}
+              seq="second"
+            />
+          </div>
         </header>
         <h3>{selectedContent.name}</h3>
         <S.ChartBox>
