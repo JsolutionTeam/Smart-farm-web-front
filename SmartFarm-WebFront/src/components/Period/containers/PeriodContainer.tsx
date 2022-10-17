@@ -21,12 +21,12 @@ const PeriodContainer = () => {
   const [selectedContent, setSelectedContent] = useState<ContentTypes>(
     contents[0],
   );
-  const [periodData, setPeriodData] = useState<PeriodTypes[]>([]);
-  const [labels, setLabels] = useState<string[]>([]);
+  const [allData, setAllData] = useState<PeriodTypes[]>([]);
   const [filteredData, setFilteredData] = useState<PeriodTypes[]>([]);
+  const [chartLabels, setChartLabels] = useState<string[]>([]);
   const chartData: ChartDataTypes = useMemo(
     () => ({
-      labels: labels.map((label) => dayjs(label).format('DD일 HH시')),
+      labels: chartLabels.map((label) => dayjs(label).format('DD일 HH시')),
       datasets: [
         {
           label: '기간',
@@ -38,9 +38,10 @@ const PeriodContainer = () => {
         },
       ],
     }),
-    [filteredData, labels, selectedContent.value],
+    [filteredData, chartLabels, selectedContent.value],
   );
 
+  // 콘텐츠 선택
   const onChangeContent = (content: ContentTypes) => {
     setSelectedContent(content);
   };
@@ -63,8 +64,8 @@ const PeriodContainer = () => {
     }));
   };
 
-  // 적용 버튼 선택 시 차트 데이터 변경
-  const applyDate = useCallback(() => {
+  // 차트 데이터 변경
+  const setChartData = useCallback(() => {
     const { start, end } = selectedDate;
 
     // 선택한 일 수 (종료일 - 시작일)
@@ -74,40 +75,39 @@ const PeriodContainer = () => {
 
     let labels: string[] = [];
 
-    function setLabel(hour: number) {
-      return new Date(
-        start.getFullYear(),
-        start.getMonth(),
-        start.getDate(),
-        hour,
-        0,
-        0,
-      );
+    // labels setter
+    // hour: 몇 시간 단위인지, repeat: 몇 번 반복인지
+    function setLabels(hour: number, repeat: number) {
+      for (let i = 0; i < repeat; i++) {
+        let date = new Date(
+          start.getFullYear(),
+          start.getMonth(),
+          start.getDate(),
+          hour * i,
+          0,
+          0,
+        );
+        labels.push(dayjs(date).format('YYYY-MM-DD HH:mm'));
+      }
     }
 
+    // 하루: 4시간 단위 (0, 4, 8, 12, 16, 20, 24시)
     if (diffDate === 1) {
-      // 4시간 단위 (0, 4, 8, 12, 16, 20, 24시)
-      for (let i = 0; i < 7; i++) {
-        let date = setLabel(4 * i);
-        labels.push(dayjs(date).format('YYYY-MM-DD HH:mm'));
-      }
+      setLabels(4, 7);
     }
+
+    // 이틀: 8시간 단위 (0, 8, 16, 24, 8, 16, 24)
     if (diffDate === 2) {
-      // 8시간 단위 (0, 8, 16, 24, 8, 16, 24)
-      for (let i = 0; i < 7; i++) {
-        let date = setLabel(8 * i);
-        labels.push(dayjs(date).format('YYYY-MM-DD HH:mm'));
-      }
+      setLabels(8, 7);
     }
+
+    // 사흘: 8시간 단위 (0, 8, 16, 24, 8, 16, 24, 8, 16, 24)
     if (diffDate === 3) {
-      // 8시간 단위 (0, 8, 16, 24, 8, 16, 24, 8, 16, 24)
-      for (let i = 0; i < 10; i++) {
-        let date = setLabel(8 * i);
-        labels.push(dayjs(date).format('YYYY-MM-DD HH:mm'));
-      }
+      setLabels(8, 10);
     }
+
+    // 사흘 이상: 하루 단위
     if (diffDate > 3) {
-      // 하루 단위
       for (let i = 0; i < diffDate; i++) {
         let date = new Date(
           start.getFullYear(),
@@ -122,8 +122,11 @@ const PeriodContainer = () => {
     }
 
     let temp = [];
+
+    // 데이터의 시간과 라벨의 시간이 같은 데이터 필터링
+    // 존재하지 않는 경우 데이터 0으로 초기화
     for (let i = 0; i < labels.length; i++) {
-      const filtered = periodData.filter(
+      const filtered = allData.filter(
         (period) => period.microRegTime.slice(0, -3) === labels[i],
       );
       if (filtered.length) {
@@ -143,10 +146,12 @@ const PeriodContainer = () => {
         });
       }
     }
-    setLabels(labels);
-    setFilteredData(temp);
-  }, [selectedDate, periodData]);
 
+    setChartLabels(labels);
+    setFilteredData(temp);
+  }, [selectedDate, allData]);
+
+  // 데이터 조회
   const getData = useCallback(async () => {
     function formatDate(date: Date) {
       return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
@@ -162,7 +167,7 @@ const PeriodContainer = () => {
     );
 
     if (config.status >= 200 && config.status < 400) {
-      setPeriodData(data);
+      setAllData(data);
     }
   }, [getToken, selectedDate, siteSeq]);
 
@@ -171,8 +176,8 @@ const PeriodContainer = () => {
   }, [getData]);
 
   useEffect(() => {
-    applyDate();
-  }, [applyDate]);
+    setChartData();
+  }, [setChartData]);
 
   return (
     <Period

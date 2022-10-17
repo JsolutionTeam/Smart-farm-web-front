@@ -75,6 +75,8 @@ const Copyright = styled.p`
   color: #999;
 
   @media ${({ theme }) => theme.media.mobile} {
+    width: 100%;
     font-size: 12px;
+    text-align: center;
   }
 `;

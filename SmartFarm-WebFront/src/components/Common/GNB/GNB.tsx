@@ -31,14 +31,14 @@ const GNBBox = styled.header`
     &[aria-current] {
       border-bottom: 3px solid #1c6453;
       color: #1c6453;
-      font-weight: 500;
+      font-weight: 600;
     }
   }
 
   @media ${({ theme }) => theme.media.mobile} {
     height: 60px;
     flex-wrap: wrap;
-    padding: 0 40px;
+    padding: 0 20px;
 
     a {
       flex: 1;

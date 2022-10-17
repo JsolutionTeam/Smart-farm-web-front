@@ -1,32 +1,36 @@
-import Compare from '../Compare';
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import useToken from '@hooks/useToken';
-import useUser from '@hooks/useUser';
-import { apiRoute, requestSecureGet } from '@lib/api';
-import { setStartDate, setEndDate, getPrevMonth } from '@lib/date';
-import { ChartDataTypes } from '@typedef/components/Common/chart.data.types';
-import { ContentTypes } from '@typedef/assets/content.types';
-import { contents } from '@assets/content';
-import { PeriodTypes } from '@typedef/components/Period/period.types';
-import dayjs from 'dayjs';
+import Compare from "../Compare";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import useToken from "@hooks/useToken";
+import useUser from "@hooks/useUser";
+import { apiRoute, requestSecureGet } from "@lib/api";
+import { setStartDate, setEndDate, getPrevMonth } from "@lib/date";
+import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
+import { ContentTypes } from "@typedef/assets/content.types";
+import { contents } from "@assets/content";
+import { PeriodTypes } from "@typedef/components/Period/period.types";
+import dayjs from "dayjs";
 
 const CompareContainer = () => {
   const { getToken } = useToken();
   const { getUser } = useUser();
   const siteSeq = useMemo(() => getUser().siteSeq, [getUser]);
-  const [selectedContent, setSelectedContent] = useState<ContentTypes>(
-    contents[0],
-  );
-  const [selectedDate, setSelectedDate] = useState({
+  const [selectedDate, setSelectedDate] = useState<{
+    first: { start: Date; end: Date };
+    second: { start: Date | null; end: Date | null };
+  }>({
     first: {
       start: getPrevMonth(),
       end: setEndDate(),
     },
     second: {
-      start: getPrevMonth(),
-      end: setEndDate(),
+      start: null,
+      end: null,
     },
   });
+
+  const [selectedContent, setSelectedContent] = useState<ContentTypes>(
+    contents[0]
+  );
   const [allData, setAllData] = useState<{
     first: PeriodTypes[];
     second: PeriodTypes[];
@@ -41,101 +45,138 @@ const CompareContainer = () => {
     first: [],
     second: [],
   });
-  const [labels, setLabels] = useState<string[]>([]);
+  const selectedDateLength = useMemo(
+    () =>
+      Math.ceil(
+        (selectedDate.first.end.getTime() -
+          selectedDate.first.start.getTime()) /
+          (1000 * 60 * 60 * 24)
+      ),
+    [selectedDate.first]
+  );
+  const [chartLabels, setChartLabels] = useState<string[]>([]);
   const chartData: ChartDataTypes = useMemo(
     () => ({
-      labels: labels.map((label) => dayjs(label).format('DD일 HH시')),
+      labels: chartLabels.map((label, index) => `Day ${index + 1}`),
       datasets: [
         {
-          label: '비교1',
+          label: "비교1",
           data: filteredData.first.map((data) =>
-            Math.round(data[selectedContent.value]),
+            Math.round(data[selectedContent.value])
           ),
-          borderColor: '#058b6b',
-          backgroundColor: '#058b6b',
+          borderColor: "#058b6b",
+          backgroundColor: "#058b6b",
         },
         {
-          label: '비교2',
+          label: "비교2",
           data: filteredData.second.map((data) =>
-            Math.round(data[selectedContent.value]),
+            Math.round(data[selectedContent.value])
           ),
-          borderColor: '#ffa20d',
-          backgroundColor: '#ffa20d',
+          borderColor: "#ffa20d",
+          backgroundColor: "#ffa20d",
         },
       ],
     }),
-    [filteredData, labels, selectedContent.value],
+    [filteredData, chartLabels, selectedContent.value]
   );
+  const [isSecond, setIsSecond] = useState<number>(0);
 
+  // 콘텐츠 선택
   const onChangeContent = (content: ContentTypes) => {
     setSelectedContent(content);
   };
 
-  const setChartData = useCallback(
-    (seq: 1 | 2) => {
-      const { start, end } =
-        seq === 1 ? selectedDate.first : selectedDate.second;
-      const seqData = seq === 1 ? allData.first : allData.second;
-      const hehe = seq === 1 ? 'first' : 'second';
+  // 시작일, 종료일 선택
+  const onChangeDate = (
+    name: "start" | "end",
+    date: Date,
+    seq?: "first" | "second"
+  ) => {
+    let temp = new Date();
 
-      // 선택한 일 수 (종료일 - 시작일)
-      const diffDate = Math.ceil(
-        (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24),
-      );
+    if (name === "start") {
+      // 시간 00:00:00 설정
+      temp = setStartDate(date);
+    } else {
+      // 시간 23:59:59 설정
+      temp = setEndDate(date);
+    }
 
-      let tempLabels: string[] = [];
+    if (seq === "first") {
+      setSelectedDate((selectedDate) => ({
+        first: {
+          ...selectedDate.first,
+          [name]: temp,
+        },
+        second: {
+          start: null,
+          end: null,
+        },
+      }));
+    }
 
-      function setLabel(hour: number) {
-        return new Date(
+    if (seq === "second") {
+      if (name === "start") {
+        setSelectedDate((selectedDate) => ({
+          ...selectedDate,
+          second: {
+            start: temp,
+            end: new Date(
+              date.getFullYear(),
+              date.getMonth(),
+              date.getDate() + selectedDateLength - 1,
+              0,
+              0,
+              0
+            ),
+          },
+        }));
+      }
+      if (name === "end") {
+        setSelectedDate((selectedDate) => ({
+          ...selectedDate,
+          second: {
+            start: new Date(
+              date.getFullYear(),
+              date.getMonth(),
+              date.getDate() - selectedDateLength,
+              23,
+              59,
+              59
+            ),
+            end: temp,
+          },
+        }));
+      }
+      setIsSecond((prev) => prev + 1);
+    }
+  };
+
+  // 차트 데이터 변경
+  const setChartData = useCallback(() => {
+    function setLabels(start: Date) {
+      let labels = [];
+      for (let i = 0; i < selectedDateLength; i++) {
+        let date = new Date(
           start.getFullYear(),
           start.getMonth(),
-          start.getDate(),
-          hour,
+          start.getDate() + i,
+          12,
           0,
-          0,
+          0
         );
+        labels.push(dayjs(date).format("YYYY-MM-DD HH:mm"));
       }
+      return labels;
+    }
 
-      if (diffDate === 1) {
-        // 4시간 단위 (0, 4, 8, 12, 16, 20, 24시)
-        for (let i = 0; i < 7; i++) {
-          let date = setLabel(4 * i);
-          tempLabels.push(dayjs(date).format('YYYY-MM-DD HH:mm'));
-        }
-      }
-      if (diffDate === 2) {
-        // 8시간 단위 (0, 8, 16, 24, 8, 16, 24)
-        for (let i = 0; i < 7; i++) {
-          let date = setLabel(8 * i);
-          tempLabels.push(dayjs(date).format('YYYY-MM-DD HH:mm'));
-        }
-      }
-      if (diffDate === 3) {
-        // 8시간 단위 (0, 8, 16, 24, 8, 16, 24, 8, 16, 24)
-        for (let i = 0; i < 10; i++) {
-          let date = setLabel(8 * i);
-          tempLabels.push(dayjs(date).format('YYYY-MM-DD HH:mm'));
-        }
-      }
-      if (diffDate > 3) {
-        // 하루 단위
-        for (let i = 0; i < diffDate; i++) {
-          let date = new Date(
-            start.getFullYear(),
-            start.getMonth(),
-            start.getDate() + i,
-            12,
-            0,
-            0,
-          );
-          tempLabels.push(dayjs(date).format('YYYY-MM-DD HH:mm'));
-        }
-      }
-
+    // 데이터의 시간과 라벨의 시간이 같은 데이터 필터링
+    // 존재하지 않는 경우 데이터 0으로 초기화
+    function filteredData(data: PeriodTypes[], labels: string[]) {
       let temp: PeriodTypes[] = [];
-      for (let i = 0; i < tempLabels.length; i++) {
-        const filtered = seqData.filter(
-          (data) => data.microRegTime.slice(0, -3) === tempLabels[i],
+      for (let i = 0; i < labels.length; i++) {
+        const filtered = data.filter(
+          (period) => period.microRegTime.slice(0, -3) === labels[i]
         );
         if (filtered.length) {
           temp.push(filtered[0]);
@@ -144,7 +185,7 @@ const CompareContainer = () => {
             co2: 0,
             co2RegTime: 0,
             earthTemperature: 0,
-            microRegTime: '',
+            microRegTime: "",
             rainfall: 0,
             relativeHumidity: 0,
             solarRadiation: 0,
@@ -154,113 +195,77 @@ const CompareContainer = () => {
           });
         }
       }
+      return temp;
+    }
 
-      setLabels(labels);
+    const firstLabels = setLabels(selectedDate.first.start);
+    const firstData = filteredData(allData.first, firstLabels);
+    let secondData: PeriodTypes[] = [];
 
-      setFilteredData((filteredData) => ({
-        ...filteredData,
-        [hehe]: temp,
-      }));
+    if (selectedDate.second.start) {
+      const secondLabels = setLabels(selectedDate.second.start);
+      secondData = filteredData(allData.second, secondLabels);
+    }
+
+    setChartLabels(firstLabels);
+    setFilteredData({
+      first: firstData,
+      second: secondData,
+    });
+  }, [allData, selectedDate, selectedDateLength]);
+
+  // 데이터 조회
+  const getData = useCallback(
+    async (isSecond?: "isSecond") => {
+      const { start, end } = isSecond
+        ? selectedDate.second
+        : selectedDate.first;
+
+      function formatDate(date: Date) {
+        return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
+      }
+
+      const { config, data } = await requestSecureGet<PeriodTypes[]>(
+        apiRoute.site +
+          `${siteSeq}/summary?startTime=${formatDate(
+            start!
+          )}&endTime=${formatDate(end!)}`,
+        {},
+        getToken()!
+      );
+
+      if (config.status >= 200 && config.status < 400) {
+        if (data.length === 1) {
+          alert("해당 기간에 수집된 데이터가 없습니다.");
+          return;
+        }
+        if (isSecond) {
+          setAllData((allData) => ({
+            ...allData,
+            second: data,
+          }));
+        } else {
+          setAllData((allData) => ({
+            ...allData,
+            first: data,
+          }));
+        }
+      }
     },
-    [
-      allData.first,
-      allData.second,
-      labels,
-      selectedDate.first,
-      selectedDate.second,
-    ],
+    [getToken, selectedDate, siteSeq]
   );
 
-  // 시작일, 종료일 선택
-  const onChangeDate = (name: 'start' | 'end', date: Date, seq?: 1 | 2) => {
-    let temp = new Date();
-
-    if (name === 'start') {
-      // 시간 00:00:00 설정
-      temp = setStartDate(date);
-    } else {
-      // 시간 23:59:59 설정
-      temp = setEndDate(date);
-    }
-
-    if (seq === 1) {
-      setSelectedDate((selectedDate) => ({
-        ...selectedDate,
-        first: {
-          ...selectedDate.first,
-          [name]: temp,
-        },
-      }));
-    }
-
-    if (seq === 2) {
-      setSelectedDate((selectedDate) => ({
-        ...selectedDate,
-        second: {
-          ...selectedDate.first,
-          [name]: temp,
-        },
-      }));
-    }
-
-    setChartData(seq!);
-  };
-
-  const getFirstData = useCallback(async () => {
-    console.log('getFirstData 실행');
-
-    function formatDate(date: Date) {
-      return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
-    }
-
-    const { config, data } = await requestSecureGet<PeriodTypes[]>(
-      apiRoute.site +
-        `${siteSeq}/summary?startTime=${formatDate(
-          selectedDate.first.start,
-        )}&endTime=${formatDate(selectedDate.first.end)}`,
-      {},
-      getToken()!,
-    );
-
-    if (config.status >= 200 && config.status < 400) {
-      setAllData((prev) => ({
-        ...prev,
-        first: data,
-      }));
-    }
-  }, [getToken, selectedDate.first, siteSeq]);
-
-  const getSecondData = useCallback(async () => {
-    console.log('getSecondData 실행');
-
-    function formatDate(date: Date) {
-      return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
-    }
-
-    const { config, data } = await requestSecureGet<PeriodTypes[]>(
-      apiRoute.site +
-        `${siteSeq}/summary?startTime=${formatDate(
-          selectedDate.second.start,
-        )}&endTime=${formatDate(selectedDate.second.end)}`,
-      {},
-      getToken()!,
-    );
-
-    if (config.status >= 200 && config.status < 400) {
-      setAllData((prev) => ({
-        ...prev,
-        second: data,
-      }));
-    }
-  }, [getToken, selectedDate.second, siteSeq]);
+  useEffect(() => {
+    getData();
+  }, [getData]);
 
   useEffect(() => {
-    getFirstData();
-  }, [getFirstData]);
+    getData("isSecond");
+  }, [getData, isSecond]);
 
   useEffect(() => {
-    getSecondData();
-  }, [getSecondData]);
+    setChartData();
+  }, [setChartData]);
 
   return (
     <Compare

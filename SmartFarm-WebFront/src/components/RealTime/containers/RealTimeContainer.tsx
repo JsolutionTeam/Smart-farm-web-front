@@ -24,7 +24,7 @@ const RealTimeContainer = () => {
     windDirection: 0,
     windSpeed: 0,
   });
-  const realTimeDataList: realTimeListTypes[] = useMemo(
+  const contents: realTimeListTypes[] = useMemo(
     () => [
       {
         name: '온도',
@@ -113,9 +113,7 @@ const RealTimeContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <RealTime realTimeDataList={realTimeDataList} setClassName={setClassName} />
-  );
+  return <RealTime contents={contents} setClassName={setClassName} />;
 };
 
 export default RealTimeContainer;

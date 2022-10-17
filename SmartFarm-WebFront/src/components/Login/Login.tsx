@@ -13,17 +13,25 @@ const Login = ({ onChangeInputs, onClickLogin }: Props) => {
         <header>로그인</header>
         <Inputs>
           <input
+            type='text'
             name='id'
             onChange={onChangeInputs}
             autoFocus
             placeholder='아이디'
           />
           <input
+            type='password'
             name='passwd'
             onChange={onChangeInputs}
             placeholder='비밀번호'
           />
-          <button type='button' onClick={onClickLogin}>
+          <button type='button' onClick={onClickLogin}
+          onKeyPress={(e) => {
+            if(e.key === 'Enter') {
+              onClickLogin()
+            }
+          }}
+          >
             로그인
           </button>
         </Inputs>
@@ -39,13 +47,13 @@ const space = '60px';
 
 export const Main = styled.main`
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 4.5vw);
   ${({ theme }) => theme.flex.col}
   align-items: center;
   justify-content: center;
 
   @media ${({ theme }) => theme.media.mobile} {
-    padding: 0 40px;
+    padding: 0 30px;
   }
 `;
 
@@ -53,6 +61,7 @@ export const LoginBox = styled.main`
   width: 508px;
   ${({ theme }) => theme.flex.col}
   align-items: center;
+  transform: translate(0, -4.5vw);
   background-color: #fff;
   border: 1px solid #d8d8d8;
   border-radius: ${radius};
@@ -100,8 +109,11 @@ export const Inputs = styled.section`
     }
 
     &:focus {
-      outline: auto;
-      outline-color: #45b298;
+      outline: none;
+      border-color: #45b298;
+    }
+    &:-webkit-direct-focus {
+      border-color: #45b298;
     }
   }
 
@@ -110,7 +122,8 @@ export const Inputs = styled.section`
     height: ${space};
     margin-top: 40px;
     background-color: #45b298;
-    color: #fff;
     border-radius: ${radius};
+    color: #fff;
+    font-size: 16px;
   }
 `;
