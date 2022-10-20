@@ -6,7 +6,7 @@ import LoginContainer from "@components/Login/containers/LoginContainer";
 import useToken from "@hooks/useToken";
 // import useUser from "@hooks/useUser";
 // import { useMemo } from "react";
-import ListSelectContainer from "@components/Common/CSelect/containers/ListSelectContainer";
+// import ListSelectContainer from "@components/Common/CSelect/containers/ListSelectContainer";
 
 const RootNavigation = () => {
   const { getToken } = useToken();
@@ -17,7 +17,7 @@ const RootNavigation = () => {
     <BrowserRouter>
       <Header>
         <h3>스마트팜 혁신밸리</h3>
-        <ListSelectContainer />
+        {/* <ListSelectContainer /> */}
         {/* {role === 'ROLE_ADMIN' && <div>농장선택</div>} */}
       </Header>
       <Body>
