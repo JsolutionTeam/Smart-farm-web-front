@@ -1,13 +1,13 @@
-import CSelect from '../CSelect';
-import { ContentTypes } from '@typedef/assets/content.types';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import ContentSelect from "../ContentSelect";
+import { ContentTypes } from "@typedef/assets/content.types";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 type Props = {
   selected: ContentTypes;
   func: (content: ContentTypes) => void;
 };
 
-const CSelectContainer = ({ selected, func }: Props) => {
+const ContentSelectContainer = ({ selected, func }: Props) => {
   const [visibleOption, setVisibleOption] = useState<boolean>(false);
   const selectRef = useRef<HTMLElement>(null);
 
@@ -28,18 +28,18 @@ const CSelectContainer = ({ selected, func }: Props) => {
         }
       }
     },
-    [visibleOption],
+    [visibleOption]
   );
 
   useEffect(() => {
-    window.addEventListener('click', optionHandler);
+    window.addEventListener("click", optionHandler);
     return () => {
-      window.removeEventListener('click', optionHandler);
+      window.removeEventListener("click", optionHandler);
     };
   }, [optionHandler]);
 
   return (
-    <CSelect
+    <ContentSelect
       selected={selected}
       onChangeSelect={onChangeSelect}
       visibleOption={visibleOption}
@@ -49,4 +49,4 @@ const CSelectContainer = ({ selected, func }: Props) => {
   );
 };
 
-export default CSelectContainer;
+export default ContentSelectContainer;
