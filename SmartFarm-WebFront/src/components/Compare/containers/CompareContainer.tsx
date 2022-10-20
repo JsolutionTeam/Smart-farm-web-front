@@ -2,6 +2,7 @@ import Compare from "../Compare";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import useToken from "@hooks/useToken";
 import useUser from "@hooks/useUser";
+import useSelected from "@hooks/useSelected";
 import { apiRoute, requestSecureGet } from "@lib/api";
 import { setStartDate, setEndDate, getPrevMonth } from "@lib/date";
 import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
@@ -13,7 +14,11 @@ import dayjs from "dayjs";
 const CompareContainer = () => {
   const { getToken } = useToken();
   const { getUser } = useUser();
-  const siteSeq = useMemo(() => getUser().siteSeq, [getUser]);
+  const { getSelected } = useSelected();
+  const siteSeq = useMemo(
+    () => (getSelected().id ? getSelected().id : getUser().siteSeq),
+    [getSelected, getUser]
+  );
   const [selectedDate, setSelectedDate] = useState<{
     first: { start: Date; end: Date };
     second: { start: Date | null; end: Date | null };
@@ -27,6 +32,9 @@ const CompareContainer = () => {
       end: null,
     },
   });
+
+  console.log("compareContainer 실행", getSelected());
+  // console.log(siteSeq);
 
   const [selectedContent, setSelectedContent] = useState<ContentTypes>(
     contents[0]
@@ -217,6 +225,7 @@ const CompareContainer = () => {
   // 데이터 조회
   const getData = useCallback(
     async (isSecond?: "isSecond") => {
+      console.log("getData 실행");
       const { start, end } = isSecond
         ? selectedDate.second
         : selectedDate.first;

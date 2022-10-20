@@ -1,12 +1,12 @@
-import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import styled from "styled-components";
+import { NavLink } from "react-router-dom";
 
 const GNB = () => {
   return (
     <GNBBox>
-      <NavLink to='/'>실시간</NavLink>
-      <NavLink to='/period'>기간</NavLink>
-      <NavLink to='/compare'>비교</NavLink>
+      <NavLink to="/realtime">실시간</NavLink>
+      <NavLink to="/period">기간</NavLink>
+      <NavLink to="/compare">비교</NavLink>
     </GNBBox>
   );
 };

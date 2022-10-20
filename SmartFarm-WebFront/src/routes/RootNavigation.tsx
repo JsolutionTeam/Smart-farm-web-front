@@ -1,27 +1,29 @@
-import styled from 'styled-components';
-import { Route, Routes } from 'react-router';
-import { BrowserRouter } from 'react-router-dom';
-import useToken from '@hooks/useToken';
-import MainNavigation from './components/MainNavigation';
-import LoginContainer from '@components/Login/containers/LoginContainer';
-import useUser from '@hooks/useUser';
-import { useMemo } from 'react';
+import styled from "styled-components";
+import { Route, Routes } from "react-router";
+import { BrowserRouter } from "react-router-dom";
+import MainNavigation from "./components/MainNavigation";
+import LoginContainer from "@components/Login/containers/LoginContainer";
+import useToken from "@hooks/useToken";
+// import useUser from "@hooks/useUser";
+// import { useMemo } from "react";
+import ListSelectContainer from "@components/Common/CSelect/containers/ListSelectContainer";
 
 const RootNavigation = () => {
   const { getToken } = useToken();
-  const { getUser } = useUser();
-  const role = useMemo(() => getUser().role, [getUser]);
+  // const { getUser } = useUser();
+  // const role = useMemo(() => getUser().role, [getUser]);
 
   return (
     <BrowserRouter>
       <Header>
         <h3>스마트팜 혁신밸리</h3>
-        {role === 'ROLE_ADMIN' && <div>농장선택</div>}
+        <ListSelectContainer />
+        {/* {role === 'ROLE_ADMIN' && <div>농장선택</div>} */}
       </Header>
       <Body>
         <Routes>
           <Route
-            path='*'
+            path="*"
             element={getToken() ? <MainNavigation /> : <LoginContainer />}
           />
         </Routes>
@@ -44,15 +46,15 @@ const Header = styled.header`
   justify-content: center;
   border-bottom: 1px solid #e8e8e8;
 
-  div {
-    position: absolute;
-    right: 40px;
-  }
-
   @media ${({ theme }) => theme.media.mobile} {
     height: 90px;
+    justify-content: space-between;
+    padding: 0 20px;
     h3 {
       font-size: 22px;
+    }
+    section {
+      right: 20px;
     }
   }
 `;

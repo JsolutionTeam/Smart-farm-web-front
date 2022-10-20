@@ -1,9 +1,9 @@
-import * as S from '@styles/components/ChartViewStyle';
-import CSelectContainer from '@components/Common/CSelect/containers/CSelectContainer';
-import CDatePicker from '@components/Common/CDatePicker/CDatePicker';
-import LineChart from '@components/Common/CChart/LineChart';
-import { ChartDataTypes } from '@typedef/components/Common/chart.data.types';
-import { ContentTypes } from '@typedef/assets/content.types';
+import * as S from "@styles/components/ChartViewStyle";
+import ContentSelectContainer from "@components/Common/CSelect/containers/ContentSelectContainer";
+import CDatePicker from "@components/Common/CDatePicker/CDatePicker";
+import LineChart from "@components/Common/CChart/LineChart";
+import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
+import { ContentTypes } from "@typedef/assets/content.types";
 
 type Props = {
   selectedContent: ContentTypes;
@@ -12,7 +12,7 @@ type Props = {
     start: Date;
     end: Date;
   };
-  onChangeDate: (name: 'start' | 'end', date: Date) => void;
+  onChangeDate: (name: "start" | "end", date: Date) => void;
   chartData: ChartDataTypes;
 };
 
@@ -25,7 +25,10 @@ const Period = ({
 }: Props) => {
   return (
     <S.Main>
-      <CSelectContainer selected={selectedContent} func={onChangeContent} />
+      <ContentSelectContainer
+        selected={selectedContent}
+        func={onChangeContent}
+      />
       <S.Contents>
         <header>
           <CDatePicker selectedDate={selectedDate} func={onChangeDate} />

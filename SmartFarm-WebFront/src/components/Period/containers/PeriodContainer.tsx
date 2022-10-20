@@ -1,44 +1,49 @@
-import Period from '../Period';
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import useToken from '@hooks/useToken';
-import useUser from '@hooks/useUser';
-import { apiRoute, requestSecureGet } from '@lib/api';
-import { setStartDate, setEndDate, getPrevMonth } from '@lib/date';
-import { ChartDataTypes } from '@typedef/components/Common/chart.data.types';
-import { ContentTypes } from '@typedef/assets/content.types';
-import { contents } from '@assets/content';
-import { PeriodTypes } from '@typedef/components/Period/period.types';
-import dayjs from 'dayjs';
+import Period from "../Period";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import useToken from "@hooks/useToken";
+import useUser from "@hooks/useUser";
+import useSelected from "@hooks/useSelected";
+import { apiRoute, requestSecureGet } from "@lib/api";
+import { setStartDate, setEndDate, getPrevMonth } from "@lib/date";
+import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
+import { ContentTypes } from "@typedef/assets/content.types";
+import { contents } from "@assets/content";
+import { PeriodTypes } from "@typedef/components/Period/period.types";
+import dayjs from "dayjs";
 
 const PeriodContainer = () => {
   const { getToken } = useToken();
   const { getUser } = useUser();
-  const siteSeq = useMemo(() => getUser().siteSeq, [getUser]);
+  const { getSelected } = useSelected();
+  const siteSeq = useMemo(
+    () => (getSelected().id ? getSelected().id : getUser().siteSeq),
+    [getSelected, getUser]
+  );
   const [selectedDate, setSelectedDate] = useState<{ start: Date; end: Date }>({
     start: getPrevMonth(),
     end: setEndDate(),
   });
   const [selectedContent, setSelectedContent] = useState<ContentTypes>(
-    contents[0],
+    contents[0]
   );
   const [allData, setAllData] = useState<PeriodTypes[]>([]);
   const [filteredData, setFilteredData] = useState<PeriodTypes[]>([]);
   const [chartLabels, setChartLabels] = useState<string[]>([]);
   const chartData: ChartDataTypes = useMemo(
     () => ({
-      labels: chartLabels.map((label) => dayjs(label).format('DD일 HH시')),
+      labels: chartLabels.map((label) => dayjs(label).format("DD일 HH시")),
       datasets: [
         {
-          label: '기간',
+          label: "기간",
           data: filteredData.map((data) =>
-            Math.round(data[selectedContent.value]),
+            Math.round(data[selectedContent.value])
           ),
-          borderColor: '#058b6b',
-          backgroundColor: '#058b6b',
+          borderColor: "#058b6b",
+          backgroundColor: "#058b6b",
         },
       ],
     }),
-    [filteredData, chartLabels, selectedContent.value],
+    [filteredData, chartLabels, selectedContent.value]
   );
 
   // 콘텐츠 선택
@@ -47,10 +52,10 @@ const PeriodContainer = () => {
   };
 
   // 시작일, 종료일 선택
-  const onChangeDate = (name: 'start' | 'end', date: Date) => {
+  const onChangeDate = (name: "start" | "end", date: Date) => {
     let temp = new Date();
 
-    if (name === 'start') {
+    if (name === "start") {
       // 시간 00:00:00 설정
       temp = setStartDate(date);
     } else {
@@ -70,7 +75,7 @@ const PeriodContainer = () => {
 
     // 선택한 일 수 (종료일 - 시작일)
     const diffDate = Math.ceil(
-      (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24),
+      (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
     );
 
     let labels: string[] = [];
@@ -85,9 +90,9 @@ const PeriodContainer = () => {
           start.getDate(),
           hour * i,
           0,
-          0,
+          0
         );
-        labels.push(dayjs(date).format('YYYY-MM-DD HH:mm'));
+        labels.push(dayjs(date).format("YYYY-MM-DD HH:mm"));
       }
     }
 
@@ -115,9 +120,9 @@ const PeriodContainer = () => {
           start.getDate() + i,
           12,
           0,
-          0,
+          0
         );
-        labels.push(dayjs(date).format('YYYY-MM-DD HH:mm'));
+        labels.push(dayjs(date).format("YYYY-MM-DD HH:mm"));
       }
     }
 
@@ -127,7 +132,7 @@ const PeriodContainer = () => {
     // 존재하지 않는 경우 데이터 0으로 초기화
     for (let i = 0; i < labels.length; i++) {
       const filtered = allData.filter(
-        (period) => period.microRegTime.slice(0, -3) === labels[i],
+        (period) => period.microRegTime.slice(0, -3) === labels[i]
       );
       if (filtered.length) {
         temp.push(filtered[0]);
@@ -136,7 +141,7 @@ const PeriodContainer = () => {
           co2: 0,
           co2RegTime: 0,
           earthTemperature: 0,
-          microRegTime: '',
+          microRegTime: "",
           rainfall: 0,
           relativeHumidity: 0,
           solarRadiation: 0,
@@ -154,19 +159,23 @@ const PeriodContainer = () => {
   // 데이터 조회
   const getData = useCallback(async () => {
     function formatDate(date: Date) {
-      return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
+      return dayjs(date).format("YYYY-MM-DD HH:mm:ss");
     }
 
     const { config, data } = await requestSecureGet<PeriodTypes[]>(
       apiRoute.site +
         `${siteSeq}/summary?startTime=${formatDate(
-          selectedDate.start,
+          selectedDate.start
         )}&endTime=${formatDate(selectedDate.end)}`,
       {},
-      getToken()!,
+      getToken()!
     );
 
     if (config.status >= 200 && config.status < 400) {
+      if (data.length === 1) {
+        alert("해당 기간에 수집된 데이터가 없습니다.");
+        return;
+      }
       setAllData(data);
     }
   }, [getToken, selectedDate, siteSeq]);
@@ -178,6 +187,8 @@ const PeriodContainer = () => {
   useEffect(() => {
     setChartData();
   }, [setChartData]);
+
+  console.log(siteSeq);
 
   return (
     <Period

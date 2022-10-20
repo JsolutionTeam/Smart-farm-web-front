@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import { contents } from '@assets/content';
-import { ContentTypes } from '@typedef/assets/content.types';
-import { FiChevronDown } from 'react-icons/fi';
+import { contents } from "@assets/content";
+import { ContentTypes } from "@typedef/assets/content.types";
+import { FiChevronDown } from "react-icons/fi";
+import styled from "styled-components";
 
 type Props = {
   selected: ContentTypes;
@@ -11,7 +11,7 @@ type Props = {
   selectRef: React.RefObject<HTMLElement>;
 };
 
-const CSelect = ({
+const ContentSelect = ({
   selected,
   onChangeSelect,
   visibleOption,
@@ -19,17 +19,18 @@ const CSelect = ({
   selectRef,
 }: Props) => {
   return (
-    <CSelectBox ref={selectRef} className='cselect'>
+    <CSelectBox ref={selectRef} className="cselect">
       <Selected onClick={onClickSelected}>
         <p>{selected.name}</p>
-        <FiChevronDown className={visibleOption ? 'arrow open' : 'arrow'} />
+        <FiChevronDown className={visibleOption ? "arrow open" : "arrow"} />
       </Selected>
       <Options visible={visibleOption}>
         {contents.map((content) => (
           <Option
             key={content.value}
             onClick={() => onChangeSelect(content)}
-            selected={content.name === selected.name}>
+            selected={content.name === selected.name}
+          >
             {content.name}
           </Option>
         ))}
@@ -38,7 +39,7 @@ const CSelect = ({
   );
 };
 
-export default CSelect;
+export default ContentSelect;
 
 const CSelectBox = styled.section`
   width: 190px;
@@ -58,10 +59,8 @@ const Selected = styled.button`
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-
   .arrow {
   }
-
   .open {
     transform: rotate(180deg);
   }
@@ -69,7 +68,7 @@ const Selected = styled.button`
 
 const Options = styled.div<{ visible: boolean }>`
   width: 100%;
-  display: ${({ visible }) => (visible ? 'block' : 'none')};
+  display: ${({ visible }) => (visible ? "block" : "none")};
   position: absolute;
   top: 55px;
   background-color: #e4eeee;
@@ -82,14 +81,12 @@ const Options = styled.div<{ visible: boolean }>`
 const Option = styled.div<{ selected: boolean }>`
   line-height: 45px;
   padding: 0 20px;
-  color: ${({ selected }) => !selected && '#767676'};
+  color: ${({ selected }) => !selected && "#767676"};
   border-bottom: 1px solid #45b298;
   cursor: pointer;
-
   &:last-child {
     border-bottom: none;
   }
-
   &:hover {
     background-color: rgb(69, 178, 152, 0.2);
   }

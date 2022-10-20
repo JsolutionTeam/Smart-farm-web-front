@@ -2,7 +2,7 @@ import * as S from "@styles/components/ChartViewStyle";
 import LineChart from "@components/Common/CChart/LineChart";
 import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
 import { ContentTypes } from "@typedef/assets/content.types";
-import CSelectContainer from "@components/Common/CSelect/containers/CSelectContainer";
+import ContentSelectContainer from "@components/Common/CSelect/containers/ContentSelectContainer";
 import CDatePicker from "@components/Common/CDatePicker/CDatePicker";
 
 type Props = {
@@ -35,7 +35,10 @@ const Compare = ({
 }: Props) => {
   return (
     <S.Main>
-      <CSelectContainer selected={selectedContent} func={onChangeContent} />
+      <ContentSelectContainer
+        selected={selectedContent}
+        func={onChangeContent}
+      />
       <S.Contents>
         <header>
           <div className="datePickerBox">
