@@ -107,7 +107,7 @@ const RealTimeContainer = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       getRealTimeData();
-    }, 50000000);
+    }, 5000);
     return () => {
       clearInterval(interval);
     };
