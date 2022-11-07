@@ -14,7 +14,7 @@ const RealTimeContainer = () => {
   const { getUser } = useUser();
   const { getSelected } = useSelected();
   const siteSeq = useMemo(
-    () => (getSelected() ? getSelected().id : getUser().siteSeq),
+    () => (getSelected().id ? getSelected().id : getUser().siteSeq),
     [getSelected, getUser]
   );
   const [realTimeData, setRealTimeData] = useState<RealTimeTypes>({
