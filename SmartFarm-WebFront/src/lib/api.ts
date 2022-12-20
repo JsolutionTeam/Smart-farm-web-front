@@ -1,14 +1,14 @@
-import axios from 'axios';
+import axios from "axios";
 
-const dev = 'http://14.45.108.75/sf_viewer/backend/api';
-const prod = 'http://14.45.108.75/sf_viewer/backend/api';
+const dev = "http://sf.j-sol.co.kr/sf_viewer/backend/api";
+const prod = "http://sf.j-sol.co.kr/sf_viewer/backend/api";
 
-export const API_ORIGIN = process.env.NODE_ENV === 'development' ? dev : prod;
+export const API_ORIGIN = process.env.NODE_ENV === "development" ? dev : prod;
 
 axios.defaults.baseURL = API_ORIGIN;
 
 axios.interceptors.request.use((req) => {
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === "development") {
     console.log(req);
   }
 
@@ -16,7 +16,7 @@ axios.interceptors.request.use((req) => {
 });
 
 axios.interceptors.response.use((res) => {
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === "development") {
     console.log(res);
   }
 
@@ -25,10 +25,10 @@ axios.interceptors.response.use((res) => {
 
 export const apiRoute = {
   auth: {
-    login: '/auth/login',
-    refresh: '/auth/refresh',
+    login: "/auth/login",
+    refresh: "/auth/refresh",
   },
-  site: '/v1/site/',
+  site: "/v1/site/",
 };
 
 export type BasicApiResponse<T> = {
@@ -52,12 +52,12 @@ export type BasicListApiResponse<T> = {
 
 export function requestGet<T>(
   url: string,
-  header: object,
+  header: object
 ): Promise<BasicApiResponse<T>> {
   return axios
     .get(url, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...header,
       },
     })
@@ -69,10 +69,10 @@ export function requestGet<T>(
             status: res.status,
             ...res.data?.meta,
           },
-        } as BasicApiResponse<T>),
+        } as BasicApiResponse<T>)
     )
     .catch((err) => {
-      console.error('[Axios Error]', err);
+      console.error("[Axios Error]", err);
 
       return {
         data: {} as T,
@@ -86,12 +86,12 @@ export function requestGet<T>(
 export function requestSecureGet<T>(
   url: string,
   header: object,
-  token: string,
+  token: string
 ): Promise<BasicApiResponse<T>> {
   return axios
     .get(url, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `${token}`,
         ...header,
       },
@@ -104,10 +104,10 @@ export function requestSecureGet<T>(
             status: res.status,
             ...res.data?.meta,
           },
-        } as BasicApiResponse<T>),
+        } as BasicApiResponse<T>)
     )
     .catch((err) => {
-      console.error('[Axios Error]', err);
+      console.error("[Axios Error]", err);
 
       return {
         data: {} as T,
@@ -120,12 +120,12 @@ export function requestSecureGet<T>(
 
 export function requestDelete<T>(
   url: string,
-  header: object,
+  header: object
 ): Promise<BasicApiResponse<T>> {
   return axios
     .delete(url, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...header,
       },
     })
@@ -137,10 +137,10 @@ export function requestDelete<T>(
             status: res.status,
             ...res.data?.meta,
           },
-        } as BasicApiResponse<T>),
+        } as BasicApiResponse<T>)
     )
     .catch((err) => {
-      console.error('[Axios Error]', err);
+      console.error("[Axios Error]", err);
 
       return {
         data: {} as T,
@@ -154,12 +154,12 @@ export function requestDelete<T>(
 export function requestSecureDelete<T>(
   url: string,
   header: object,
-  token: string,
+  token: string
 ): Promise<BasicApiResponse<T>> {
   return axios
     .delete(url, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `${token}`,
         ...header,
       },
@@ -172,10 +172,10 @@ export function requestSecureDelete<T>(
             status: res.status,
             ...res.data?.meta,
           },
-        } as BasicApiResponse<T>),
+        } as BasicApiResponse<T>)
     )
     .catch((err) => {
-      console.error('[Axios Error]', err);
+      console.error("[Axios Error]", err);
 
       return {
         data: {} as T,
@@ -189,12 +189,12 @@ export function requestSecurePost<T>(
   url: string,
   header: object,
   body: object,
-  token: string,
+  token: string
 ): Promise<BasicApiResponse<T>> {
   return axios
     .post(url, body, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `${token}`,
         ...header,
       },
@@ -207,10 +207,10 @@ export function requestSecurePost<T>(
             status: res.status,
             ...res.data?.meta,
           },
-        } as BasicApiResponse<T>),
+        } as BasicApiResponse<T>)
     )
     .catch((err) => {
-      console.error('[Axios Error]', err);
+      console.error("[Axios Error]", err);
 
       return {
         data: {} as T,
@@ -224,12 +224,12 @@ export function requestSecurePost<T>(
 export function requestPost<T>(
   url: string,
   header: object,
-  body: object,
+  body: object
 ): Promise<BasicApiResponse<T>> {
   return axios
     .post(url, body, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...header,
       },
     })
@@ -241,10 +241,10 @@ export function requestPost<T>(
             status: res.status,
             ...res.data?.meta,
           },
-        } as BasicApiResponse<T>),
+        } as BasicApiResponse<T>)
     )
     .catch((err) => {
-      console.error('[Axios Error]', err.response);
+      console.error("[Axios Error]", err.response);
 
       return {
         data: {} as T,
@@ -259,12 +259,12 @@ export function requestSecurePatch<T>(
   url: string,
   header: object,
   body: object,
-  token: string,
+  token: string
 ): Promise<BasicApiResponse<T>> {
   return axios
     .patch(url, body, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `${token}`,
         ...header,
       },
@@ -277,10 +277,10 @@ export function requestSecurePatch<T>(
             status: res.status,
             ...res.data?.meta,
           },
-        } as BasicApiResponse<T>),
+        } as BasicApiResponse<T>)
     )
     .catch((err) => {
-      console.error('[Axios Error]', err);
+      console.error("[Axios Error]", err);
 
       return {
         data: {} as T,
@@ -295,12 +295,12 @@ export function requestMultipart<T>(
   url: string,
   header: object,
   body: FormData,
-  token: string,
+  token: string
 ): Promise<BasicApiResponse<T>> {
   return axios
     .post(url, body, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
         Authorization: `${token}`,
         ...header,
       },
@@ -313,10 +313,10 @@ export function requestMultipart<T>(
             status: res.status,
             ...res.data?.meta,
           },
-        } as BasicApiResponse<T>),
+        } as BasicApiResponse<T>)
     )
     .catch((err) => {
-      console.error('[Axios Error]', err);
+      console.error("[Axios Error]", err);
 
       return {
         data: {} as T,

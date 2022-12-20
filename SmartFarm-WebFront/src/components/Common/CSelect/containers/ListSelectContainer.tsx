@@ -27,7 +27,6 @@ const ListSelectContainer = () => {
   };
 
   const getOptions = useCallback(async () => {
-    console.log("getOptions 실행");
     const { config, data } = await requestSecureGet<ListTypes[]>(
       apiRoute.site + "list",
       {},
