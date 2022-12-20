@@ -33,9 +33,6 @@ const CompareContainer = () => {
     },
   });
 
-  console.log("compareContainer 실행", getSelected());
-  // console.log(siteSeq);
-
   const [selectedContent, setSelectedContent] = useState<ContentTypes>(
     contents[0]
   );
@@ -183,8 +180,10 @@ const CompareContainer = () => {
     function filteredData(data: PeriodTypes[], labels: string[]) {
       let temp: PeriodTypes[] = [];
       for (let i = 0; i < labels.length; i++) {
-        const filtered = data.filter(
-          (period) => period.microRegTime.slice(0, -3) === labels[i]
+        const filtered = data.filter((period) =>
+          period.microRegTime !== null
+            ? period.microRegTime.slice(0, -3) === labels[i]
+            : ""
         );
         if (filtered.length) {
           temp.push(filtered[0]);
@@ -225,10 +224,11 @@ const CompareContainer = () => {
   // 데이터 조회
   const getData = useCallback(
     async (isSecond?: "isSecond") => {
-      console.log("getData 실행");
       const { start, end } = isSecond
         ? selectedDate.second
         : selectedDate.first;
+
+      if (start === null) return;
 
       function formatDate(date: Date) {
         return dayjs(date).format("YYYY-MM-DD HH:mm:ss");

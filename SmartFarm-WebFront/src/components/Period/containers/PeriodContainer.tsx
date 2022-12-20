@@ -131,8 +131,10 @@ const PeriodContainer = () => {
     // 데이터의 시간과 라벨의 시간이 같은 데이터 필터링
     // 존재하지 않는 경우 데이터 0으로 초기화
     for (let i = 0; i < labels.length; i++) {
-      const filtered = allData.filter(
-        (period) => period.microRegTime.slice(0, -3) === labels[i]
+      const filtered = allData.filter((period) =>
+        period.microRegTime !== null
+          ? period.microRegTime.slice(0, -3) === labels[i]
+          : ""
       );
       if (filtered.length) {
         temp.push(filtered[0]);

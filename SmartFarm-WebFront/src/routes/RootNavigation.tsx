@@ -4,21 +4,32 @@ import { BrowserRouter } from "react-router-dom";
 import MainNavigation from "./components/MainNavigation";
 import LoginContainer from "@components/Login/containers/LoginContainer";
 import useToken from "@hooks/useToken";
-// import useUser from "@hooks/useUser";
-// import { useMemo } from "react";
-// import ListSelectContainer from "@components/Common/CSelect/containers/ListSelectContainer";
+import useUser from "@hooks/useUser";
+import { useMemo } from "react";
+import ListSelectContainer from "@components/Common/CSelect/containers/ListSelectContainer";
+import { FiLogOut } from "react-icons/fi";
 
 const RootNavigation = () => {
-  const { getToken } = useToken();
-  // const { getUser } = useUser();
-  // const role = useMemo(() => getUser().role, [getUser]);
+  const { getToken, clearToken } = useToken();
+  const { getUser, clearUser } = useUser();
+  const role = useMemo(() => getUser().role, [getUser]);
+
+  const logout = () => {
+    clearToken();
+    clearUser();
+    window.location.reload();
+  };
 
   return (
     <BrowserRouter>
       <Header>
+        {getToken() && (
+          <button onClick={logout} className="logout">
+            <FiLogOut />
+          </button>
+        )}
         <h3>스마트팜 혁신밸리</h3>
-        {/* <ListSelectContainer /> */}
-        {/* {role === 'ROLE_ADMIN' && <div>농장선택</div>} */}
+        {role === "ROLE_ADMIN" && <ListSelectContainer />}
       </Header>
       <Body>
         <Routes>
@@ -46,6 +57,14 @@ const Header = styled.header`
   justify-content: center;
   border-bottom: 1px solid #e8e8e8;
 
+  .logout {
+    position: absolute;
+    left: 40px;
+    font-size: 16px;
+    background: none;
+    cursor: pointer;
+  }
+
   @media ${({ theme }) => theme.media.mobile} {
     height: 90px;
     justify-content: space-between;
@@ -53,8 +72,13 @@ const Header = styled.header`
     h3 {
       font-size: 22px;
     }
+
     section {
       right: 20px;
+    }
+
+    .logout {
+      display: none;
     }
   }
 `;

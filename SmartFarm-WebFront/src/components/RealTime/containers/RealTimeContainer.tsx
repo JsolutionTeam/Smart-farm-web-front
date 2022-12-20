@@ -14,7 +14,7 @@ const RealTimeContainer = () => {
   const { getUser } = useUser();
   const { getSelected } = useSelected();
   const siteSeq = useMemo(
-    () => (getSelected() ? getSelected().id : getUser().siteSeq),
+    () => (getSelected().id ? getSelected().id : getUser().siteSeq),
     [getSelected, getUser]
   );
   const [realTimeData, setRealTimeData] = useState<RealTimeTypes>({
@@ -107,7 +107,7 @@ const RealTimeContainer = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       getRealTimeData();
-    }, 50000000);
+    }, 5000);
     return () => {
       clearInterval(interval);
     };

@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import img from '@assets/image';
+import styled from "styled-components";
+import img from "@assets/image";
 
 type Props = {
   onChangeInputs: (e: { target: HTMLInputElement }) => void;
@@ -13,25 +13,24 @@ const Login = ({ onChangeInputs, onClickLogin }: Props) => {
         <header>로그인</header>
         <Inputs>
           <input
-            type='text'
-            name='id'
+            type="text"
+            name="id"
             onChange={onChangeInputs}
             autoFocus
-            placeholder='아이디'
+            placeholder="아이디"
           />
           <input
-            type='password'
-            name='passwd'
+            type="password"
+            name="passwd"
             onChange={onChangeInputs}
-            placeholder='비밀번호'
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                onClickLogin();
+              }
+            }}
+            placeholder="비밀번호"
           />
-          <button type='button' onClick={onClickLogin}
-          onKeyPress={(e) => {
-            if(e.key === 'Enter') {
-              onClickLogin()
-            }
-          }}
-          >
+          <button type="button" onClick={onClickLogin}>
             로그인
           </button>
         </Inputs>
@@ -42,8 +41,8 @@ const Login = ({ onChangeInputs, onClickLogin }: Props) => {
 
 export default Login;
 
-const radius = '8px';
-const space = '60px';
+const radius = "8px";
+const space = "60px";
 
 export const Main = styled.main`
   width: 100%;

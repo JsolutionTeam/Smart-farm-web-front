@@ -56,7 +56,7 @@ const Selected = styled.button`
   background-color: #e4eeee;
   color: #000;
   border: 1px solid #45b298;
-  border-radius: 5px;
+border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
   .arrow {
