@@ -1,6 +1,6 @@
-import { useCallback } from 'react';
+import { useCallback } from "react";
 
-const ACCESS_TOKEN_KEY = '@accessToken' as const;
+const ACCESS_TOKEN_KEY = "@accessToken" as const;
 
 export default function useToken() {
   const getToken = useCallback(() => {
@@ -11,7 +11,7 @@ export default function useToken() {
     localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
   }, []);
 
-  const clearToken = useCallback((accessToken: string) => {
+  const clearToken = useCallback(() => {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
   }, []);
 
