@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const dev = "http://sf.j-sol.co.kr/sf_viewer/backend/api";
-const prod = "http://sf.j-sol.co.kr/sf_viewer/backend/api";
+const dev = "http://39.112.10.37/api";
+const prod = "http://39.112.10.37/api";
 
 export const API_ORIGIN = process.env.NODE_ENV === "development" ? dev : prod;
 
