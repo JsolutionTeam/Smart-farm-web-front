@@ -24,12 +24,17 @@ const RootNavigation = () => {
     <BrowserRouter>
       <Header>
         {getToken() && (
-          <button onClick={logout} className="logout">
+          <button onClick={logout} className="logout desktop">
             <FiLogOut />
           </button>
         )}
         <h3>스마트팜 혁신밸리</h3>
         {role === "ROLE_ADMIN" && <ListSelectContainer />}
+        {getToken() && role === "ROLE_USER" && (
+          <button onClick={logout} className="logout mobile">
+            <FiLogOut />
+          </button>
+        )}
       </Header>
       <Body>
         <Routes>
@@ -65,10 +70,16 @@ const Header = styled.header`
     cursor: pointer;
   }
 
+  .mobile {
+    display: none;
+  }
+
   @media ${({ theme }) => theme.media.mobile} {
     height: 90px;
     justify-content: space-between;
     padding: 0 20px;
+    position: relative;
+
     h3 {
       font-size: 22px;
     }
@@ -78,6 +89,11 @@ const Header = styled.header`
     }
 
     .logout {
+      display: block;
+      position: static;
+    }
+
+    .desktop {
       display: none;
     }
   }
