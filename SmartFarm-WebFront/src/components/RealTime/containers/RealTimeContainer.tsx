@@ -118,7 +118,13 @@ const RealTimeContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <RealTime contents={contents} setClassName={setClassName} />;
+  return (
+    <RealTime
+      contents={contents}
+      setClassName={setClassName}
+      time={{ co2: realTimeData.co2RegTime, micro: realTimeData.microRegTime }}
+    />
+  );
 };
 
 export default RealTimeContainer;

@@ -1,19 +1,23 @@
-import styled from 'styled-components';
-import { realTimeListTypes } from '@typedef/components/RealTime/real.time.list.types';
-import { UnitTypes } from '@typedef/components/RealTime/unit.types';
+import styled from "styled-components";
+import { realTimeListTypes } from "@typedef/components/RealTime/real.time.list.types";
+import { UnitTypes } from "@typedef/components/RealTime/unit.types";
 
 type Props = {
   contents: realTimeListTypes[];
-  setClassName: (unit: UnitTypes) => '' | 'big';
+  setClassName: (unit: UnitTypes) => "" | "big";
+  time: {
+    co2: number;
+    micro: number;
+  };
 };
 
-const RealTime = ({ contents, setClassName }: Props) => {
+const RealTime = ({ contents, setClassName, time }: Props) => {
   return (
     <Main>
       {contents.map((content) => (
         <Content key={content.name}>
           <section>
-            <p className='name'>{content.name}</p>
+            <p className="name">{content.name}</p>
             <Value>
               {content.value ? Math.round(content.value) : 0}
               <span className={setClassName(content.unit)}>{content.unit}</span>
@@ -22,6 +26,16 @@ const RealTime = ({ contents, setClassName }: Props) => {
           <img src={content.icon} alt={`${content.name} 아이콘`} />
         </Content>
       ))}
+      <Times>
+        <div>
+          <p>co2 수집시간</p>
+          <p>{time.co2 || "없음"}</p>
+        </div>
+        <div>
+          <p>micro 수집시간</p>
+          <p>{time.micro || "없음"}</p>
+        </div>
+      </Times>
     </Main>
   );
 };
@@ -92,5 +106,17 @@ const Value = styled.p`
       line-height: 45px;
       font-size: 45px;
     }
+  }
+`;
+
+const Times = styled.section`
+  ${({ theme }) => theme.flex.col}
+
+  div:first-child {
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: #999;
   }
 `;
