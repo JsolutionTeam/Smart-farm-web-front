@@ -94,13 +94,13 @@ const RealTimeContainer = () => {
   };
 
   const getRealTimeData = useCallback(async () => {
-    const { config, data } = await requestSecureGet<RealTimeTypes[]>(
+    const { config, data } = await requestSecureGet<RealTimeTypes>(
       apiRoute.site + `${siteSeq}/realtime`,
       {},
       getToken()!
     );
     if (config.status >= 200 && config.status < 400) {
-      setRealTimeData(data[0]);
+      setRealTimeData(data);
     }
   }, [siteSeq, getToken]);
 
@@ -117,6 +117,8 @@ const RealTimeContainer = () => {
     getRealTimeData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  console.log("realTimeData", realTimeData);
 
   return (
     <RealTime
