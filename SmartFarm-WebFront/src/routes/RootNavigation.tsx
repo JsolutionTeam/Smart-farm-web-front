@@ -28,7 +28,7 @@ const RootNavigation = () => {
             <FiLogOut />
           </button>
         )}
-        <h3>스마트팜 혁신밸리</h3>
+        <h3>환경 데이터 모니터링</h3>
         {role === "ROLE_ADMIN" && <ListSelectContainer />}
         {getToken() && role === "ROLE_USER" && (
           <button onClick={logout} className="logout mobile">
@@ -44,7 +44,7 @@ const RootNavigation = () => {
           />
         </Routes>
         <Copyright>
-          Copyright &copy; 스마트팜 혁신밸리 All Rights Reserved.
+          Copyright &copy; 환경 데이터 모니터링 All Rights Reserved.
         </Copyright>
       </Body>
     </BrowserRouter>
