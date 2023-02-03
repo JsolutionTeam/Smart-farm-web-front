@@ -1,19 +1,25 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import useUser from "@hooks/useUser";
+import { useMemo } from "react";
 
 const GNB = () => {
+  const { getUser } = useUser();
+  const role = useMemo(() => getUser().role, [getUser]);
+
   return (
-    <GNBBox>
+    <Container>
       <NavLink to="/realtime">실시간</NavLink>
       <NavLink to="/period">기간</NavLink>
       <NavLink to="/compare">비교</NavLink>
-    </GNBBox>
+      {role === "ROLE_ADMIN" && <NavLink to="/account">계정</NavLink>}
+    </Container>
   );
 };
 
 export default GNB;
 
-const GNBBox = styled.header`
+const Container = styled.header`
   height: 3.5vw;
   ${({ theme }) => theme.flex.row}
   align-items: center;

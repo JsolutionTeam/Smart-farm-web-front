@@ -13,7 +13,7 @@ type Props = {
 
 const RealTime = ({ contents, setClassName, time }: Props) => {
   return (
-    <Main>
+    <Container>
       {contents.map((content) => (
         <Content key={content.name}>
           <section>
@@ -36,13 +36,13 @@ const RealTime = ({ contents, setClassName, time }: Props) => {
           <p>{time.micro || "없음"}</p>
         </div>
       </Times>
-    </Main>
+    </Container>
   );
 };
 
 export default RealTime;
 
-const Main = styled.main`
+const Container = styled.main`
   display: grid;
   grid-template-columns: repeat(4, 13vw);
   grid-template-rows: repeat(2, 13vw);

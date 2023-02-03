@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const dev = "http://39.112.10.37/api";
+const dev = "http://192.168.0.215:18080/api";
 const prod = "http://39.112.10.37/api";
 
 export const API_ORIGIN = process.env.NODE_ENV === "development" ? dev : prod;
@@ -15,13 +15,25 @@ axios.interceptors.request.use((req) => {
   return req;
 });
 
-axios.interceptors.response.use((res) => {
-  if (process.env.NODE_ENV === "development") {
-    console.log(res);
-  }
+axios.interceptors.response.use(
+  (res) => {
+    if (process.env.NODE_ENV === "development") {
+      console.log(res);
+    }
 
-  return res;
-});
+    return res;
+  },
+  async (error) => {
+    if (error.response.status === 401) {
+      if (localStorage.getItem("@accessToken")) {
+        alert("장시간 미사용으로 로그아웃 되었습니다");
+        localStorage.removeItem("@accessToken");
+        localStorage.removeItem("@user");
+        window.location.reload();
+      }
+    }
+  }
+);
 
 export const apiRoute = {
   auth: {
@@ -92,7 +104,7 @@ export function requestSecureGet<T>(
     .get(url, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `${token}`,
+        Authorization: `Bearer ${token}`,
         ...header,
       },
     })
@@ -245,6 +257,45 @@ export function requestPost<T>(
     )
     .catch((err) => {
       console.error("[Axios Error]", err.response);
+
+      return {
+        data: {} as T,
+        config: {
+          status: -1,
+        },
+      } as BasicApiResponse<T>;
+    });
+}
+
+export function requestSecurePut<T>(
+  url: string,
+  header: object,
+  body: object,
+  token: string
+): Promise<BasicApiResponse<T>> {
+  return axios
+    .put(url, body, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-AUTH-TOKEN": `${token}`,
+        ...header,
+      },
+    })
+    .then(
+      (res) =>
+        ({
+          data: res.data?.data as T,
+          config: {
+            status: res.status,
+            msg: res.data?.msg,
+            code: res.data?.code,
+            success: res.data?.success,
+            version: res.data?.version,
+          },
+        } as BasicApiResponse<T>)
+    )
+    .catch((err) => {
+      console.error("[Axios Error]", err);
 
       return {
         data: {} as T,

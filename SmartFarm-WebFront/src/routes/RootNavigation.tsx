@@ -1,109 +1,33 @@
 import styled from "styled-components";
 import { Route, Routes } from "react-router";
-import { BrowserRouter } from "react-router-dom";
-import MainNavigation from "./components/MainNavigation";
-import LoginContainer from "@components/Login/containers/LoginContainer";
 import useToken from "@hooks/useToken";
-import useUser from "@hooks/useUser";
-import { useMemo } from "react";
-import ListSelectContainer from "@components/Common/CSelect/containers/ListSelectContainer";
-import { FiLogOut } from "react-icons/fi";
+import MainNavigation from "./MainNavigation";
+import LoginContainer from "@components/Login/containers/LoginContainer";
 
 const RootNavigation = () => {
-  const { getToken, clearToken } = useToken();
-  const { getUser, clearUser } = useUser();
-  const role = useMemo(() => getUser().role, [getUser]);
-
-  const logout = () => {
-    clearToken();
-    clearUser();
-    window.location.reload();
-  };
+  const { getToken } = useToken();
 
   return (
-    <BrowserRouter>
-      <Header>
-        {getToken() && (
-          <button onClick={logout} className="logout desktop">
-            <FiLogOut />
-          </button>
-        )}
-        <h3>환경 데이터 모니터링</h3>
-        {role === "ROLE_ADMIN" && <ListSelectContainer />}
-        {getToken() && role === "ROLE_USER" && (
-          <button onClick={logout} className="logout mobile">
-            <FiLogOut />
-          </button>
-        )}
-      </Header>
-      <Body>
-        <Routes>
-          <Route
-            path="*"
-            element={getToken() ? <MainNavigation /> : <LoginContainer />}
-          />
-        </Routes>
-        <Copyright>
-          Copyright &copy; 환경 데이터 모니터링 All Rights Reserved.
-        </Copyright>
-      </Body>
-    </BrowserRouter>
+    <Container>
+      <Routes>
+        <Route
+          path="*"
+          element={getToken() ? <MainNavigation /> : <LoginContainer />}
+        />
+      </Routes>
+      <Copyright>
+        Copyright &copy; 환경 데이터 모니터링 All Rights Reserved.
+      </Copyright>
+    </Container>
   );
 };
 
 export default RootNavigation;
 
-// 헤더
-const Header = styled.header`
-  width: 100%;
-  height: 4.5vw;
-  ${({ theme }) => theme.flex.row}
-  align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid #e8e8e8;
-
-  .logout {
-    position: absolute;
-    left: 40px;
-    font-size: 16px;
-    background: none;
-    cursor: pointer;
-  }
-
-  .mobile {
-    display: none;
-  }
-
-  @media ${({ theme }) => theme.media.mobile} {
-    height: 90px;
-    justify-content: space-between;
-    padding: 0 20px;
-    position: relative;
-
-    h3 {
-      font-size: 22px;
-    }
-
-    section {
-      right: 20px;
-    }
-
-    .logout {
-      display: block;
-      position: static;
-    }
-
-    .desktop {
-      display: none;
-    }
-  }
-`;
-
-// 헤더 외 전체 영역
-const Body = styled.section`
-  width: 100%;
+const Container = styled.section`
+  width: 100vw;
   height: 100%;
-  min-height: calc(100vh - 4.5vw);
+  min-height: 100vh;
   background-color: #edf1f2;
   position: relative;
 `;
@@ -111,13 +35,15 @@ const Body = styled.section`
 // 카피라이트
 const Copyright = styled.p`
   position: absolute;
-  bottom: 2vw;
   left: 50%;
+  bottom: 40px;
   transform: translate(-50%, 0);
   color: #999;
 
   @media ${({ theme }) => theme.media.mobile} {
+    position: relative;
     width: 100%;
+    /* margin-top: ; */
     font-size: 12px;
     text-align: center;
   }

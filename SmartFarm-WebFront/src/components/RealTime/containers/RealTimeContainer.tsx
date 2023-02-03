@@ -118,8 +118,6 @@ const RealTimeContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log("realTimeData", realTimeData);
-
   return (
     <RealTime
       contents={contents}

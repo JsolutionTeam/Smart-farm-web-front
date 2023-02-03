@@ -8,9 +8,12 @@ type Props = {
 
 const Login = ({ onChangeInputs, onClickLogin }: Props) => {
   return (
-    <Main>
-      <LoginBox>
-        <header>로그인</header>
+    <Container>
+      <header>
+        <h3>환경 데이터 모니터링</h3>
+      </header>
+      <LoginContainer>
+        <p className="subtitle">로그인</p>
         <Inputs>
           <input
             type="text"
@@ -34,8 +37,8 @@ const Login = ({ onChangeInputs, onClickLogin }: Props) => {
             로그인
           </button>
         </Inputs>
-      </LoginBox>
-    </Main>
+      </LoginContainer>
+    </Container>
   );
 };
 
@@ -44,36 +47,39 @@ export default Login;
 const radius = "8px";
 const space = "60px";
 
-export const Main = styled.main`
-  width: 100%;
-  height: calc(100vh - 4.5vw);
-  ${({ theme }) => theme.flex.col}
-  align-items: center;
-  justify-content: center;
+export const Container = styled.main`
+  min-height: 100vh;
 
-  @media ${({ theme }) => theme.media.mobile} {
-    padding: 0 30px;
+  header {
+    line-height: 60px;
+    background-color: #fff;
+    text-align: center;
+
+    @media ${({ theme }) => theme.media.mobile} {
+      padding-left: 20px;
+      text-align: left;
+    }
   }
 `;
 
-export const LoginBox = styled.main`
-  width: 508px;
+export const LoginContainer = styled.section`
+  width: 500px;
   ${({ theme }) => theme.flex.col}
   align-items: center;
-  transform: translate(0, -4.5vw);
+  margin: 0 auto;
+  transform: translate(0, 50%);
   background-color: #fff;
   border: 1px solid #d8d8d8;
   border-radius: ${radius};
 
-  header {
-    height: ${space};
-    line-height: ${space};
+  .subtitle {
+    margin: 40px 0 20px;
     font-size: 18px;
     font-weight: 600;
   }
 
   @media ${({ theme }) => theme.media.mobile} {
-    width: 100%;
+    width: calc(100% - 40px);
   }
 `;
 
@@ -111,6 +117,7 @@ export const Inputs = styled.section`
       outline: none;
       border-color: #45b298;
     }
+
     &:-webkit-direct-focus {
       border-color: #45b298;
     }
