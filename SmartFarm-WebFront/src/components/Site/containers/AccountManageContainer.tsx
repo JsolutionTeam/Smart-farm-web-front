@@ -1,13 +1,15 @@
 import AccountManage from "../components/AccountManage";
-import { useState, useEffect, useCallback } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import useToken from "@hooks/useToken";
 import {
   requestSecureGet,
   requestSecurePost,
   requestSecurePut,
 } from "@lib/api";
-import { AccountTypes } from "@typedef/components/Account/account.types";
+
+import { AccountTypes } from "@typedef/components/Site/account.types";
+import { SiteTypes } from "@typedef/components/Site/site.types";
 
 type AccountManageTypes = AccountTypes & {
   password: string;
@@ -15,8 +17,10 @@ type AccountManageTypes = AccountTypes & {
 
 const AccountManageContainer = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  // insert ? null : AccountTypes
+  const { state } = useLocation();
   const { getToken } = useToken();
+  const [type, setType] = useState<"insert" | "update">("insert");
   const [inputs, setInputs] = useState<AccountManageTypes>({
     password: "",
     role: "ROLE_ADMIN",
@@ -33,25 +37,27 @@ const AccountManageContainer = () => {
     passwd: "",
     confirmPasswd: "",
   });
+  const [sites, setSites] = useState<SiteTypes[]>([]);
+  const [visibleSites, setVisibleSites] = useState(false);
+  const siteRef = useRef<HTMLDivElement>(null);
 
   const onChangeInputs = (
-    input: "role" | "site.id" | "username" | "password",
-    value: string | number
+    input: "role" | "username" | "password" | "site",
+    value: string | number | SiteTypes
   ) => {
-    const isSiteInput = input.includes("site");
-
-    setInputs((prev) =>
-      isSiteInput
-        ? {
-            ...prev,
-            site: {
-              ...prev.site,
-              id: value as number,
-            },
-          }
-        : { ...prev, [input]: value }
-    );
+    setInputs((prev) => ({ ...prev, [input]: value }));
   };
+
+  // const onChangeInputs = (
+  //   props:
+  //     | {
+  //         input: "role" | "username" | "password";
+  //         value: string | number;
+  //       }
+  //     | { input: "site"; value: SiteTypes }
+  // ) => {
+  //   setInputs((prev) => ({ ...prev, [props.input]: props.value }));
+  // };
 
   const onChangeMsgs = (
     msg: "username" | "passwd" | "confirmPasswd",
@@ -103,28 +109,39 @@ const AccountManageContainer = () => {
   const onChangeConfirmPasswd = (passwd: string) => {
     if (!passwd) return;
 
-    if (!inputs.password) {
-      onChangeMsgs("confirmPasswd", "비밀번호 먼저 입력해 주세요");
-      return;
-    }
-
     if (inputs.password !== passwd) {
       onChangeMsgs("confirmPasswd", "일치하지 않습니다.");
       return;
     }
 
-    onChangeMsgs("confirmPasswd", "");
+    onChangeMsgs("confirmPasswd", "일치합니다.");
+  };
+
+  // inputs 유효성 검사
+  const validateInputs = () => {
+    let message = "";
+    if (!inputs.username) message = "아이디를";
+    else if (!inputs.password) message = "비밀번호를";
+    else if (msgs.confirmPasswd !== "일치합니다.") message = "비밀번호 확인을";
+    else if (!inputs.site.id) message = "농가번호를";
+
+    return message;
   };
 
   // 계정 생성
   const insert = async () => {
-    console.log("insert");
+    const message = validateInputs();
+
+    if (message) {
+      alert(`${message} 입력해 주세요.`);
+    }
+
     const { config } = await requestSecurePost(
       "/admin/user",
       {},
       {
         username: inputs.username,
-        passwod: inputs.password,
+        password: inputs.password,
         role: inputs.role,
         siteSeq: inputs.site.id,
       },
@@ -133,59 +150,70 @@ const AccountManageContainer = () => {
 
     if (config.status >= 200 && config.status < 400) {
       alert("성공적으로 등록이 완료되었습니다.");
-      navigate("/account");
+      navigate("/site");
     }
   };
 
   // 계정 수정
   const update = async () => {
-    console.log("update");
     const { config } = await requestSecurePut(
       "/admin/user",
       {},
-      inputs,
+      {
+        username: inputs.username,
+        role: inputs.role,
+        siteSeq: inputs.site.id,
+      },
       getToken()!
     );
 
     if (config.status >= 200 && config.status < 400) {
-      alert("성공적으로 등록이 완료되었습니다.");
-      navigate("/account");
+      alert("성공적으로 수정이 완료되었습니다.");
+      navigate("/site");
     }
   };
 
-  const getDataByAccountId = useCallback(
-    async (id: string) => {
-      const { config, data } = await requestSecureGet<AccountTypes>(
-        `/admin/users/${id}`,
+  useEffect(() => {
+    if (state) {
+      setType("update");
+      setInputs((prev) => ({
+        ...prev,
+        ...state,
+      }));
+      onChangeMsgs("username", "아이디는 수정할 수 없습니다.");
+    }
+  }, [state]);
+
+  useEffect(() => {
+    async function getSites() {
+      const { config, data } = await requestSecureGet<SiteTypes[]>(
+        "/v1/site/list",
         {},
         getToken()!
       );
 
       if (config.status >= 200 && config.status < 400) {
-        setInputs({ ...data, password: "" });
+        setSites(data);
       }
-    },
-    [getToken]
-  );
-
-  useEffect(() => {
-    const accountId = searchParams.get("accountId");
-
-    if (accountId) {
-      getDataByAccountId(accountId);
     }
-  }, [getDataByAccountId, searchParams]);
+
+    getSites();
+  }, [getToken]);
 
   return (
     <AccountManage
-      type={inputs.site.id ? "수정" : "생성"}
+      type={type === "insert" ? "생성" : "수정"}
       inputs={inputs}
       msgs={msgs}
+      sites={sites}
+      visibleSites={visibleSites}
+      siteRef={siteRef}
+      onChangeVisibleSite={(visible: boolean) => setVisibleSites(visible)}
       onChangeInputs={onChangeInputs}
       onChangeUsername={onChangeUsername}
       onChangePasswd={onChangePasswd}
       onChangeConfirmPasswd={onChangeConfirmPasswd}
-      save={inputs.site.id ? update : insert}
+      save={type === "insert" ? insert : update}
     />
   );
 };

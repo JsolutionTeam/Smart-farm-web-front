@@ -1,4 +1,4 @@
-import * as S from "@styles/components/ChartViewStyle";
+import * as S from "@styles/components/ChartStyle";
 import LineChart from "@components/Common/CChart/LineChart";
 import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
 import { ContentTypes } from "@typedef/assets/content.types";

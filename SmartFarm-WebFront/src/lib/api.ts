@@ -9,7 +9,7 @@ axios.defaults.baseURL = API_ORIGIN;
 
 axios.interceptors.request.use((req) => {
   if (process.env.NODE_ENV === "development") {
-    console.log(req);
+    // console.log(req);
   }
 
   return req;
@@ -18,7 +18,7 @@ axios.interceptors.request.use((req) => {
 axios.interceptors.response.use(
   (res) => {
     if (process.env.NODE_ENV === "development") {
-      console.log(res);
+      // console.log(res);
     }
 
     return res;

@@ -22,7 +22,7 @@
       "@hooks/*": ["src/hooks/*"],
       "@lib/*": ["src/lib/*"],
       "@routes/*": ["src/routes/*"],
-      "@store/*": ["src/store/*"],
+      "@stories/*": ["src/stories/*"],
       "@styles/*": ["src/styles/*"],
       "@typedef/*": ["src/typedef/*"]
     }

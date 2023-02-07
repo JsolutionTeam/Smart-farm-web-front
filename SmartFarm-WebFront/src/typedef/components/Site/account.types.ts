@@ -1,5 +1,5 @@
 export type AccountTypes = {
-  role: "ROLE_ADMIN" | "ROME_USER";
+  role: "ROLE_ADMIN" | "ROLE_USER";
   site: {
     id: number;
     name: string;

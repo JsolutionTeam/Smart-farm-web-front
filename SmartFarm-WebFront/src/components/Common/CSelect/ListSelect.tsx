@@ -24,7 +24,7 @@ const ListSelect = ({
   return (
     <CSelectBox ref={selectRef}>
       <Selected onClick={onClickSelected}>
-        <p>{selected ? selected : "농장선택"}</p>
+        <p>{selected ? selected : "농가선택"}</p>
         <FiChevronDown className={visibleOption ? "arrow open" : "arrow"} />
       </Selected>
       <OptionBox visible={visibleOption}>
