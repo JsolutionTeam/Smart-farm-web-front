@@ -1,10 +1,6 @@
 import Site from "../Site";
 import { useState, useEffect, useCallback } from "react";
-import {
-  requestSecureDelete,
-  requestSecureGet,
-  requestSecurePut,
-} from "@lib/api";
+import { requestSecureDelete, requestSecureGet } from "@lib/api";
 import { useNavigate } from "react-router-dom";
 import useToken from "@hooks/useToken";
 import { SiteTypes } from "@typedef/components/Site/site.types";
@@ -14,31 +10,23 @@ const SiteContainer = () => {
   const navigate = useNavigate();
   const { getToken } = useToken();
   const [sites, setSites] = useState<SiteTypes[]>([]);
-  const [editSite, setEditSite] = useState({
-    id: 0,
-    name: "",
-  });
   const [accounts, setAccounts] = useState<AccountTypes[]>([]);
+  const [toggle, setToggle] = useState<{
+    [kind in "sites" | "accounts"]: boolean;
+  }>({
+    sites: false,
+    accounts: false,
+  });
   const [reload, setReload] = useState(0);
 
-  const updateSite = async () => {
-    const { config } = await requestSecurePut(
-      `/v1/${editSite.id}`,
-      {},
-      { name: editSite.name },
-      getToken()!
-    );
-
-    if (config.status >= 200 && config.status < 400) {
-      alert("성공적으로 수정이 완료되었습니다.");
-      setReload((prev) => prev + 1);
-      setEditSite({
-        id: 0,
-        name: "",
-      });
-    }
+  const onChangeToggle = (kind: "sites" | "accounts") => {
+    setToggle((prev) => ({
+      ...prev,
+      [kind]: !prev[kind],
+    }));
   };
 
+  // 농가 관리 페이지 이동 (생성, 수정)
   const manageSite = (site: SiteTypes | null) => {
     let url = "/site/manage?type=";
 
@@ -64,9 +52,10 @@ const SiteContainer = () => {
     navigate(url, { state: account });
   };
 
+  // 농가 / 계정 삭제
   const remove = async (kind: "site" | "account", id: number | string) => {
     if (window.confirm(`삭제하시겠습니까?`)) {
-      const url = kind === "site" ? `/v1/${id}` : `/admin/user/${id}`;
+      const url = kind === "site" ? `/v1/site/${id}` : `/admin/user/${id}`;
 
       const { config } = await requestSecureDelete(url, {}, getToken()!);
 
@@ -113,15 +102,11 @@ const SiteContainer = () => {
     <Site
       sites={sites}
       accounts={accounts}
-      editSite={editSite}
-      onClickEditSite={(site: SiteTypes) => setEditSite(site)}
-      onChangeEditSite={(name: string) =>
-        setEditSite((prev) => ({ ...prev, name: name }))
-      }
-      updateSite={updateSite}
+      toggle={toggle}
       manageSite={manageSite}
       manageAccount={manageAccount}
       remove={remove}
+      onChangeToggle={onChangeToggle}
     />
   );
 };

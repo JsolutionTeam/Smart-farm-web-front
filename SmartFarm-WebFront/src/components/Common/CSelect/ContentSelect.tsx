@@ -44,6 +44,10 @@ export default ContentSelect;
 const CSelectBox = styled.section`
   width: 190px;
   position: relative;
+
+  @media ${({ theme }) => theme.media.mobile} {
+    width: 130px;
+  }
 `;
 
 const Selected = styled.button`

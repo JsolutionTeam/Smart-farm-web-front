@@ -5,69 +5,57 @@ import { AccountTypes } from "@typedef/components/Site/account.types";
 type Props = {
   sites: SiteTypes[];
   accounts: AccountTypes[];
-  editSite: { id: number };
-  onClickEditSite: (site: SiteTypes) => void;
-  onChangeEditSite: (name: string) => void;
-  updateSite: () => Promise<void>;
+  toggle: {
+    sites: boolean;
+    accounts: boolean;
+  };
   manageSite: (site: SiteTypes | null) => void;
   manageAccount: (account: AccountTypes | null) => void;
   remove: (kind: "site" | "account", id: number | string) => Promise<void>;
+  onChangeToggle: (kind: "sites" | "accounts") => void;
 };
 
 const Site = ({
   sites,
   accounts,
-  editSite,
-  onClickEditSite,
-  onChangeEditSite,
-  updateSite,
   manageSite,
   manageAccount,
   remove,
+  toggle,
+  onChangeToggle,
 }: Props) => {
   return (
     <Container>
       <header>
-        <h3>전체 농가&nbsp;({sites.length})</h3>
+        <button onClick={() => onChangeToggle("sites")} className="toggle">
+          <Arrow visible={toggle.sites} />
+          전체 농가&nbsp;({sites.length})
+        </button>
         <button onClick={() => manageSite(null)} className="insert">
           농가 생성
         </button>
       </header>
-      <TableWrapper>
-        <Table>
-          <thead>
-            <tr>
-              <th>농가번호</th>
-              <th>농가</th>
-              <th>수정</th>
-              <th>삭제</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sites.map((site) => {
-              const isEdit = editSite.id === site.id;
-              return (
+      {toggle.sites && (
+        <TableWrapper>
+          <Table>
+            <thead>
+              <tr>
+                <th>농가번호</th>
+                <th>농가</th>
+                <th>수정</th>
+                <th>삭제</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sites.map((site) => (
                 <tr key={site.id}>
                   <td>{site.id}</td>
+                  <td>{site.name}</td>
                   <td>
-                    {isEdit ? (
-                      <input
-                        defaultValue={site.name}
-                        onChange={(e) => onChangeEditSite(e.target.value)}
-                      />
-                    ) : (
-                      site.name
-                    )}
-                  </td>
-                  <td>
-                    {isEdit ? (
-                      <button onClick={updateSite} className="check" />
-                    ) : (
-                      <button
-                        onClick={() => onClickEditSite(site)}
-                        className="update"
-                      />
-                    )}
+                    <button
+                      onClick={() => manageSite(site)}
+                      className="update"
+                    />
                   </td>
                   <td>
                     <button
@@ -76,51 +64,56 @@ const Site = ({
                     />
                   </td>
                 </tr>
-              );
-            })}
-          </tbody>
-        </Table>
-      </TableWrapper>
+              ))}
+            </tbody>
+          </Table>
+        </TableWrapper>
+      )}
       <header>
-        <h3>전체 계정&nbsp;({accounts.length})</h3>
+        <button onClick={() => onChangeToggle("accounts")} className="toggle">
+          <Arrow visible={toggle.sites} />
+          전체 계정&nbsp;({accounts.length})
+        </button>
         <button onClick={() => manageAccount(null)} className="insert">
           계정 생성
         </button>
       </header>
-      <TableWrapper>
-        <Table>
-          <thead>
-            <tr>
-              <th>번호</th>
-              <th>아이디</th>
-              <th>농가</th>
-              <th>수정</th>
-              <th>삭제</th>
-            </tr>
-          </thead>
-          <tbody>
-            {accounts.map((row, idx) => (
-              <tr key={row.username}>
-                <td>{idx + 1}</td>
-                <td>{row.username}</td>
-                <td>{row.site.name}</td>
-                <td>
-                  <button
-                    onClick={() => manageAccount(row)}
-                    className="update"
-                  />
-                </td>
-                <td>
-                  <button
-                    onClick={() => remove("account", row.username)}
-                    className="delete"
-                  />
-                </td>
+      {toggle.accounts && (
+        <TableWrapper>
+          <Table>
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>아이디</th>
+                <th>농가</th>
+                <th>수정</th>
+                <th>삭제</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
-      </TableWrapper>
+            </thead>
+            <tbody>
+              {accounts.map((row, idx) => (
+                <tr key={row.username}>
+                  <td>{idx + 1}</td>
+                  <td>{row.username}</td>
+                  <td>{row.site.name}</td>
+                  <td>
+                    <button
+                      onClick={() => manageAccount(row)}
+                      className="update"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => remove("account", row.username)}
+                      className="delete"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </TableWrapper>
+      )}
     </Container>
   );
 };
@@ -138,6 +131,14 @@ const Container = styled.main`
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
+
+    .toggle {
+      ${({ theme }) => theme.flex.row}
+      align-items: center;
+      font-size: 1.25rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
   }
 
   .insert {
@@ -153,6 +154,10 @@ const Container = styled.main`
 
   @media ${({ theme }) => theme.media.mobile} {
     width: calc(100vw - 40px);
+
+    .insert {
+      width: 130px;
+    }
   }
 `;
 
@@ -227,8 +232,8 @@ const Table = styled.table`
   }
 
   @media ${({ theme }) => theme.media.mobile} {
-    width: 650px;
-    table-layout: fixed;
+    width: 500px;
+    /* table-layout: fixed; */
 
     td {
       white-space: nowrap;
@@ -236,4 +241,14 @@ const Table = styled.table`
       text-overflow: ellipsis;
     }
   }
+`;
+
+const Arrow = styled.span<{ visible: boolean }>`
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 10px;
+  background: url(/assets/images/ic-chevron-right.svg) no-repeat;
+  background-size: 1.25rem;
+  display: block;
+  transform: ${({ visible }) => visible && "rotate(90deg)"};
 `;

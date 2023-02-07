@@ -61,6 +61,17 @@ const AccountManage = ({
           </div>
         </S.InputWrapper>
         <S.InputWrapper>
+          <p>아이디</p>
+          <input
+            name="username"
+            defaultValue={inputs.username}
+            onBlur={(e) => onChangeUsername(e.target.value)}
+            disabled={type === "수정"}
+            placeholder="아이디"
+          />
+        </S.InputWrapper>
+        {msgs.username && <p className="msg">{msgs.username}</p>}
+        <S.InputWrapper>
           <p>농가</p>
           <S.Select ref={siteRef}>
             <S.Selected onClick={() => onChangeVisibleSite(true)}>
@@ -86,17 +97,6 @@ const AccountManage = ({
             )}
           </S.Select>
         </S.InputWrapper>
-        <S.InputWrapper>
-          <p>아이디</p>
-          <input
-            name="username"
-            defaultValue={inputs.username}
-            onBlur={(e) => onChangeUsername(e.target.value)}
-            disabled={type === "수정"}
-            placeholder="아이디"
-          />
-        </S.InputWrapper>
-        {msgs.username && <p className="msg">{msgs.username}</p>}
         <S.InputWrapper>
           <p>비밀번호</p>
           <input

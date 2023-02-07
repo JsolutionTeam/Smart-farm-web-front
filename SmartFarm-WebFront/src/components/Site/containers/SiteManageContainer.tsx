@@ -35,6 +35,14 @@ const SiteManageContainer = () => {
   };
 
   const onChangeId = async (id: number) => {
+    if (id === 0) {
+      setMsgs((prev) => ({
+        ...prev,
+        id: `"0"은 농가번호로 사용할 수 없습니다.`,
+      }));
+      return;
+    }
+
     const { config, data } = await requestSecureGet(
       `/v1/site/exist/${id}`,
       {},
@@ -91,7 +99,7 @@ const SiteManageContainer = () => {
     }
 
     const { config } = await requestSecurePut(
-      `/admin/user/${inputs.id}`,
+      `/v1/site/${inputs.id}`,
       {},
       {
         name: inputs.name,
