@@ -28,6 +28,9 @@ const RealTimeContainer = () => {
     temperature: 0,
     windDirection: 0,
     windSpeed: 0,
+    rateOfOpening: 0,
+    openSignal: 0,
+    openDataRegTime: "",
   });
   const contents: realTimeListTypes[] = useMemo(
     () => [
@@ -123,6 +126,11 @@ const RealTimeContainer = () => {
       contents={contents}
       setClassName={setClassName}
       time={{ co2: realTimeData.co2RegTime, micro: realTimeData.microRegTime }}
+      switchgear={{
+        signal: realTimeData.openSignal,
+        rate: realTimeData.rateOfOpening,
+        time: realTimeData.openDataRegTime,
+      }}
     />
   );
 };

@@ -9,33 +9,53 @@ type Props = {
     co2: number;
     micro: number;
   };
+  switchgear: {
+    signal: -1 | 0 | 1;
+    rate: number;
+    time: string;
+  };
 };
 
-const RealTime = ({ contents, setClassName, time }: Props) => {
+const RealTime = ({ contents, setClassName, time, switchgear }: Props) => {
   return (
     <Container>
-      {contents.map((content) => (
-        <Content key={content.name}>
-          <section>
-            <p className="name">{content.name}</p>
-            <Value>
-              {content.value ? Math.round(content.value) : 0}
-              <span className={setClassName(content.unit)}>{content.unit}</span>
-            </Value>
-          </section>
-          <img src={content.icon} alt={`${content.name} 아이콘`} />
-        </Content>
-      ))}
-      <Times>
-        <div>
-          <p>co2 수집시간</p>
-          <p>{time.co2 || "없음"}</p>
-        </div>
-        <div>
-          <p>micro 수집시간</p>
-          <p>{time.micro || "없음"}</p>
-        </div>
-      </Times>
+      <Contents>
+        {contents.map((content) => (
+          <Content key={content.name}>
+            <section>
+              <p className="name">{content.name}</p>
+              <Value>
+                {content.value ? Math.round(content.value) : 0}
+                <span className={setClassName(content.unit)}>
+                  {content.unit}
+                </span>
+              </Value>
+            </section>
+            <img src={content.icon} alt={`${content.name} 아이콘`} />
+          </Content>
+        ))}
+      </Contents>
+      <SubContents>
+        <article>
+          <p className="subtitle">실시간 데이터 수집시간</p>
+          <p>co2 {time.co2 || "없음"}</p>
+          <p>micro {time.micro || "없음"}</p>
+        </article>
+        <article>
+          <p className="subtitle">개폐장치</p>
+          <p>수집시간 {switchgear.time}</p>
+          <p>
+            움직임&nbsp;
+            {switchgear.signal === -1
+              ? "역방향"
+              : switchgear.signal === 1
+              ? "정방향"
+              : "정지"}
+            &nbsp;
+            {switchgear.rate}
+          </p>
+        </article>
+      </SubContents>
     </Container>
   );
 };
@@ -43,12 +63,17 @@ const RealTime = ({ contents, setClassName, time }: Props) => {
 export default RealTime;
 
 const Container = styled.main`
+  ${({ theme }) => theme.flex.col}
+  align-items: center;
+  margin: 40px auto;
+  margin-bottom: 0;
+`;
+
+const Contents = styled.section`
   display: grid;
   grid-template-columns: repeat(4, 13vw);
   grid-template-rows: repeat(2, 13vw);
   gap: 20px;
-  margin: 40px auto;
-  margin-bottom: 0;
 
   @media ${({ theme }) => theme.media.mobile} {
     width: calc(100vw - 40px);
@@ -57,7 +82,7 @@ const Container = styled.main`
   }
 `;
 
-const Content = styled.div`
+const Content = styled.article`
   ${({ theme }) => theme.flex.col}
   justify-content: space-between;
   padding: 20px;
@@ -109,14 +134,36 @@ const Value = styled.p`
   }
 `;
 
-const Times = styled.section`
-  ${({ theme }) => theme.flex.col}
+const SubContents = styled.section`
+  width: 100%;
+  ${({ theme }) => theme.flex.row}
+  justify-content: space-between;
+  margin-top: 30px;
 
-  div:first-child {
-    margin-bottom: 10px;
+  article {
+    width: calc(50% - 10px);
+    ${({ theme }) => theme.flex.col}
+
+    p {
+      color: #767676;
+    }
   }
 
-  p {
-    color: #999;
+  .subtitle {
+    margin-bottom: 5px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #000;
+  }
+
+  @media ${({ theme }) => theme.media.mobile} {
+    ${({ theme }) => theme.flex.col}
+
+    article {
+      width: 100%;
+      &:last-child {
+        margin-top: 20px;
+      }
+    }
   }
 `;

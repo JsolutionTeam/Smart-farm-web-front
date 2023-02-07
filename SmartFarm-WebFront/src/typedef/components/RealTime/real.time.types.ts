@@ -9,4 +9,7 @@ export type RealTimeTypes = {
   temperature: number;
   windDirection: number;
   windSpeed: number;
+  rateOfOpening: number;
+  openSignal: -1 | 0 | 1;
+  openDataRegTime: string;
 };
