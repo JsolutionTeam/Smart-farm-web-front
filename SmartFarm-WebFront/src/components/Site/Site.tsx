@@ -9,6 +9,7 @@ type Props = {
   onClickEditSite: (site: SiteTypes) => void;
   onChangeEditSite: (name: string) => void;
   updateSite: () => Promise<void>;
+  manageSite: (site: SiteTypes | null) => void;
   manageAccount: (account: AccountTypes | null) => void;
   remove: (kind: "site" | "account", id: number | string) => Promise<void>;
 };
@@ -20,6 +21,7 @@ const Site = ({
   onClickEditSite,
   onChangeEditSite,
   updateSite,
+  manageSite,
   manageAccount,
   remove,
 }: Props) => {
@@ -27,7 +29,9 @@ const Site = ({
     <Container>
       <header>
         <h3>전체 농가&nbsp;({sites.length})</h3>
-        <button className="insert">농가 생성</button>
+        <button onClick={() => manageSite(null)} className="insert">
+          농가 생성
+        </button>
       </header>
       <TableWrapper>
         <Table>

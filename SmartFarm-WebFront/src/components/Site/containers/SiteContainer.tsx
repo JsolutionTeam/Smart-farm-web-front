@@ -9,13 +9,10 @@ import { useNavigate } from "react-router-dom";
 import useToken from "@hooks/useToken";
 import { SiteTypes } from "@typedef/components/Site/site.types";
 import { AccountTypes } from "@typedef/components/Site/account.types";
-import useModal from "@hooks/stories/useModal";
-import SiteManageContainer from "./SiteManageContainer";
 
 const SiteContainer = () => {
   const navigate = useNavigate();
   const { getToken } = useToken();
-  const { __modalVisibleActionFromHooks } = useModal();
   const [sites, setSites] = useState<SiteTypes[]>([]);
   const [editSite, setEditSite] = useState({
     id: 0,
@@ -23,12 +20,6 @@ const SiteContainer = () => {
   });
   const [accounts, setAccounts] = useState<AccountTypes[]>([]);
   const [reload, setReload] = useState(0);
-
-  // const manage = (type: "insert" | "update", kind: "site" | "account") => {
-  //   __modalVisibleActionFromHooks(
-  //     <SiteManageContainer type={type} site={null} />
-  //   );
-  // };
 
   const updateSite = async () => {
     const { config } = await requestSecurePut(
@@ -46,6 +37,18 @@ const SiteContainer = () => {
         name: "",
       });
     }
+  };
+
+  const manageSite = (site: SiteTypes | null) => {
+    let url = "/site/manage?type=";
+
+    if (site) {
+      url += "update";
+    } else {
+      url += "insert";
+    }
+
+    navigate(url, { state: site });
   };
 
   // 계정 관리 페이지 이동 (생성, 수정)
@@ -116,6 +119,7 @@ const SiteContainer = () => {
         setEditSite((prev) => ({ ...prev, name: name }))
       }
       updateSite={updateSite}
+      manageSite={manageSite}
       manageAccount={manageAccount}
       remove={remove}
     />

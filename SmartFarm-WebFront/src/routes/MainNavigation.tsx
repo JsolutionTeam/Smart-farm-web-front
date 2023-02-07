@@ -7,8 +7,9 @@ import GNB from "@components/Common/GNB/GNB";
 import RealTimeContainer from "@components/RealTime/containers/RealTimeContainer";
 import PeriodContainer from "@components/Period/containers/PeriodContainer";
 import CompareContainer from "@components/Compare/containers/CompareContainer";
-import AccountManageContainer from "@components/Site/containers/AccountManageContainer";
 import SiteContainer from "@components/Site/containers/SiteContainer";
+import SiteManageContainer from "@components/Site/containers/SiteManageContainer";
+import AccountManageContainer from "@components/Site/containers/AccountManageContainer";
 
 const MainNavigation = () => {
   const { getUser } = useUser();
@@ -24,6 +25,9 @@ const MainNavigation = () => {
         <Route path="/compare" element={<CompareContainer />} />
         {role === "ROLE_ADMIN" && (
           <Route path="/site" element={<SiteContainer />} />
+        )}
+        {role === "ROLE_ADMIN" && (
+          <Route path="/site/manage" element={<SiteManageContainer />} />
         )}
         {role === "ROLE_ADMIN" && (
           <Route

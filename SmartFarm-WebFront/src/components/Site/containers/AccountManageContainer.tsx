@@ -48,17 +48,6 @@ const AccountManageContainer = () => {
     setInputs((prev) => ({ ...prev, [input]: value }));
   };
 
-  // const onChangeInputs = (
-  //   props:
-  //     | {
-  //         input: "role" | "username" | "password";
-  //         value: string | number;
-  //       }
-  //     | { input: "site"; value: SiteTypes }
-  // ) => {
-  //   setInputs((prev) => ({ ...prev, [props.input]: props.value }));
-  // };
-
   const onChangeMsgs = (
     msg: "username" | "passwd" | "confirmPasswd",
     value: string
@@ -120,10 +109,11 @@ const AccountManageContainer = () => {
   // inputs 유효성 검사
   const validateInputs = () => {
     let message = "";
-    if (!inputs.username) message = "아이디를";
-    else if (!inputs.password) message = "비밀번호를";
-    else if (msgs.confirmPasswd !== "일치합니다.") message = "비밀번호 확인을";
-    else if (!inputs.site.id) message = "농가번호를";
+    if (!inputs.site.id) message = "농가를 선택해";
+    else if (!inputs.username) message = "아이디를 입력해";
+    else if (!inputs.password) message = "비밀번호를 입력해";
+    else if (msgs.confirmPasswd !== "일치합니다.")
+      message = "비밀번호 확인을 입력해";
 
     return message;
   };
@@ -133,7 +123,8 @@ const AccountManageContainer = () => {
     const message = validateInputs();
 
     if (message) {
-      alert(`${message} 입력해 주세요.`);
+      alert(`${message} 주세요.`);
+      return;
     }
 
     const { config } = await requestSecurePost(
@@ -161,6 +152,7 @@ const AccountManageContainer = () => {
       {},
       {
         username: inputs.username,
+        password: inputs.password,
         role: inputs.role,
         siteSeq: inputs.site.id,
       },
