@@ -22,7 +22,7 @@ const MainNavigation = () => {
 
 export default MainNavigation;
 
-const Body = styled.section`
+const Body = styled.div`
   height: 100%;
   ${({ theme }) => theme.flex.col}
 

@@ -3,7 +3,7 @@ import axios from "axios";
 const dev = "http://sf.j-sol.co.kr/sf_viewer/backend/api";
 const prod = "http://sf.j-sol.co.kr/sf_viewer/backend/api";
 
-export const API_ORIGIN = process.env.NODE_ENV === "development" ? dev : prod;
+export const API_ORIGIN = process.env.NODE_ENV === "development" ? prod : prod;
 
 axios.defaults.baseURL = API_ORIGIN;
 
