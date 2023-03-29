@@ -190,8 +190,6 @@ const PeriodContainer = () => {
     setChartData();
   }, [setChartData]);
 
-  console.log(siteSeq);
-
   return (
     <Period
       selectedContent={selectedContent}

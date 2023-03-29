@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { BrowserRouter } from "react-router-dom";
 import { Route, Routes } from "react-router";
-import MainNavigation from "./components/MainNavigation";
+import MainNavigation from "./MainNavigation";
 import LoginContainer from "@components/Login/containers/LoginContainer";
 import useToken from "@hooks/useToken";
 

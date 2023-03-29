@@ -28,6 +28,9 @@ const RealTimeContainer = () => {
     temperature: 0,
     windDirection: 0,
     windSpeed: 0,
+    rateOfOpening: 0,
+    openSignal: 0,
+    openDataRegTime: "",
   });
   const contents: realTimeListTypes[] = useMemo(
     () => [
@@ -94,13 +97,13 @@ const RealTimeContainer = () => {
   };
 
   const getRealTimeData = useCallback(async () => {
-    const { config, data } = await requestSecureGet<RealTimeTypes[]>(
+    const { config, data } = await requestSecureGet<RealTimeTypes>(
       apiRoute.site + `${siteSeq}/realtime`,
       {},
       getToken()!
     );
     if (config.status >= 200 && config.status < 400) {
-      setRealTimeData(data[0]);
+      setRealTimeData(data);
     }
   }, [siteSeq, getToken]);
 
@@ -118,7 +121,18 @@ const RealTimeContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <RealTime contents={contents} setClassName={setClassName} />;
+  return (
+    <RealTime
+      contents={contents}
+      setClassName={setClassName}
+      time={{ co2: realTimeData.co2RegTime, micro: realTimeData.microRegTime }}
+      switchgear={{
+        signal: realTimeData.openSignal,
+        rate: realTimeData.rateOfOpening,
+        time: realTimeData.openDataRegTime,
+      }}
+    />
+  );
 };
 
 export default RealTimeContainer;

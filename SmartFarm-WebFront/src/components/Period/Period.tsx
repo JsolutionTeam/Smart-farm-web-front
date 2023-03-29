@@ -1,4 +1,4 @@
-import * as S from "@styles/components/ChartViewStyle";
+import * as S from "@styles/components/ChartStyle";
 import ContentSelectContainer from "@components/Common/CSelect/containers/ContentSelectContainer";
 import CDatePicker from "@components/Common/CDatePicker/CDatePicker";
 import LineChart from "@components/Common/CChart/LineChart";
