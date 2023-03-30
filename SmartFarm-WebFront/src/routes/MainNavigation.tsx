@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { useMemo } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import useUser from "@hooks/useUser";
-import Header from "@components/Common/Header/Header";
 import GNB from "@components/Common/GNB/GNB";
 import RealTimeContainer from "@components/RealTime/containers/RealTimeContainer";
 import PeriodContainer from "@components/Period/containers/PeriodContainer";
@@ -17,7 +16,6 @@ const MainNavigation = () => {
 
   return (
     <Container>
-      <Header />
       <GNB />
       <Routes>
         <Route path="/realtime" element={<RealTimeContainer />} />
@@ -44,10 +42,10 @@ const MainNavigation = () => {
 export default MainNavigation;
 
 const Container = styled.section`
+  width: 100vw;
+  min-height: 100vh;
   height: 100%;
   ${({ theme }) => theme.flex.col}
-
-  @media ${({ theme }) => theme.media.mobile} {
-    margin-bottom: 40px;
-  }
+  align-items: center;
+  background-color: ${({ theme }) => theme.colors.gray1};
 `;

@@ -3,10 +3,10 @@ import img from "@assets/image";
 
 type Props = {
   onChangeInputs: (e: { target: HTMLInputElement }) => void;
-  onClickLogin: () => Promise<void>;
+  login: () => Promise<void>;
 };
 
-const Login = ({ onChangeInputs, onClickLogin }: Props) => {
+const Login = ({ onChangeInputs, login }: Props) => {
   return (
     <Container>
       <header>
@@ -27,12 +27,12 @@ const Login = ({ onChangeInputs, onClickLogin }: Props) => {
           onChange={onChangeInputs}
           onKeyPress={(e) => {
             if (e.key === "Enter") {
-              onClickLogin();
+              login();
             }
           }}
           placeholder="비밀번호"
         />
-        <button type="button" onClick={onClickLogin}>
+        <button type="button" onClick={login}>
           로그인
         </button>
       </Inputs>

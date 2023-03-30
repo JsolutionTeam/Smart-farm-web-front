@@ -3,7 +3,7 @@ import axios from "axios";
 const dev = "http://192.168.0.215:18080/api";
 const prod = "http://39.112.10.37/api";
 
-export const API_ORIGIN = process.env.NODE_ENV === "development" ? dev : prod;
+export const API_ORIGIN = process.env.NODE_ENV === "development" ? prod : prod;
 
 axios.defaults.baseURL = API_ORIGIN;
 

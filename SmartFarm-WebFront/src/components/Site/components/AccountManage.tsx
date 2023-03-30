@@ -1,5 +1,5 @@
 import * as S from "@styles/components/ManageStyle";
-import useOnClickOutside from "@hooks/useOnClickOutside";
+import useOnClickOutside from "@hooks/useOutsideClick";
 import { AccountTypes } from "@typedef/components/Site/account.types";
 import { SiteTypes } from "@typedef/components/Site/site.types";
 

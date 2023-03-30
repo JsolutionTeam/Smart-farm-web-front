@@ -5,14 +5,10 @@ type Props<T> = {
   func: () => void;
 };
 
-export default function useOnClickOutside<T extends HTMLElement>({
-  ref,
-  func,
-}: Props<T>) {
+const useOutsideClick = <T extends HTMLElement>({ ref, func }: Props<T>) => {
   useEffect(() => {
-    // @FIX any 타입 변경
-    const listener = (e: any) => {
-      if (!ref.current || ref.current.contains(e.target)) {
+    const listener = (e: MouseEvent | TouchEvent) => {
+      if (!ref.current || ref.current.contains(e.target as Node)) {
         return;
       }
       func();
@@ -23,5 +19,7 @@ export default function useOnClickOutside<T extends HTMLElement>({
       document.removeEventListener("mousedown", listener);
       document.removeEventListener("touchstart", listener);
     };
-  }, [ref, func]);
-}
+  }, [func, ref]);
+};
+
+export default useOutsideClick;

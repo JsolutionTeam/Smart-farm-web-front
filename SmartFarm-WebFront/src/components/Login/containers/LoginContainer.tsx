@@ -1,33 +1,34 @@
 import Login from "../Login";
 import { useState } from "react";
-import { apiRoute, requestPost } from "@lib/api";
+import { requestPost } from "@lib/api";
 import useToken from "@hooks/useToken";
 import useUser from "@hooks/useUser";
 
 const LoginContainer = () => {
   const { setToken } = useToken();
   const { setUser } = useUser();
-  const [inputs, setInputs] = useState<{ id: string; passwd: string }>({
+  const [inputs, setInputs] = useState<{ [key in "id" | "passwd"]: string }>({
     id: "",
     passwd: "",
   });
 
   const onChangeInputs = (e: { target: HTMLInputElement }) => {
     const { name, value } = e.target;
+
     setInputs((inputs) => ({
       ...inputs,
       [name]: value,
     }));
   };
 
-  const onClickLogin = async () => {
+  const login = async () => {
     if (inputs.id && inputs.passwd) {
       const { config, data } = await requestPost<{
         accessToken: string;
         role: "ROLE_ADMIN" | "ROLE_USER";
         siteSeq: number;
       }>(
-        apiRoute.auth.login,
+        "/auth/login",
         {},
         {
           username: inputs.id,
@@ -38,7 +39,6 @@ const LoginContainer = () => {
         setToken(data.accessToken);
         setUser({
           role: data.role,
-          // siteSeq: 13,
           siteSeq: data.siteSeq,
         });
         window.location.reload();
@@ -50,7 +50,7 @@ const LoginContainer = () => {
     }
   };
 
-  return <Login onChangeInputs={onChangeInputs} onClickLogin={onClickLogin} />;
+  return <Login onChangeInputs={onChangeInputs} login={login} />;
 };
 
 export default LoginContainer;

@@ -3,6 +3,7 @@ import { createGlobalStyle } from "styled-components";
 export const GlobalStyle = createGlobalStyle`
     * {
         box-sizing: border-box;
+        font-family: 'Pretendard';
     }
     
     body {
@@ -12,5 +13,9 @@ export const GlobalStyle = createGlobalStyle`
     a {
         color: inherit;
         text-decoration: none;
+    }
+
+    button {
+        cursor: pointer;  
     }
 `;
