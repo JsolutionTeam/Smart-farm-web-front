@@ -86,6 +86,26 @@ const CompareContainer = () => {
   );
   const [isSecond, setIsSecond] = useState<number>(0);
 
+  const temp = useMemo(
+    () => ({
+      categories: chartLabels.map((label, index) => `Day ${index + 1}`),
+      data: {
+        first: filteredData.first.map((data) =>
+          Math.round(data[selectedContent.value])
+        ),
+        second: filteredData.second.map((data) =>
+          Math.round(data[selectedContent.value])
+        ),
+      },
+    }),
+    [
+      chartLabels,
+      filteredData.first,
+      filteredData.second,
+      selectedContent.value,
+    ]
+  );
+
   // 콘텐츠 선택
   const onChangeContent = (content: ContentTypes) => {
     setSelectedContent(content);
@@ -283,6 +303,7 @@ const CompareContainer = () => {
       selectedDate={selectedDate}
       onChangeDate={onChangeDate}
       chartData={chartData}
+      temp={temp}
     />
   );
 };

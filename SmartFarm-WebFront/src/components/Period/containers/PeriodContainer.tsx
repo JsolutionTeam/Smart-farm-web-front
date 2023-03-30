@@ -46,8 +46,16 @@ const PeriodContainer = () => {
     [filteredData, chartLabels, selectedContent.value]
   );
 
+  const temp = useMemo(
+    () => ({
+      categories: chartLabels.map((label) => dayjs(label).format("DD일")),
+      data: filteredData.map((data) => Math.round(data[selectedContent.value])),
+    }),
+    [chartLabels, filteredData, selectedContent.value]
+  );
+
   // 콘텐츠 선택
-  const onChangeContent = (content: ContentTypes) => {
+  const contentHandler = (content: ContentTypes) => {
     setSelectedContent(content);
   };
 
@@ -193,10 +201,11 @@ const PeriodContainer = () => {
   return (
     <Period
       selectedContent={selectedContent}
-      onChangeContent={onChangeContent}
+      contentHandler={contentHandler}
       selectedDate={selectedDate}
       onChangeDate={onChangeDate}
       chartData={chartData}
+      temp={temp}
     />
   );
 };

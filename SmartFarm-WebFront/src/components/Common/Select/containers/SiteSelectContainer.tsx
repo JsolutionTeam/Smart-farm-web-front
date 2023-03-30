@@ -11,7 +11,7 @@ const SiteSelectContainer = () => {
     useSite();
   const selectRef = useRef<HTMLDivElement>(null);
 
-  const handleVisible = (visible: boolean) => {
+  const visibleHandler = (visible: boolean) => {
     setIsVisible(visible);
   };
 
@@ -35,7 +35,7 @@ const SiteSelectContainer = () => {
     <SiteSelect
       sites={sites ?? []}
       isVisible={isVisible}
-      handleVisible={handleVisible}
+      visibleHandler={visibleHandler}
       selectedSite={selectedSite}
       onClickSite={onClickSite}
       onClickClear={onClickClear}

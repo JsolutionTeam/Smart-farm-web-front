@@ -2,14 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import useOutsideClick from "@hooks/useOutsideClick";
 import { SiteTypes } from "@store/site/actions";
-import { SiteState } from "@store/site/reducer";
 import { FiChevronDown } from "react-icons/fi";
 
 type Props = {
   sites: SiteTypes[];
   isVisible: boolean;
-  handleVisible: (visible: boolean) => void;
-  selectedSite: SiteState;
+  visibleHandler: (visible: boolean) => void;
+  selectedSite: SiteTypes | null;
   onClickSite: (site: SiteTypes) => void;
   onClickClear: () => void;
   selectRef: React.RefObject<HTMLDivElement>;
@@ -18,17 +17,17 @@ type Props = {
 const SiteSelect = ({
   sites,
   isVisible,
-  handleVisible,
+  visibleHandler,
   onClickSite,
   selectedSite,
   onClickClear,
   selectRef,
 }: Props) => {
-  useOutsideClick({ ref: selectRef, func: () => handleVisible(false) });
+  useOutsideClick({ ref: selectRef, func: () => visibleHandler(false) });
 
   return (
     <Container ref={selectRef}>
-      <Selected onClick={() => handleVisible(!isVisible)}>
+      <Selected onClick={() => visibleHandler(!isVisible)}>
         <p>{selectedSite ? selectedSite.name : "농가선택"}</p>
         <FiChevronDown />
       </Selected>

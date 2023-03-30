@@ -1,8 +1,9 @@
 import { SiteActionType, SiteTypes } from "./actions";
 
-export type SiteState = SiteTypes | null;
-
-const reducer = (state: SiteState = null, { type, site }: SiteActionType) => {
+const reducer = (
+  state: SiteTypes | null = null,
+  { type, site }: SiteActionType
+) => {
   switch (type) {
     case "SET":
       return site;

@@ -6,7 +6,7 @@ import { FiChevronDown } from "react-icons/fi";
 
 type Props = {
   isVisible: boolean;
-  handleVisible: (visible: boolean) => void;
+  visibleHandler: (visible: boolean) => void;
   selectedContent: ContentTypes;
   onClickContent: (content: ContentTypes) => void;
   selectRef: React.RefObject<HTMLDivElement>;
@@ -14,12 +14,12 @@ type Props = {
 
 const ContentSelect = ({
   isVisible,
-  handleVisible,
+  visibleHandler,
   selectedContent,
   onClickContent,
   selectRef,
 }: Props) => {
-  useOutsideClick({ ref: selectRef, func: () => handleVisible(false) });
+  useOutsideClick({ ref: selectRef, func: () => visibleHandler(false) });
 
   const contents: ContentTypes[] = [
     {
@@ -58,7 +58,7 @@ const ContentSelect = ({
 
   return (
     <Container ref={selectRef}>
-      <Selected onClick={() => handleVisible(!isVisible)}>
+      <Selected onClick={() => visibleHandler(!isVisible)}>
         <p>{selectedContent.name}</p>
         <FiChevronDown />
       </Selected>

@@ -1,27 +1,33 @@
 import styled from "styled-components";
 import CDatePicker from "@components/Common/CDatePicker/CDatePicker";
-import LineChart from "@components/Common/CChart/LineChart";
+// import LineChart from "@components/Common/CChart/LineChart";
 import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
 import { ContentTypes } from "@typedef/assets/content.types";
 import ContentSelectContainer from "@components/Common/Select/containers/ContentSelectContainer";
+import LineChart from "@components/Common/CChart/LineChart";
 
 type Props = {
   selectedContent: ContentTypes;
-  onChangeContent: (content: ContentTypes) => void;
+  contentHandler: (content: ContentTypes) => void;
   selectedDate: {
     start: Date;
     end: Date;
   };
   onChangeDate: (name: "start" | "end", date: Date) => void;
   chartData: ChartDataTypes;
+  temp: {
+    categories: string[];
+    data: number[];
+  };
 };
 
 const Period = ({
   selectedContent,
-  onChangeContent,
+  contentHandler,
   selectedDate,
   onChangeDate,
   chartData,
+  temp,
 }: Props) => {
   return (
     <Container>
@@ -29,22 +35,16 @@ const Period = ({
         <p>{selectedContent.name}</p>
         <ContentSelectContainer
           selectedContent={selectedContent}
-          func={onChangeContent}
+          func={contentHandler}
         />
       </header>
-      {/* <ContentSelectContainer
-        selected={selectedContent}
-        func={onChangeContent}
+      <DatePickerContainer>
+        <CDatePicker selectedDate={selectedDate} func={onChangeDate} />
+      </DatePickerContainer>
+      <LineChart
+        categories={temp.categories}
+        data={[{ name: selectedContent.name, data: temp.data }]}
       />
-      <S.Contents>
-        <header>
-          <CDatePicker selectedDate={selectedDate} func={onChangeDate} />
-        </header>
-        <h3>{selectedContent.name}</h3>
-        <S.ChartBox>
-          <LineChart data={chartData} />
-        </S.ChartBox>
-      </S.Contents> */}
     </Container>
   );
 };
@@ -64,11 +64,28 @@ const Container = styled.main`
     ${({ theme }) => theme.flex.row}
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 20px;
 
     & > p {
       font-size: 24px;
       font-weight: 600;
       color: ${({ theme }) => theme.colors.gray4};
     }
+  }
+`;
+
+const DatePickerContainer = styled.section`
+  margin-bottom: 40px;
+`;
+
+const ChartContainer = styled.section`
+  height: 420px;
+  ${({ theme }) => theme.flex.row}
+
+  p {
+    width: fit-content;
+    align-self: center;
+    color: ${({ theme }) => theme.colors.gray3};
+    /* transform: rotate(270deg); */
   }
 `;

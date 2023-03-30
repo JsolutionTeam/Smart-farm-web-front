@@ -21,6 +21,7 @@ const MainNavigation = () => {
         <Route path="/realtime" element={<RealTimeContainer />} />
         <Route path="/period" element={<PeriodContainer />} />
         <Route path="/compare" element={<CompareContainer />} />
+        {role === "ROLE_ADMIN" && <Route path="site2"></Route>}
         {role === "ROLE_ADMIN" && (
           <Route path="/site" element={<SiteContainer />} />
         )}
@@ -44,7 +45,6 @@ export default MainNavigation;
 const Container = styled.section`
   width: 100vw;
   min-height: 100vh;
-  height: 100%;
   ${({ theme }) => theme.flex.col}
   align-items: center;
   background-color: ${({ theme }) => theme.colors.gray1};

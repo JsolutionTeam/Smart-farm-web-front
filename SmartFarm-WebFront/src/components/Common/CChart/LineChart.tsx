@@ -1,35 +1,23 @@
-import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-} from "chart.js";
+import ApexCharts from "react-apexcharts";
+
 type Props = {
-  data: ChartDataTypes;
+  categories: string[];
+  data: { name: string; data: number[] }[];
 };
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement);
+const LineChart = ({ categories, data }: Props) => {
+  const options = {
+    chart: {
+      toolbar: { show: false },
+      zoom: { enabled: false },
+    },
+    colors: ["#005e63", "#2E6CA3"], // theme.colors.primary
+    xaxis: {
+      categories: categories,
+    },
+  };
 
-const LineChart = ({ data }: Props) => {
-  return (
-    <Line
-      options={{
-        maintainAspectRatio: false,
-        plugins: {
-          title: {
-            display: false,
-          },
-        },
-        interaction: {
-          intersect: true,
-        },
-      }}
-      data={data}
-    />
-  );
+  return <ApexCharts type="line" series={data} options={options} />;
 };
 
 export default LineChart;

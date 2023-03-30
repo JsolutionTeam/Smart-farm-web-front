@@ -24,7 +24,7 @@ const ContentSelectContainer = ({ selectedContent, func }: Props) => {
   const [isVisible, setIsVisible] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
 
-  const handleVisible = (visible: boolean) => {
+  const visibleHandler = (visible: boolean) => {
     setIsVisible(visible);
   };
 
@@ -36,7 +36,7 @@ const ContentSelectContainer = ({ selectedContent, func }: Props) => {
   return (
     <ContentSelect
       isVisible={isVisible}
-      handleVisible={handleVisible}
+      visibleHandler={visibleHandler}
       selectedContent={selectedContent}
       onClickContent={onClickContent}
       selectRef={selectRef}
