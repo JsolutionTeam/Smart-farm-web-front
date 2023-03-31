@@ -5,9 +5,9 @@ import { SiteTypes } from "@store/site/actions";
 import { FiChevronDown } from "react-icons/fi";
 
 type Props = {
-  sites: SiteTypes[];
   isVisible: boolean;
   visibleHandler: (visible: boolean) => void;
+  sites: SiteTypes[];
   selectedSite: SiteTypes | null;
   onClickSite: (site: SiteTypes) => void;
   onClickClear: () => void;
@@ -15,9 +15,9 @@ type Props = {
 };
 
 const SiteSelect = ({
-  sites,
   isVisible,
   visibleHandler,
+  sites,
   onClickSite,
   selectedSite,
   onClickClear,
@@ -28,25 +28,27 @@ const SiteSelect = ({
   return (
     <Container ref={selectRef}>
       <Selected onClick={() => visibleHandler(!isVisible)}>
-        <p>{selectedSite ? selectedSite.name : "농가선택"}</p>
+        <p>
+          {selectedSite
+            ? `${selectedSite.crop}-${selectedSite.location}`
+            : "농가선택"}
+        </p>
         <FiChevronDown />
       </Selected>
-      <OptionContainer isVisible={isVisible}>
-        <Options>
-          <Option onClick={onClickClear} selected={!!!selectedSite}>
-            농가선택
+      <Options isVisible={isVisible}>
+        <Option onClick={onClickClear} selected={!!!selectedSite}>
+          농가선택
+        </Option>
+        {sites.map((site) => (
+          <Option
+            key={site.id}
+            onClick={() => onClickSite(site)}
+            selected={selectedSite ? selectedSite.id === site.id : false}
+          >
+            {site.crop}-{site.location}
           </Option>
-          {sites.map((site) => (
-            <Option
-              key={site.id}
-              onClick={() => onClickSite(site)}
-              selected={selectedSite ? selectedSite.id === site.id : false}
-            >
-              {site.name}
-            </Option>
-          ))}
-        </Options>
-      </OptionContainer>
+        ))}
+      </Options>
     </Container>
   );
 };
@@ -58,6 +60,7 @@ const Container = styled.div`
 `;
 
 const Selected = styled.button`
+  height: 40px;
   ${({ theme }) => theme.flex.row}
   align-items: center;
   background: none;
@@ -69,48 +72,35 @@ const Selected = styled.button`
   }
 `;
 
-const OptionContainer = styled.div<{ isVisible: boolean }>`
-  width: 200px;
+export const Options = styled.div<{ isVisible: boolean }>`
+  width: 255px;
+  max-height: 300px;
   display: ${({ isVisible }) => (isVisible ? "block" : "none")};
+  padding: 5px 0;
   position: absolute;
-  top: 40px;
+  top: 45px;
   right: 0;
-  padding: 20px;
-  background-color: #fff;
+  overflow-y: auto;
   border: 1px solid ${({ theme }) => theme.colors.gray2};
   border-radius: 6px;
+  z-index: 99;
 `;
 
-const Options = styled.div`
+export const Option = styled.button<{ selected: boolean }>`
   width: 100%;
-  height: 300px;
-  overflow-y: auto;
-  ${({ theme }) => theme.flex.col}
-
-  &::-webkit-scrollbar {
-    width: 7px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: ${({ theme }) => theme.colors.gray2};
-    border-radius: 25px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.gray3};
-    border-radius: 25px;
-  }
-  &::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme }) => theme.colors.gray3};
-  }
-`;
-
-const Option = styled.button<{ selected: boolean }>`
   line-height: 40px;
-  background: none;
+  padding: 0 20px;
+  background: ${({ theme, selected }) =>
+    selected ? theme.colors.primaryLight : "#fff"};
   border: none;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray2};
   font-size: 16px;
-  font-weight: ${({ selected }) => selected && 600};
+  font-weight: ${({ selected }) => selected && 500};
   text-align: left;
-  color: ${({ theme, selected }) => selected && theme.colors.primary};
+  color: ${({ theme, selected }) =>
+    selected ? theme.colors.gray4 : theme.colors.gray3};
+
+  &:hover {
+    background-color: ${({ selected, theme }) =>
+      selected ? theme.colors.primaryLight : theme.colors.gray1};
+  }
 `;

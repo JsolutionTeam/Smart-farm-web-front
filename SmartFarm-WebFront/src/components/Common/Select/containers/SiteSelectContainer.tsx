@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import SiteSelect from "../SiteSelect";
-import useAxios from "@hooks/useAxios";
+import useLocalStorage from "@hooks/useLocalStorage";
 import useSite from "@hooks/store/useSite";
+import { requestSecureGet } from "@lib/api";
 import { SiteTypes } from "@store/site/actions";
 
 const SiteSelectContainer = () => {
+  const { getToken } = useLocalStorage();
   const [isVisible, setIsVisible] = useState(false);
-  const { response: sites, requestApi } = useAxios<SiteTypes[]>();
+  const [sites, setSites] = useState<SiteTypes[]>([]);
   const { selectedSite, __siteSetActionFromHooks, __siteClearActionFromHooks } =
     useSite();
   const selectRef = useRef<HTMLDivElement>(null);
@@ -27,15 +29,27 @@ const SiteSelectContainer = () => {
     setIsVisible(false);
   };
 
+  const getSites = async () => {
+    const { config, data } = await requestSecureGet<SiteTypes[]>(
+      "/v1/site/list",
+      {},
+      getToken()!
+    );
+
+    if (config.status >= 200 && config.status < 400) {
+      setSites(data);
+    }
+  };
+
   useEffect(() => {
-    requestApi("GET", "/v1/site/list");
+    getSites();
   }, []);
 
   return (
     <SiteSelect
-      sites={sites ?? []}
       isVisible={isVisible}
       visibleHandler={visibleHandler}
+      sites={sites ?? []}
       selectedSite={selectedSite}
       onClickSite={onClickSite}
       onClickClear={onClickClear}

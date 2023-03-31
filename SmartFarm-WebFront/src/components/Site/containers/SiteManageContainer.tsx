@@ -1,7 +1,7 @@
 import SiteManage from "../components/SiteManage";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import useToken from "@hooks/useToken";
+import useLocalStorage from "@hooks/useLocalStorage";
 import { SiteTypes } from "@typedef/components/Site/site.types";
 import {
   requestSecureGet,
@@ -13,7 +13,7 @@ const SiteManageContainer = () => {
   const navigate = useNavigate();
   // insert ? null : AccountTypes
   const { state } = useLocation();
-  const { getToken } = useToken();
+  const { getToken } = useLocalStorage();
   const [type, setType] = useState<"insert" | "update">("insert");
   const [inputs, setInputs] = useState<SiteTypes>({
     id: 0,

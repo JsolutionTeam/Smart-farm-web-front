@@ -2,13 +2,13 @@ import Site from "../Site";
 import { useState, useEffect, useCallback } from "react";
 import { requestSecureDelete, requestSecureGet } from "@lib/api";
 import { useNavigate } from "react-router-dom";
-import useToken from "@hooks/useToken";
 import { SiteTypes } from "@typedef/components/Site/site.types";
 import { AccountTypes } from "@typedef/components/Site/account.types";
+import useLocalStorage from "@hooks/useLocalStorage";
 
 const SiteContainer = () => {
   const navigate = useNavigate();
-  const { getToken } = useToken();
+  const { getToken } = useLocalStorage();
   const [sites, setSites] = useState<SiteTypes[]>([]);
   const [accounts, setAccounts] = useState<AccountTypes[]>([]);
   const [toggle, setToggle] = useState<{

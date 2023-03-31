@@ -1,17 +1,19 @@
 import styled from "styled-components";
 import { useMemo } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import useUser from "@hooks/useUser";
+import useLocalStorage from "@hooks/useLocalStorage";
 import GNB from "@components/Common/GNB/GNB";
 import RealTimeContainer from "@components/RealTime/containers/RealTimeContainer";
 import PeriodContainer from "@components/Period/containers/PeriodContainer";
 import CompareContainer from "@components/Compare/containers/CompareContainer";
-import SiteContainer from "@components/Site/containers/SiteContainer";
-import SiteManageContainer from "@components/Site/containers/SiteManageContainer";
-import AccountManageContainer from "@components/Site/containers/AccountManageContainer";
+import SiteNavigation from "./SiteNavigation";
+import AccountContainer from "@components/Account/containers/AccountContainer";
+import AccountManageContainer from "@components/Account/containers/AccountManageContainer";
+import SensorContainer from "@components/Sensor/containers/SensorContainer";
+import SensorManageContainer from "@components/Sensor/containers/SensorManageContainer";
 
 const MainNavigation = () => {
-  const { getUser } = useUser();
+  const { getUser } = useLocalStorage();
   const role = useMemo(() => getUser().role, [getUser]);
 
   return (
@@ -21,18 +23,18 @@ const MainNavigation = () => {
         <Route path="/realtime" element={<RealTimeContainer />} />
         <Route path="/period" element={<PeriodContainer />} />
         <Route path="/compare" element={<CompareContainer />} />
-        {role === "ROLE_ADMIN" && <Route path="site2"></Route>}
         {role === "ROLE_ADMIN" && (
-          <Route path="/site" element={<SiteContainer />} />
-        )}
-        {role === "ROLE_ADMIN" && (
-          <Route path="/site/manage" element={<SiteManageContainer />} />
-        )}
-        {role === "ROLE_ADMIN" && (
-          <Route
-            path="/site/account/manage"
-            element={<AccountManageContainer />}
-          />
+          <Route path="/site" element={<SiteNavigation />}>
+            <Route path="account">
+              <Route index element={<AccountContainer />} />
+              <Route path="manage" element={<AccountManageContainer />} />
+            </Route>
+            <Route path="sensor">
+              <Route index element={<SensorContainer />} />
+              <Route path="manage" element={<SensorManageContainer />} />
+            </Route>
+            <Route index element={<Navigate to="./account" />} />
+          </Route>
         )}
         <Route path="*" element={<Navigate to="/realtime" />} />
       </Routes>
@@ -43,7 +45,6 @@ const MainNavigation = () => {
 export default MainNavigation;
 
 const Container = styled.section`
-  width: 100vw;
   min-height: 100vh;
   ${({ theme }) => theme.flex.col}
   align-items: center;

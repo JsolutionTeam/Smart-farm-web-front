@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import img from "@assets/image";
 
 type Props = {
   onChangeInputs: (e: { target: HTMLInputElement }) => void;
@@ -16,14 +15,14 @@ const Login = ({ onChangeInputs, login }: Props) => {
         <header>로그인</header>
         <input
           type="text"
-          name="id"
+          name="username"
           onChange={onChangeInputs}
           autoFocus
           placeholder="아이디"
         />
         <input
           type="password"
-          name="passwd"
+          name="password"
           onChange={onChangeInputs}
           onKeyPress={(e) => {
             if (e.key === "Enter") {
@@ -88,13 +87,13 @@ const Inputs = styled.section`
     font-size: 16px;
 
     &:first-of-type {
-      background-image: url(${img.IcId});
+      background-image: url(/assets/icons/username.svg);
       border-radius: ${radius} ${radius} 0 0;
     }
 
     &:last-of-type {
       margin-bottom: 40px;
-      background-image: url(${img.IcPasswd});
+      background-image: url(/assets/icons/password.svg);
       border-radius: 0 0 ${radius} ${radius};
     }
 

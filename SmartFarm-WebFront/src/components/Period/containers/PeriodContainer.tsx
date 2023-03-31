@@ -1,19 +1,18 @@
 import Period from "../Period";
 import { useState, useEffect, useCallback, useMemo } from "react";
-import useToken from "@hooks/useToken";
-import useUser from "@hooks/useUser";
+import useLocalStorage from "@hooks/useLocalStorage";
+
 import useSelected from "@hooks/useSelected";
-import { apiRoute, requestSecureGet } from "@lib/api";
+import { requestSecureGet } from "@lib/api";
 import { setStartDate, setEndDate, getPrevMonth } from "@lib/date";
 import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
-import { ContentTypes } from "@typedef/assets/content.types";
-import { contents } from "@assets/content";
 import { PeriodTypes } from "@typedef/components/Period/period.types";
 import dayjs from "dayjs";
+import { contents } from "@components/Common/Select/ContentSelect";
+import { ContentTypes } from "@components/Common/Select/containers/ContentSelectContainer";
 
 const PeriodContainer = () => {
-  const { getToken } = useToken();
-  const { getUser } = useUser();
+  const { getToken, getUser } = useLocalStorage();
   const { getSelected } = useSelected();
   const siteSeq = useMemo(
     () => (getSelected().id ? getSelected().id : getUser().siteSeq),
@@ -173,10 +172,9 @@ const PeriodContainer = () => {
     }
 
     const { config, data } = await requestSecureGet<PeriodTypes[]>(
-      apiRoute.site +
-        `${siteSeq}/summary?startTime=${formatDate(
-          selectedDate.start
-        )}&endTime=${formatDate(selectedDate.end)}`,
+      `/v1/site/${siteSeq}/summary?startTime=${formatDate(
+        selectedDate.start
+      )}&endTime=${formatDate(selectedDate.end)}`,
       {},
       getToken()!
     );

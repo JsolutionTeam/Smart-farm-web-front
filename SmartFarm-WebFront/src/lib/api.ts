@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const dev = "http://192.168.0.215:18080/api";
-const prod = "http://39.112.10.37/api";
+const DEV = "http://192.168.0.195:18080/api";
+const PROD = "http://39.112.10.37/api";
 
-export const API_ORIGIN = process.env.NODE_ENV === "development" ? prod : prod;
+export const API_ORIGIN = process.env.NODE_ENV === "development" ? DEV : PROD;
 
 axios.defaults.baseURL = API_ORIGIN;
 
@@ -23,25 +23,8 @@ axios.interceptors.response.use(
 
     return res;
   },
-  async (error) => {
-    if (error.response.status === 401) {
-      if (localStorage.getItem("@accessToken")) {
-        alert("장시간 미사용으로 로그아웃 되었습니다");
-        localStorage.removeItem("@accessToken");
-        localStorage.removeItem("@user");
-        window.location.reload();
-      }
-    }
-  }
+  async (error) => {}
 );
-
-export const apiRoute = {
-  auth: {
-    login: "/auth/login",
-    refresh: "/auth/refresh",
-  },
-  site: "/v1/site/",
-};
 
 export type BasicApiResponse<T> = {
   data: T;

@@ -1,9 +1,11 @@
 import styled from "styled-components";
+import { Container } from "@components/Period/Period";
 // import LineChart from "@components/Common/CChart/LineChart";
 import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
-import ContentSelectContainer from "@components/Common/Select/containers/ContentSelectContainer";
+import ContentSelectContainer, {
+  ContentTypes,
+} from "@components/Common/Select/containers/ContentSelectContainer";
 import CDatePicker from "@components/Common/CDatePicker/CDatePicker";
-import { ContentTypes } from "@typedef/assets/content.types";
 import LineChart from "@components/Common/CChart/LineChart";
 
 type Props = {
@@ -82,29 +84,6 @@ const Compare = ({
 
 export default Compare;
 
-const Container = styled.main`
-  width: 802px;
-  ${({ theme }) => theme.flex.col}
-  padding: 40px;
-  background-color: #fff;
-  border: 1px solid ${({ theme }) => theme.colors.gray2};
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.08);
-  border-radius: 12px;
-
-  header {
-    ${({ theme }) => theme.flex.row}
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-
-    & > p {
-      font-size: 24px;
-      font-weight: 600;
-      color: ${({ theme }) => theme.colors.gray4};
-    }
-  }
-`;
-
 const DatePickerContainer = styled.section`
   margin-bottom: 40px;
 
@@ -121,17 +100,5 @@ const DatePickerContainer = styled.section`
     &:first-child {
       margin-bottom: 12px;
     }
-  }
-`;
-
-const ChartContainer = styled.section`
-  height: 420px;
-  ${({ theme }) => theme.flex.row}
-
-  p {
-    width: fit-content;
-    align-self: center;
-    color: ${({ theme }) => theme.colors.gray3};
-    /* transform: rotate(270deg); */
   }
 `;

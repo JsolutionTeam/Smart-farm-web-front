@@ -1,15 +1,14 @@
 import styled from "styled-components";
-import { BrowserRouter } from "react-router-dom";
 import { Route, Routes } from "react-router";
+import useLocalStorage from "@hooks/useLocalStorage";
 import MainNavigation from "./MainNavigation";
 import LoginContainer from "@components/Login/containers/LoginContainer";
-import useToken from "@hooks/useToken";
 
 const RootNavigation = () => {
-  const { getToken } = useToken();
+  const { getToken } = useLocalStorage();
 
   return (
-    <BrowserRouter>
+    <Contianer>
       <Routes>
         <Route
           path="*"
@@ -19,11 +18,15 @@ const RootNavigation = () => {
       <Copyright>
         Copyright &copy; 스마트팜 혁신밸리 All Rights Reserved.
       </Copyright>
-    </BrowserRouter>
+    </Contianer>
   );
 };
 
 export default RootNavigation;
+
+const Contianer = styled.div`
+  position: relative;
+`;
 
 // 카피라이트
 const Copyright = styled.div`

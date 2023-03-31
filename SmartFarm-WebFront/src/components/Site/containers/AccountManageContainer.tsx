@@ -1,7 +1,7 @@
 import AccountManage from "../components/AccountManage";
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import useToken from "@hooks/useToken";
+import useLocalStorage from "@hooks/useLocalStorage";
 import {
   requestSecureGet,
   requestSecurePost,
@@ -19,7 +19,7 @@ const AccountManageContainer = () => {
   const navigate = useNavigate();
   // insert ? null : AccountTypes
   const { state } = useLocation();
-  const { getToken } = useToken();
+  const { getToken } = useLocalStorage();
   const [type, setType] = useState<"insert" | "update">("insert");
   const [inputs, setInputs] = useState<AccountManageTypes>({
     password: "",

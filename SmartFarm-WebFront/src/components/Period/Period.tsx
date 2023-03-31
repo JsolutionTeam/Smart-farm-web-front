@@ -2,8 +2,9 @@ import styled from "styled-components";
 import CDatePicker from "@components/Common/CDatePicker/CDatePicker";
 // import LineChart from "@components/Common/CChart/LineChart";
 import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
-import { ContentTypes } from "@typedef/assets/content.types";
-import ContentSelectContainer from "@components/Common/Select/containers/ContentSelectContainer";
+import ContentSelectContainer, {
+  ContentTypes,
+} from "@components/Common/Select/containers/ContentSelectContainer";
 import LineChart from "@components/Common/CChart/LineChart";
 
 type Props = {
@@ -51,9 +52,10 @@ const Period = ({
 
 export default Period;
 
-const Container = styled.main`
+export const Container = styled.main`
   width: 802px;
   ${({ theme }) => theme.flex.col}
+  margin-bottom: 120px;
   padding: 40px;
   background-color: #fff;
   border: 1px solid ${({ theme }) => theme.colors.gray2};

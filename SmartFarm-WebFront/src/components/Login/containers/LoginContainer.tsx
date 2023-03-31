@@ -1,15 +1,22 @@
 import Login from "../Login";
 import { useState } from "react";
+import useLocalStorage from "@hooks/useLocalStorage";
 import { requestPost } from "@lib/api";
-import useToken from "@hooks/useToken";
-import useUser from "@hooks/useUser";
+
+type LoginResponseTypes = {
+  accessToken: string;
+  refreshToken: string;
+  role: "ROLE_ADMIN" | "ROLE_USER";
+  siteSeq: number;
+};
 
 const LoginContainer = () => {
-  const { setToken } = useToken();
-  const { setUser } = useUser();
-  const [inputs, setInputs] = useState<{ [key in "id" | "passwd"]: string }>({
-    id: "",
-    passwd: "",
+  const { setToken, setUser } = useLocalStorage();
+  const [inputs, setInputs] = useState<{
+    [key in "username" | "password"]: string;
+  }>({
+    username: "",
+    password: "",
   });
 
   const onChangeInputs = (e: { target: HTMLInputElement }) => {
@@ -22,18 +29,11 @@ const LoginContainer = () => {
   };
 
   const login = async () => {
-    if (inputs.id && inputs.passwd) {
-      const { config, data } = await requestPost<{
-        accessToken: string;
-        role: "ROLE_ADMIN" | "ROLE_USER";
-        siteSeq: number;
-      }>(
+    if (inputs.username && inputs.password) {
+      const { config, data } = await requestPost<LoginResponseTypes>(
         "/auth/login",
         {},
-        {
-          username: inputs.id,
-          password: inputs.passwd,
-        }
+        inputs
       );
       if (config.status >= 200 && config.status < 400) {
         setToken(data.accessToken);

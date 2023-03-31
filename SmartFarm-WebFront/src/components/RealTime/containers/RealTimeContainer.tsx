@@ -1,17 +1,14 @@
 import RealTime from "../RealTime";
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { apiRoute, requestSecureGet } from "@lib/api";
-import useToken from "@hooks/useToken";
-import useUser from "@hooks/useUser";
+import { requestSecureGet } from "@lib/api";
+import useLocalStorage from "@hooks/useLocalStorage";
 import useSelected from "@hooks/useSelected";
 import { RealTimeTypes } from "@typedef/components/RealTime/real.time.types";
 import { realTimeListTypes } from "@typedef/components/RealTime/real.time.list.types";
 import { UnitTypes } from "@typedef/components/RealTime/unit.types";
-import img from "@assets/image";
 
 const RealTimeContainer = () => {
-  const { getToken } = useToken();
-  const { getUser } = useUser();
+  const { getToken, getUser } = useLocalStorage();
   const { getSelected } = useSelected();
   const siteSeq = useMemo(
     () => (getSelected().id ? getSelected().id : getUser().siteSeq),
@@ -38,49 +35,49 @@ const RealTimeContainer = () => {
         name: "온도",
         value: realTimeData.temperature,
         unit: "°C",
-        icon: img.IcTemperature,
+        icon: "img.IcTemperature",
       },
       {
         name: "습도",
         value: realTimeData.relativeHumidity,
         unit: "%",
-        icon: img.IcHumidity,
+        icon: "img.IcHumidity",
       },
       {
         name: "일사량",
         value: realTimeData.solarRadiation,
         unit: "W/㎡",
-        icon: img.IcSun,
+        icon: "img.IcSun",
       },
       {
         name: "CO2농도",
         value: realTimeData.co2,
         unit: "ppm",
-        icon: img.IcCO2,
+        icon: " img.IcCO2",
       },
       {
         name: "강우량",
         value: realTimeData.rainfall,
         unit: "mm",
-        icon: img.IcRain,
+        icon: "img.IcRain",
       },
       {
         name: "지온",
         value: realTimeData.earthTemperature,
         unit: "°C",
-        icon: img.IcGeothermal,
+        icon: "img.IcGeothermal",
       },
       {
         name: "풍향",
         value: realTimeData.windDirection,
         unit: "°",
-        icon: img.IcWindDirection,
+        icon: "img.IcWindDirection",
       },
       {
         name: "풍속",
         value: realTimeData.windSpeed,
         unit: "m/s",
-        icon: img.IcWindSpeed,
+        icon: "img.IcWindSpeed",
       },
     ],
     [realTimeData]
@@ -98,7 +95,7 @@ const RealTimeContainer = () => {
 
   const getRealTimeData = useCallback(async () => {
     const { config, data } = await requestSecureGet<RealTimeTypes>(
-      apiRoute.site + `${siteSeq}/realtime`,
+      `/v1/site/${siteSeq}/realtime`,
       {},
       getToken()!
     );
