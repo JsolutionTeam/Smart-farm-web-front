@@ -2,125 +2,147 @@ import styled from "styled-components";
 import { AccountManageTypes } from "../containers/AccountManageContainer";
 
 type Props = {
+  type: "등록하기" | "상세보기";
   inputs: AccountManageTypes;
   onChangeInputs: (e: { target: HTMLInputElement }) => void;
+  validationUsername: () => Promise<void>;
+  onClickRole: (selected: "ADMIN" | "USER") => void;
+  msgs: { [input in "username"]: string };
+  insert: () => Promise<void>;
+  update: () => Promise<void>;
 };
 
-const AccountManage = ({ inputs, onChangeInputs }: Props) => {
+const AccountManage = ({
+  type,
+  inputs,
+  onChangeInputs,
+  validationUsername,
+  onClickRole,
+  msgs,
+  insert,
+  update,
+}: Props) => {
   return (
     <Container>
-      <header>농가 상세보기</header>
+      <header>농가 {type}</header>
       <TableContainer>
-        <Table>
-          <tbody>
-            <tr>
-              <th>관리자명*</th>
-              <td>
-                <input
-                  name=""
-                  value={inputs.username}
-                  onChange={onChangeInputs}
-                />
-              </td>
-            </tr>
-            <tr>
-              <th>아이디*</th>
-              <td>
-                <input
-                  name=""
-                  value={inputs.username}
-                  onChange={onChangeInputs}
-                />
-              </td>
-            </tr>
-            <tr>
-              <th>비밀번호*</th>
-              <td>
-                <input
-                  name=""
-                  value={inputs.username}
-                  onChange={onChangeInputs}
-                />
-              </td>
-            </tr>
-            <tr>
-              <th>농가번호*</th>
-              <td>
-                <input
-                  name=""
-                  value={inputs.username}
-                  onChange={onChangeInputs}
-                />
-              </td>
-            </tr>
-            <tr>
-              <th>농가명*</th>
-              <td>
-                <input
-                  name=""
-                  value={inputs.username}
-                  onChange={onChangeInputs}
-                />
-              </td>
-            </tr>
-          </tbody>
-        </Table>
-        <Table>
-          <tbody>
-            <tr>
-              <th>지역*</th>
-              <td>
-                <input
-                  name=""
-                  value={inputs.username}
-                  onChange={onChangeInputs}
-                />
-              </td>
-              <th>작물*</th>
-              <td>
-                <input
-                  name=""
-                  value={inputs.username}
-                  onChange={onChangeInputs}
-                />
-              </td>
-            </tr>
-            <tr>
-              <th>농가주소</th>
-              <td>
-                <input
-                  name=""
-                  value={inputs.username}
-                  onChange={onChangeInputs}
-                />
-              </td>
-            </tr>
-            <tr>
-              <th>전화번호</th>
-              <td>
-                <input
-                  name=""
-                  value={inputs.username}
-                  onChange={onChangeInputs}
-                />
-              </td>
-            </tr>
-            <tr>
-              <th>이메일</th>
-              <td>
-                <input
-                  name=""
-                  value={inputs.username}
-                  onChange={onChangeInputs}
-                />
-              </td>
-            </tr>
-          </tbody>
-        </Table>
+        <Tr>
+          <p>관리자명*</p>
+          <Td>
+            <input
+              name="name"
+              value={inputs.name}
+              onChange={onChangeInputs}
+              placeholder="관리자명"
+            />
+          </Td>
+        </Tr>
+        <Tr>
+          <p>지역*</p>
+          <Td>
+            <input
+              name="siteLocation"
+              value={inputs.siteLocation}
+              onChange={onChangeInputs}
+              placeholder="지역"
+            />
+          </Td>
+          <p>작물*</p>
+          <Td>
+            <input
+              name="siteCrop"
+              value={inputs.siteCrop}
+              onChange={onChangeInputs}
+              placeholder="작물"
+            />
+          </Td>
+        </Tr>
+        <Tr>
+          <p>아이디*</p>
+          <Td>
+            <input
+              name="username"
+              value={inputs.username}
+              onChange={onChangeInputs}
+              onBlur={validationUsername}
+              disabled={type === "상세보기"}
+              placeholder="아이디"
+            />
+          </Td>
+          {msgs.username && <span>{msgs.username}</span>}
+        </Tr>
+        <Tr>
+          <p>비밀번호*</p>
+          <Td>
+            <input
+              type="password"
+              name="password"
+              value={inputs.password}
+              onChange={onChangeInputs}
+              placeholder="비밀번호"
+            />
+          </Td>
+        </Tr>
+        <Tr>
+          <p>농가구분*</p>
+          <Td>
+            <button onClick={() => onClickRole("ADMIN")}>관리자</button>
+            <button onClick={() => onClickRole("USER")}>사용자</button>
+          </Td>
+        </Tr>
+        <Tr>
+          <p>농가명*</p>
+          <Td>
+            <input
+              name="siteName"
+              value={inputs.siteName}
+              onChange={onChangeInputs}
+              placeholder="농가명"
+            />
+          </Td>
+        </Tr>
+        <Tr>
+          <p>농가주소</p>
+          <Td>
+            <input
+              name="address"
+              value={inputs.address}
+              onChange={onChangeInputs}
+              placeholder="농가주소"
+            />
+          </Td>
+        </Tr>
+        <Tr>
+          <p>전화번호</p>
+          <Td>
+            <input
+              name="phone"
+              value={inputs.phone}
+              onChange={onChangeInputs}
+              placeholder="전화번호"
+            />
+          </Td>
+        </Tr>
+        <Tr>
+          <p>이메일</p>
+          <Td>
+            <input
+              name="email"
+              value={inputs.email}
+              onChange={onChangeInputs}
+              placeholder="이메일"
+            />
+          </Td>
+        </Tr>
       </TableContainer>
       <Buttons>
         <button>취소</button>
-        <button className="active">등록</button>
+        <button
+          onClick={type === "등록하기" ? insert : update}
+          className="active"
+        >
+          {type === "등록하기" ? "등록" : "수정"}
+        </button>
       </Buttons>
     </Container>
   );
@@ -143,43 +165,51 @@ export const Container = styled.main`
 
 export const TableContainer = styled.section`
   width: 100%;
-  ${({ theme }) => theme.flex.row}
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   margin-bottom: 225px;
 `;
 
-export const Table = styled.table`
-  width: 50%;
-  table-layout: fixed;
+export const Tr = styled.article`
+  width: 100%;
+  height: 62px;
+  ${({ theme }) => theme.flex.row}
+  align-items: center;
+  color: ${({ theme }) => theme.colors.gray4};
+  font-size: 20px;
+  text-align: left;
 
-  tr {
+  p {
+    width: 160px;
     line-height: 62px;
-    border: 1px solid ${({ theme }) => theme.colors.gray2};
-    color: ${({ theme }) => theme.colors.gray4};
-    font-size: 20px;
-    text-align: left;
+    padding-left: 20px;
+    background-color: ${({ theme }) => theme.colors.primaryBackground};
+    box-shadow: 0 0 0 1px ${({ theme }) => theme.colors.gray2};
+    font-weight: 500;
 
-    th {
-      width: 160px;
-      padding-left: 20px;
-      background-color: ${({ theme }) => theme.colors.primaryBackground};
-      font-weight: 500;
-    }
-
-    td {
-      padding: 0 20px;
-
-      input {
-        width: 100%;
-        border: none;
-        outline: none;
-      }
+    &:nth-of-type(-n + 2) {
     }
   }
+`;
 
-  &:last-child {
-    tr {
-      border-left: none;
+export const Td = styled.div`
+  flex: 1;
+  height: 100%;
+  ${({ theme }) => theme.flex.col}
+  box-shadow: 0 0 0 1px ${({ theme }) => theme.colors.gray2};
+
+  input {
+    width: 100%;
+    height: 100%;
+    padding: 0 20px;
+    border: none;
+    outline: none;
+    color: ${({ theme }) => theme.colors.gray4};
+
+    font-size: 20px;
+
+    &::placeholder {
+      color: ${({ theme }) => theme.colors.gray3};
     }
   }
 `;

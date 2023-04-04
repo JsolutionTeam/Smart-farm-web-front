@@ -1,34 +1,30 @@
 import styled from "styled-components";
 import CDatePicker from "@components/Common/CDatePicker/CDatePicker";
-// import LineChart from "@components/Common/CChart/LineChart";
-import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
 import ContentSelectContainer, {
   ContentTypes,
 } from "@components/Common/Select/containers/ContentSelectContainer";
 import LineChart from "@components/Common/CChart/LineChart";
+import dayjs from "dayjs";
 
 type Props = {
   selectedContent: ContentTypes;
-  contentHandler: (content: ContentTypes) => void;
+  onChangeContent: (content: ContentTypes) => void;
   selectedDate: {
     start: Date;
     end: Date;
   };
   onChangeDate: (name: "start" | "end", date: Date) => void;
-  chartData: ChartDataTypes;
-  temp: {
-    categories: string[];
-    data: number[];
-  };
+  chartXAxis: string[];
+  chartData: number[];
 };
 
 const Period = ({
   selectedContent,
-  contentHandler,
+  onChangeContent,
   selectedDate,
   onChangeDate,
+  chartXAxis,
   chartData,
-  temp,
 }: Props) => {
   return (
     <Container>
@@ -36,15 +32,15 @@ const Period = ({
         <p>{selectedContent.name}</p>
         <ContentSelectContainer
           selectedContent={selectedContent}
-          func={contentHandler}
+          func={onChangeContent}
         />
       </header>
       <DatePickerContainer>
         <CDatePicker selectedDate={selectedDate} func={onChangeDate} />
       </DatePickerContainer>
       <LineChart
-        categories={temp.categories}
-        data={[{ name: selectedContent.name, data: temp.data }]}
+        categories={chartXAxis.map((x) => `${dayjs(x).format("MM/DD HH")}시`)}
+        data={[{ name: selectedContent.name, data: chartData }]}
       />
     </Container>
   );
@@ -81,9 +77,11 @@ const DatePickerContainer = styled.section`
 `;
 
 const ChartContainer = styled.section`
+  width: 100px;
   height: 420px;
   ${({ theme }) => theme.flex.row}
 
+  background-color: red;
   p {
     width: fit-content;
     align-self: center;

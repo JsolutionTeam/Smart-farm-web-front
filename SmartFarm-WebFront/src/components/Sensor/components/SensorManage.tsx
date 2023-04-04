@@ -1,43 +1,71 @@
 import {
   Container,
-  TableContainer,
-  Table,
   Buttons,
+  TableContainer,
+  Tr,
+  Td,
 } from "@components/Account/components/AccountManage";
+import { SensorManageTypes } from "../containers/SensorManageContainer";
 
-const SensorManage = () => {
+type Props = {
+  inputs: SensorManageTypes;
+  onChangeInputs: (e: { target: HTMLInputElement }) => void;
+};
+
+const SensorManage = ({ inputs, onChangeInputs }: Props) => {
   return (
     <Container>
-      <header>센서 상세보기</header>
+      <header>센서 {inputs.sensorDeviceId ? "상세보기" : "등록하기"}</header>
       <TableContainer>
-        <Table>
-          <tbody>
-            <tr>
-              <th>센서명*</th>
-              <td></td>
-            </tr>
-            <tr>
-              <th>시리얼넘버*</th>
-              <td></td>
-            </tr>
-            <tr>
-              <th>센서이미지</th>
-              <td></td>
-            </tr>
-          </tbody>
-        </Table>
-        <Table>
-          <tbody>
-            <tr>
-              <th>모델명*</th>
-              <td></td>
-            </tr>
-            <tr>
-              <th>농가계정</th>
-              <td></td>
-            </tr>
-          </tbody>
-        </Table>
+        <Tr>
+          <p>센서타입*</p>
+          <Td>
+            <input
+              name="type"
+              value={inputs.type}
+              onChange={onChangeInputs}
+              placeholder="센서타입을 선택해 주세요"
+            />
+          </Td>
+        </Tr>
+        <Tr>
+          <p>모델명*</p>
+          <Td>
+            <input
+              name="modelName"
+              value={inputs.modelName}
+              onChange={onChangeInputs}
+              placeholder="모델명을 입력해 주세요"
+            />
+          </Td>
+        </Tr>
+        <Tr>
+          <p>시리얼넘버*</p>
+          <Td>
+            <input
+              name="serialNumber"
+              value={inputs.serialNumber}
+              onChange={onChangeInputs}
+              placeholder="시리얼넘버를 입력해 주세요"
+            />
+          </Td>
+        </Tr>
+        <Tr>
+          <p>농가계정</p>
+          <Td>
+            <input
+              name="siteSeq"
+              value={inputs.siteSeq ? inputs.siteSeq : "-"}
+              onChange={onChangeInputs}
+            />
+          </Td>
+        </Tr>
+        <Tr>
+          <p>센서이미지</p>
+          <Td>
+            <input type="file" />
+          </Td>
+        </Tr>
       </TableContainer>
       <Buttons>
         <button>취소</button>

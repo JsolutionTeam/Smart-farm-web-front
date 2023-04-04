@@ -3,9 +3,10 @@ import ApexCharts from "react-apexcharts";
 type Props = {
   categories: string[];
   data: { name: string; data: number[] }[];
+  width?: string;
 };
 
-const LineChart = ({ categories, data }: Props) => {
+const LineChart = ({ categories, data, width }: Props) => {
   const options = {
     chart: {
       toolbar: { show: false },

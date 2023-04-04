@@ -2,17 +2,32 @@ import RealTime from "../RealTime";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { requestSecureGet } from "@lib/api";
 import useLocalStorage from "@hooks/useLocalStorage";
-import useSelected from "@hooks/useSelected";
 import { RealTimeTypes } from "@typedef/components/RealTime/real.time.types";
 import { realTimeListTypes } from "@typedef/components/RealTime/real.time.list.types";
 import { UnitTypes } from "@typedef/components/RealTime/unit.types";
+import useSite from "@hooks/store/useSite";
+
+// 실시간, 기간, 비교에서 사용하는 타입
+export type SummaryTypes = {
+  co2: number;
+  co2RegTime: string;
+  earthTemperature: number;
+  microRegTime: string;
+  rainfall: number;
+  relativeHumidity: number;
+  siteSeq: number;
+  solarRadiation: number;
+  temperature: number;
+  windDirection: number;
+  windSpeed: number;
+};
 
 const RealTimeContainer = () => {
   const { getToken, getUser } = useLocalStorage();
-  const { getSelected } = useSelected();
+  const { selectedSite } = useSite();
   const siteSeq = useMemo(
-    () => (getSelected().id ? getSelected().id : getUser().siteSeq),
-    [getSelected, getUser]
+    () => (selectedSite ? selectedSite.id : getUser().siteSeq),
+    [getUser, selectedSite]
   );
   const [realTimeData, setRealTimeData] = useState<RealTimeTypes>({
     co2: 0,
@@ -117,6 +132,8 @@ const RealTimeContainer = () => {
     getRealTimeData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  console.log(selectedSite);
 
   return (
     <RealTime

@@ -11,7 +11,7 @@ type LoginResponseTypes = {
 };
 
 const LoginContainer = () => {
-  const { setToken, setUser } = useLocalStorage();
+  const { setToken, setRefreshToken, setUser } = useLocalStorage();
   const [inputs, setInputs] = useState<{
     [key in "username" | "password"]: string;
   }>({
@@ -37,6 +37,7 @@ const LoginContainer = () => {
       );
       if (config.status >= 200 && config.status < 400) {
         setToken(data.accessToken);
+        setRefreshToken(data.refreshToken);
         setUser({
           role: data.role,
           siteSeq: data.siteSeq,

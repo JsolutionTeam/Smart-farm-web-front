@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import { Container } from "@components/Period/Period";
-// import LineChart from "@components/Common/CChart/LineChart";
-import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
 import ContentSelectContainer, {
   ContentTypes,
 } from "@components/Common/Select/containers/ContentSelectContainer";
@@ -26,7 +24,6 @@ type Props = {
     date: Date,
     seq?: "first" | "second"
   ) => void;
-  chartData: ChartDataTypes;
   temp: {
     categories: string[];
     data: {
@@ -41,7 +38,6 @@ const Compare = ({
   onChangeContent,
   selectedDate,
   onChangeDate,
-  chartData,
   temp,
 }: Props) => {
   return (

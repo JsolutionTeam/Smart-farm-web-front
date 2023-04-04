@@ -28,11 +28,7 @@ const SiteSelect = ({
   return (
     <Container ref={selectRef}>
       <Selected onClick={() => visibleHandler(!isVisible)}>
-        <p>
-          {selectedSite
-            ? `${selectedSite.crop}-${selectedSite.location}`
-            : "농가선택"}
-        </p>
+        <p>{selectedSite ? selectedSite.name : "농가선택"}</p>
         <FiChevronDown />
       </Selected>
       <Options isVisible={isVisible}>
@@ -45,7 +41,7 @@ const SiteSelect = ({
             onClick={() => onClickSite(site)}
             selected={selectedSite ? selectedSite.id === site.id : false}
           >
-            {site.crop}-{site.location}
+            {site.name}
           </Option>
         ))}
       </Options>

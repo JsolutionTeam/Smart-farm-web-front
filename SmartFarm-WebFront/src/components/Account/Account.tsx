@@ -3,10 +3,11 @@ import { AccountTypes } from "./containers/AccountContainer";
 
 type Props = {
   accounts: AccountTypes[];
-  manage: (id?: number) => void;
+  manage: (username?: string) => void;
+  deleteAccount: (username: string) => Promise<void>;
 };
 
-const Account = ({ accounts, manage }: Props) => {
+const Account = ({ accounts, manage, deleteAccount }: Props) => {
   const headers = [
     "아이디",
     "농가번호",
@@ -41,12 +42,15 @@ const Account = ({ accounts, manage }: Props) => {
               <td>{account.site.crop}</td>
               <td>
                 <button
-                  onClick={() => manage(account.site.id)}
+                  onClick={() => manage(account.username)}
                   className="edit"
                 />
               </td>
               <td>
-                <button className="delete" />
+                <button
+                  onClick={() => deleteAccount(account.username)}
+                  className="delete"
+                />
               </td>
             </tr>
           ))}
@@ -118,9 +122,13 @@ export const Table = styled.table`
 
   tbody {
     tr {
-      line-height: 72px;
+      height: 72px;
       border-bottom: 1px solid ${({ theme }) => theme.colors.gray2};
       font-size: 20px;
+
+      td {
+        vertical-align: middle;
+      }
 
       td:nth-last-child(-n + 2) {
         vertical-align: middle;

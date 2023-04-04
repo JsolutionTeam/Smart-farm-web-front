@@ -1,33 +1,45 @@
 import { useState, useEffect } from "react";
 import AccountManage from "../components/AccountManage";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import useLocalStorage from "@hooks/useLocalStorage";
-import { requestSecureGet } from "@lib/api";
+import {
+  requestSecureGet,
+  requestSecurePost,
+  requestSecurePut,
+} from "@lib/api";
+import { AccountTypes } from "./AccountContainer";
 
 export type AccountManageTypes = {
-  address: string;
-  crop: string;
-  email: string;
-  location: string;
-  name: string;
-  password: string;
-  phone: string;
+  address: string; // 농가주소
+  email: string; // 이메일
+  name: string; // 관리자명
+  password: string; // 비밀번호
+  phone: string; // 전화번호
   role: "ROLE_ADMIN" | "ROLE_USER";
-  username: string;
+  siteCrop: string; // 작물
+  siteLocation: string; // 지역
+  siteName: string; // 농가명
+  username: string; // 아이디
 };
 
 const AccountManageContainer = () => {
-  const { getToken } = useLocalStorage();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { getToken } = useLocalStorage();
+  const [type, setType] = useState<"등록하기" | "상세보기">("등록하기");
   const [inputs, setInputs] = useState<AccountManageTypes>({
     address: "",
-    crop: "",
     email: "",
-    location: "",
     name: "",
     password: "",
     phone: "",
     role: "ROLE_USER",
+    siteCrop: "",
+    siteLocation: "",
+    siteName: "",
+    username: "",
+  });
+  const [msgs, setMsgs] = useState<{ [inputs in "username"]: string }>({
     username: "",
   });
 
@@ -40,26 +52,139 @@ const AccountManageContainer = () => {
     }));
   };
 
-  const getDataByAccountId = async (id: string) => {
-    const { config, data } = await requestSecureGet(
-      `/admin/users/${id}`,
+  const onChangeMsgs = (input: "username", msg: string) => {
+    setMsgs((prev) => ({
+      prev,
+      [input]: msg,
+    }));
+  };
+
+  // 아이디 중복확인
+  const validationUsername = async () => {
+    const { config, data } = await requestSecureGet<boolean>(
+      `/admin/users/exist/${inputs.username}`,
       {},
       getToken()!
     );
 
     if (config.status >= 200 && config.status < 400) {
+      // data : true (존재함) | false (존재하지않음)
+      if (data === true) {
+        onChangeMsgs("username", "이미 존재하는 아이디입니다.");
+      } else {
+        onChangeMsgs("username", "");
+      }
+    }
+  };
+
+  const onClickRole = (selected: "ADMIN" | "USER") => {
+    setInputs((prev) => ({
+      ...prev,
+      role: `ROLE_${selected}`,
+    }));
+  };
+
+  // inputs 유효성 검사
+  const validationInputs = () => {
+    let message: null | string = null;
+    if (!inputs.name) message = "관리자명을";
+    else if (!inputs.siteLocation) message = "지역을";
+    else if (!inputs.siteCrop) message = "작물을";
+    else if (!inputs.username) message = "아이디를";
+    else if (!inputs.password) message = "비밀번호를";
+    else if (!inputs.siteName) message = "농가명을";
+
+    return message;
+  };
+
+  const insert = async () => {
+    const message = validationInputs();
+
+    if (message) {
+      alert(`${message} 입력해 주세요.`);
+      return;
+    }
+
+    const { config } = await requestSecurePost(
+      "/admin/user",
+      {},
+      inputs,
+      getToken()!
+    );
+
+    if (config.status >= 200 && config.status < 400) {
+      alert("성공적으로 등록이 완료되었습니다.");
+      navigate("/stie/account");
+    }
+  };
+
+  const update = async () => {
+    const message = validationInputs();
+
+    if (message) {
+      alert(`${message} 입력해 주세요.`);
+      return;
+    }
+
+    const { config } = await requestSecurePut(
+      "/admin/user",
+      {},
+      inputs,
+      getToken()!
+    );
+
+    if (config.status >= 200 && config.status < 400) {
+      alert("성공적으로 수정이 완료되었습니다.");
+      navigate("/");
+    }
+  };
+
+  const getDataByAccountId = async (username: string) => {
+    const { config, data } = await requestSecureGet<AccountTypes>(
+      `/admin/users/${username}`,
+      {},
+      getToken()!
+    );
+
+    if (config.status >= 200 && config.status < 400) {
+      setInputs({
+        address: data.address,
+        email: data.email,
+        name: data.name,
+        password: "",
+        phone: data.phone,
+        role: data.role,
+        siteCrop: data.site.crop,
+        siteLocation: data.site.location,
+        siteName: data.site.name,
+        username: data.username,
+      });
     }
   };
 
   useEffect(() => {
-    const accountId = searchParams.get("accountId");
+    const username = searchParams.get("username");
 
-    if (accountId) {
-      getDataByAccountId(accountId);
+    if (username) {
+      setType("상세보기");
+      getDataByAccountId(username);
     }
   }, []);
 
-  return <AccountManage inputs={inputs} onChangeInputs={onChangeInputs} />;
+  return (
+    <AccountManage
+      {...{
+        type,
+        inputs,
+        onChangeInputs,
+        validationUsername,
+        onClickRole,
+        msgs,
+        insert,
+        update,
+      }}
+    />
+  );
 };
 
 export default AccountManageContainer;

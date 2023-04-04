@@ -1,6 +1,5 @@
 import Compare from "../Compare";
 import { useState, useEffect, useCallback, useMemo } from "react";
-import useSelected from "@hooks/useSelected";
 import { requestSecureGet } from "@lib/api";
 import { setStartDate, setEndDate, getPrevMonth } from "@lib/date";
 import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
@@ -9,13 +8,14 @@ import dayjs from "dayjs";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { contents } from "@components/Common/Select/ContentSelect";
 import { ContentTypes } from "@components/Common/Select/containers/ContentSelectContainer";
+import useSite from "@hooks/store/useSite";
 
 const CompareContainer = () => {
   const { getToken, getUser } = useLocalStorage();
-  const { getSelected } = useSelected();
+  const { selectedSite } = useSite();
   const siteSeq = useMemo(
-    () => (getSelected().id ? getSelected().id : getUser().siteSeq),
-    [getSelected, getUser]
+    () => (selectedSite ? selectedSite.id : getUser().siteSeq),
+    [getUser, selectedSite]
   );
   const [selectedDate, setSelectedDate] = useState<{
     first: { start: Date; end: Date };
@@ -253,7 +253,7 @@ const CompareContainer = () => {
       }
 
       const { config, data } = await requestSecureGet<PeriodTypes[]>(
-        `/v1/site${siteSeq}/summary?startTime=${formatDate(
+        `/v1/site/${siteSeq}/summary?startTime=${formatDate(
           start!
         )}&endTime=${formatDate(end!)}`,
         {},
@@ -299,7 +299,6 @@ const CompareContainer = () => {
       onChangeContent={onChangeContent}
       selectedDate={selectedDate}
       onChangeDate={onChangeDate}
-      chartData={chartData}
       temp={temp}
     />
   );
