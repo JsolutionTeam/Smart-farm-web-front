@@ -27,7 +27,8 @@ const colors = {
   gray2: "#eaeaea",
   gray3: "#73858f",
   gray4: "#1d3740",
-  balck: "#202428",
+  black: "#202428",
+  error: "#dd0000",
 };
 
 export const theme = {

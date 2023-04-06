@@ -38,10 +38,12 @@ const Period = ({
       <DatePickerContainer>
         <CDatePicker selectedDate={selectedDate} func={onChangeDate} />
       </DatePickerContainer>
-      <LineChart
-        categories={chartXAxis.map((x) => `${dayjs(x).format("MM/DD HH")}시`)}
-        data={[{ name: selectedContent.name, data: chartData }]}
-      />
+      <ChartContainer>
+        <LineChart
+          categories={chartXAxis.map((x) => `${dayjs(x).format("MM/DD HH")}시`)}
+          data={[{ name: selectedContent.name, data: chartData }]}
+        />
+      </ChartContainer>
     </Container>
   );
 };
@@ -70,22 +72,36 @@ export const Container = styled.main`
       color: ${({ theme }) => theme.colors.gray4};
     }
   }
+
+  @media ${({ theme }) => theme.media.mobile} {
+    width: 100%;
+    overflow-x: scroll;
+  }
 `;
 
 const DatePickerContainer = styled.section`
   margin-bottom: 40px;
 `;
 
-const ChartContainer = styled.section`
-  width: 100px;
+export const ChartContainer = styled.section`
+  width: 100%;
   height: 420px;
   ${({ theme }) => theme.flex.row}
 
-  background-color: red;
   p {
     width: fit-content;
     align-self: center;
     color: ${({ theme }) => theme.colors.gray3};
     /* transform: rotate(270deg); */
+  }
+
+  & > div {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media ${({ theme }) => theme.media.mobile} {
+    width: 1000px;
+    height: 1090%;
   }
 `;

@@ -1,10 +1,9 @@
 import axios from "axios";
-import useLocalStorage from "@hooks/useLocalStorage";
 
-const DEV = "http://192.168.0.195:18080/api";
+const DEV = "http://192.168.0.215:18080/api";
 const PROD = "http://39.112.10.37/api";
 
-export const API_ORIGIN = process.env.NODE_ENV === "development" ? PROD : PROD;
+export const API_ORIGIN = process.env.NODE_ENV === "development" ? DEV : PROD;
 
 axios.defaults.baseURL = API_ORIGIN;
 
@@ -25,16 +24,8 @@ axios.interceptors.response.use(
     return res;
   },
   async (error) => {
+    console.log("interceptors", error);
     const originalConfig = error.config;
-    const {
-      getToken,
-      setToken,
-      clearToken,
-      getRefreshToken,
-      setRefreshToken,
-      clearRefreshToken,
-      clearUser,
-    } = useLocalStorage();
 
     if (error.response.status === 401 && !originalConfig._retry) {
       originalConfig._retry = true;
@@ -46,20 +37,21 @@ axios.interceptors.response.use(
         "/auth/refresh",
         {},
         {
-          refreshToken: getRefreshToken(),
+          refreshToken: localStorage.getItem("@refreshToken"),
         }
       );
 
       if (config.status >= 200 && config.status < 400) {
-        setToken(data.accessToken);
-        setRefreshToken(data.refreshToken);
+        localStorage.setItem("@accessToken", data.accessToken);
+        localStorage.setItem("@refreshToken", data.refreshToken);
+
         window.location.reload();
       } else {
-        if (getToken()) {
+        if (localStorage.getItem("@accessToken")) {
           alert("장시간 미사용으로 로그아웃 되었습니다.");
-          clearToken();
-          clearRefreshToken();
-          clearUser();
+          localStorage.removeItem("@accessToken");
+          localStorage.removeItem("@refreshToken");
+          localStorage.removeItem("@user");
           window.location.reload();
         }
       }

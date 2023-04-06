@@ -28,12 +28,11 @@ const SiteSelect = ({
   return (
     <Container ref={selectRef}>
       <Selected onClick={() => visibleHandler(!isVisible)}>
-        <p>{selectedSite ? selectedSite.name : "농가선택"}</p>
         <FiChevronDown />
       </Selected>
       <Options isVisible={isVisible}>
         <Option onClick={onClickClear} selected={!!!selectedSite}>
-          농가선택
+          {selectedSite?.name || "농가선택"}
         </Option>
         {sites.map((site) => (
           <Option
@@ -63,8 +62,25 @@ const Selected = styled.button`
   border: none;
   font-size: 20px;
 
-  p {
+  &::before {
+    content: "농가선택";
     margin-right: 5px;
+  }
+
+  @media ${({ theme }) => theme.media.mobile} {
+    width: 40px;
+    height: 40px;
+    ${({ theme }) => theme.flex.row}
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border: 1px solid ${({ theme }) => theme.colors.gray2};
+    border-radius: 6px;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.08);
+
+    &::before {
+      content: none;
+    }
   }
 `;
 
@@ -79,6 +95,7 @@ export const Options = styled.div<{ isVisible: boolean }>`
   overflow-y: auto;
   border: 1px solid ${({ theme }) => theme.colors.gray2};
   border-radius: 6px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
   z-index: 99;
 `;
 

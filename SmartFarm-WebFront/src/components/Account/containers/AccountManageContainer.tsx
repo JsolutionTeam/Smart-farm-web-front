@@ -23,8 +23,8 @@ export type AccountManageTypes = {
 };
 
 const AccountManageContainer = () => {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { getToken } = useLocalStorage();
   const [type, setType] = useState<"등록하기" | "상세보기">("등록하기");
   const [inputs, setInputs] = useState<AccountManageTypes>({
@@ -77,6 +77,14 @@ const AccountManageContainer = () => {
     }
   };
 
+  const onClickClearUsername = () => {
+    setInputs((prev) => ({
+      ...prev,
+      username: "",
+    }));
+    onChangeMsgs("username", "");
+  };
+
   const onClickRole = (selected: "ADMIN" | "USER") => {
     setInputs((prev) => ({
       ...prev,
@@ -91,7 +99,8 @@ const AccountManageContainer = () => {
     else if (!inputs.siteLocation) message = "지역을";
     else if (!inputs.siteCrop) message = "작물을";
     else if (!inputs.username) message = "아이디를";
-    else if (!inputs.password) message = "비밀번호를";
+    else if (msgs.username) message = "올바른 아이디를";
+    else if (type === "등록하기" && !inputs.password) message = "비밀번호를";
     else if (!inputs.siteName) message = "농가명을";
 
     return message;
@@ -114,7 +123,7 @@ const AccountManageContainer = () => {
 
     if (config.status >= 200 && config.status < 400) {
       alert("성공적으로 등록이 완료되었습니다.");
-      navigate("/stie/account");
+      navigate("/site/account");
     }
   };
 
@@ -135,7 +144,7 @@ const AccountManageContainer = () => {
 
     if (config.status >= 200 && config.status < 400) {
       alert("성공적으로 수정이 완료되었습니다.");
-      navigate("/");
+      navigate("/site/account");
     }
   };
 
@@ -178,6 +187,7 @@ const AccountManageContainer = () => {
         inputs,
         onChangeInputs,
         validationUsername,
+        onClickClearUsername,
         onClickRole,
         msgs,
         insert,

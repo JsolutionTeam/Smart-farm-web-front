@@ -19,7 +19,32 @@ const AccountContainer = () => {
   const navigate = useNavigate();
   const { getToken } = useLocalStorage();
   const [accounts, setAccounts] = useState<AccountTypes[]>([]);
+  const [filter, setFilter] = useState<{
+    type: string;
+    value: string;
+  }>({
+    type: "name", // default 관리자명
+    value: "",
+  });
   const [reload, setReload] = useState(0);
+
+  const onChangeFilter = (key: "type" | "value", value: string) => {
+    setFilter((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  const onKeyPressSearch = () => {
+    if (!filter.value) return;
+
+    setReload((prev) => prev + 1);
+  };
+
+  const onClickFilterClear = () => {
+    onChangeFilter("value", "");
+    setReload((prev) => prev + 1);
+  };
 
   const manage = (username?: string) => {
     let url = "/site/account/manage";
@@ -47,8 +72,14 @@ const AccountContainer = () => {
   };
 
   const getAccounts = async () => {
+    let url = "/admin/users";
+
+    if (filter.value) {
+      url += `?${filter.type}=${filter.value}`;
+    }
+
     const { config, data } = await requestSecureGet<AccountTypes[]>(
-      "/admin/users",
+      url,
       {},
       getToken()!
     );
@@ -67,6 +98,10 @@ const AccountContainer = () => {
   return (
     <Account
       accounts={accounts}
+      filter={filter}
+      onChangeFilter={onChangeFilter}
+      onKeyPressSearch={onKeyPressSearch}
+      onClickFilterClear={onClickFilterClear}
       manage={manage}
       deleteAccount={deleteAccount}
     />

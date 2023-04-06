@@ -31,10 +31,12 @@ const GNB = () => {
         )}
       </Header>
       <Navs>
-        <NavLink to="/realtime">실시간</NavLink>
-        <NavLink to="/period">기간</NavLink>
-        <NavLink to="/compare">비교</NavLink>
-        {role === "ROLE_ADMIN" && <NavLink to="/site">농가</NavLink>}
+        <nav>
+          <NavLink to="/realtime">실시간</NavLink>
+          <NavLink to="/period">기간</NavLink>
+          <NavLink to="/compare">비교</NavLink>
+          {role === "ROLE_ADMIN" && <NavLink to="/site">농가</NavLink>}
+        </nav>
       </Navs>
     </Container>
   );
@@ -47,6 +49,10 @@ const Container = styled.section`
   ${({ theme }) => theme.flex.col};
   align-items: center;
   margin-bottom: 36px;
+
+  @media ${({ theme }) => theme.media.mobile} {
+    align-items: flex-start;
+  }
 `;
 
 const Header = styled.header`
@@ -67,12 +73,29 @@ const Header = styled.header`
       color: ${({ theme }) => theme.colors.primary};
     }
   }
+
+  @media ${({ theme }) => theme.media.mobile} {
+    justify-content: space-between;
+    padding: 20px;
+  }
 `;
 
-const Navs = styled.nav`
-  ${({ theme }) => theme.flex.row}
-  flex-wrap: wrap;
-  gap: 12px;
+const SiteSelect = styled.div`
+  position: absolute;
+  right: 40px;
+
+  @media ${({ theme }) => theme.media.mobile} {
+    position: relative;
+    right: 0;
+  }
+`;
+
+const Navs = styled.section`
+  nav {
+    ${({ theme }) => theme.flex.row}
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 
   a {
     width: 107px;
@@ -92,6 +115,25 @@ const Navs = styled.nav`
       font-weight: 600;
     }
   }
+
+  @media ${({ theme }) => theme.media.mobile} {
+    width: 100%;
+    padding: 0 20px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+
+    nav {
+      width: fit-content;
+      flex-wrap: nowrap;
+    }
+
+    // 스크롤 숨기기
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 `;
 
 const Logout = styled.button`
@@ -105,9 +147,4 @@ const Logout = styled.button`
   @media ${({ theme }) => theme.media.mobile} {
     display: none;
   }
-`;
-
-const SiteSelect = styled.div`
-  position: absolute;
-  right: 40px;
 `;

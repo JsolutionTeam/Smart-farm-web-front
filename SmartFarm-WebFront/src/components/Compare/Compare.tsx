@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Container } from "@components/Period/Period";
+import { ChartContainer, Container } from "@components/Period/Period";
 import ContentSelectContainer, {
   ContentTypes,
 } from "@components/Common/Select/containers/ContentSelectContainer";
@@ -67,13 +67,15 @@ const Compare = ({
           />
         </article>
       </DatePickerContainer>
-      <LineChart
-        categories={temp.categories}
-        data={[
-          { name: "기준일", data: temp.data.first },
-          { name: "비교일", data: temp.data.second },
-        ]}
-      />
+      <ChartContainer>
+        <LineChart
+          categories={temp.categories}
+          data={[
+            { name: "기준일", data: temp.data.first },
+            { name: "비교일", data: temp.data.second },
+          ]}
+        />
+      </ChartContainer>
     </Container>
   );
 };
@@ -95,6 +97,15 @@ const DatePickerContainer = styled.section`
 
     &:first-child {
       margin-bottom: 12px;
+    }
+
+    @media ${({ theme }) => theme.media.mobile} {
+      flex-direction: column;
+      align-items: flex-start;
+
+      p {
+        margin-bottom: 8px;
+      }
     }
   }
 `;

@@ -17,4 +17,8 @@ export default SiteNavigation;
 const Container = styled.div`
   width: 100%;
   padding: 0 40px;
+
+  @media ${({ theme }) => theme.media.mobile} {
+    padding: 0;
+  }
 `;

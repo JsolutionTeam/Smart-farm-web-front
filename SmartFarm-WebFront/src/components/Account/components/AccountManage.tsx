@@ -6,6 +6,7 @@ type Props = {
   inputs: AccountManageTypes;
   onChangeInputs: (e: { target: HTMLInputElement }) => void;
   validationUsername: () => Promise<void>;
+  onClickClearUsername: () => void;
   onClickRole: (selected: "ADMIN" | "USER") => void;
   msgs: { [input in "username"]: string };
   insert: () => Promise<void>;
@@ -17,6 +18,7 @@ const AccountManage = ({
   inputs,
   onChangeInputs,
   validationUsername,
+  onClickClearUsername,
   onClickRole,
   msgs,
   insert,
@@ -38,26 +40,6 @@ const AccountManage = ({
           </Td>
         </Tr>
         <Tr>
-          <p>지역*</p>
-          <Td>
-            <input
-              name="siteLocation"
-              value={inputs.siteLocation}
-              onChange={onChangeInputs}
-              placeholder="지역"
-            />
-          </Td>
-          <p>작물*</p>
-          <Td>
-            <input
-              name="siteCrop"
-              value={inputs.siteCrop}
-              onChange={onChangeInputs}
-              placeholder="작물"
-            />
-          </Td>
-        </Tr>
-        <Tr>
           <p>아이디*</p>
           <Td>
             <input
@@ -69,7 +51,12 @@ const AccountManage = ({
               placeholder="아이디"
             />
           </Td>
-          {msgs.username && <span>{msgs.username}</span>}
+          {msgs.username && (
+            <Message>
+              <p>{msgs.username}</p>
+              <button onClick={onClickClearUsername} />
+            </Message>
+          )}
         </Tr>
         <Tr>
           <p>비밀번호*</p>
@@ -86,8 +73,26 @@ const AccountManage = ({
         <Tr>
           <p>농가구분*</p>
           <Td>
-            <button onClick={() => onClickRole("ADMIN")}>관리자</button>
-            <button onClick={() => onClickRole("USER")}>사용자</button>
+            <div className="radios">
+              <label className={inputs.role === "ROLE_ADMIN" ? "active" : ""}>
+                <input
+                  type="radio"
+                  name="role"
+                  checked={inputs.role === "ROLE_ADMIN"}
+                  onClick={() => onClickRole("ADMIN")}
+                />
+                관리자
+              </label>
+              <label className={inputs.role === "ROLE_USER" ? "active" : ""}>
+                <input
+                  type="radio"
+                  name="role"
+                  checked={inputs.role === "ROLE_USER"}
+                  onClick={() => onClickRole("USER")}
+                />
+                사용자
+              </label>
+            </div>
           </Td>
         </Tr>
         <Tr>
@@ -101,6 +106,30 @@ const AccountManage = ({
             />
           </Td>
         </Tr>
+        <div className="two">
+          <Tr>
+            <p>지역*</p>
+            <Td>
+              <input
+                name="siteLocation"
+                value={inputs.siteLocation}
+                onChange={onChangeInputs}
+                placeholder="지역"
+              />
+            </Td>
+          </Tr>
+          <Tr>
+            <p>작물*</p>
+            <Td>
+              <input
+                name="siteCrop"
+                value={inputs.siteCrop}
+                onChange={onChangeInputs}
+                placeholder="작물"
+              />
+            </Td>
+          </Tr>
+        </div>
         <Tr>
           <p>농가주소</p>
           <Td>
@@ -161,6 +190,10 @@ export const Container = styled.main`
     font-weight: 600;
     color: ${({ theme }) => theme.colors.gray4};
   }
+
+  @media ${({ theme }) => theme.media.mobile} {
+    padding: 72px 20px 0;
+  }
 `;
 
 export const TableContainer = styled.section`
@@ -168,27 +201,39 @@ export const TableContainer = styled.section`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   margin-bottom: 225px;
+
+  .two {
+    ${({ theme }) => theme.flex.row}
+  }
+
+  @media ${({ theme }) => theme.media.mobile} {
+    ${({ theme }) => theme.flex.col}
+
+    .two {
+      flex-direction: column;
+    }
+  }
 `;
 
 export const Tr = styled.article`
   width: 100%;
-  height: 62px;
+  min-height: 62px;
+  height: 100%;
   ${({ theme }) => theme.flex.row}
   align-items: center;
   color: ${({ theme }) => theme.colors.gray4};
   font-size: 20px;
   text-align: left;
 
-  p {
+  & > p {
     width: 160px;
-    line-height: 62px;
+    height: 100%;
+    ${({ theme }) => theme.flex.row}
+    align-items: center;
     padding-left: 20px;
     background-color: ${({ theme }) => theme.colors.primaryBackground};
     box-shadow: 0 0 0 1px ${({ theme }) => theme.colors.gray2};
     font-weight: 500;
-
-    &:nth-of-type(-n + 2) {
-    }
   }
 `;
 
@@ -196,20 +241,88 @@ export const Td = styled.div`
   flex: 1;
   height: 100%;
   ${({ theme }) => theme.flex.col}
+  justify-content: center;
+  padding: 0 20px;
   box-shadow: 0 0 0 1px ${({ theme }) => theme.colors.gray2};
 
-  input {
+  input:not(input[type="radio"]) {
     width: 100%;
-    height: 100%;
-    padding: 0 20px;
     border: none;
     outline: none;
     color: ${({ theme }) => theme.colors.gray4};
-
     font-size: 20px;
 
     &::placeholder {
       color: ${({ theme }) => theme.colors.gray3};
+    }
+
+    &:disabled {
+      background-color: ${({ theme }) => theme.colors.gray2};
+      color: ${({ theme }) => theme.colors.gray3};
+    }
+  }
+
+  .radios {
+    width: 100%;
+    height: 100%;
+    ${({ theme }) => theme.flex.row}
+    align-items: center;
+    padding-left: 20px;
+    border: none;
+
+    label {
+      ${({ theme }) => theme.flex.row}
+      align-items: center;
+      color: ${({ theme }) => theme.colors.gray3};
+      font-size: 20px;
+
+      &:first-child {
+        margin-right: 36px;
+      }
+    }
+
+    input[type="radio"] {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      width: 24px;
+      height: 24px;
+      margin: 0;
+      margin-right: 8px;
+      background-color: #fff;
+      border: 1px solid ${({ theme }) => theme.colors.gray2};
+      border-radius: 50%;
+
+      &:after {
+        content: "";
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: ${({ theme }) => theme.colors.gray2};
+        border-radius: 50%;
+      }
+    }
+
+    // radio checked
+    .active {
+      color: ${({ theme }) => theme.colors.primary};
+
+      input {
+        border-color: ${({ theme }) => theme.colors.primary};
+
+        &:after {
+          background-color: ${({ theme }) => theme.colors.primary};
+        }
+      }
+    }
+  }
+
+  @media ${({ theme }) => theme.media.mobile} {
+    label:first-child {
+      margin-right: 18px !important;
     }
   }
 `;
@@ -236,5 +349,42 @@ export const Buttons = styled.section`
   .active {
     background-color: ${({ theme }) => theme.colors.primary};
     color: #fff;
+  }
+`;
+
+const Message = styled.div`
+  ${({ theme }) => theme.flex.row}
+  align-items: center;
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-color: #f8e1e1;
+  border: 1px solid ${({ theme }) => theme.colors.error};
+  border-radius: 4px;
+  color: ${({ theme }) => theme.colors.error};
+  z-index: 99;
+
+  &:before {
+    content: "";
+    width: 62px;
+    height: 62px;
+    display: block;
+    background: url(/assets/icons/error.svg) no-repeat;
+    background-position: center;
+  }
+
+  p {
+    width: 290px;
+    margin-right: 12px;
+  }
+
+  button {
+    width: 28px;
+    height: 28px;
+    margin-right: 8px;
+    background: url(/assets/icons/x.svg) no-repeat;
+    background-position: center;
+    border: none;
   }
 `;

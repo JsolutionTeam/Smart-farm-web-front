@@ -2,7 +2,6 @@ import Compare from "../Compare";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { requestSecureGet } from "@lib/api";
 import { setStartDate, setEndDate, getPrevMonth } from "@lib/date";
-import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
 import { PeriodTypes } from "@typedef/components/Period/period.types";
 import dayjs from "dayjs";
 import useLocalStorage from "@hooks/useLocalStorage";
@@ -58,30 +57,6 @@ const CompareContainer = () => {
     [selectedDate.first]
   );
   const [chartLabels, setChartLabels] = useState<string[]>([]);
-  const chartData: ChartDataTypes = useMemo(
-    () => ({
-      labels: chartLabels.map((label, index) => `Day ${index + 1}`),
-      datasets: [
-        {
-          label: "비교1",
-          data: filteredData.first.map((data) =>
-            Math.round(data[selectedContent.value])
-          ),
-          borderColor: "#058b6b",
-          backgroundColor: "#058b6b",
-        },
-        {
-          label: "비교2",
-          data: filteredData.second.map((data) =>
-            Math.round(data[selectedContent.value])
-          ),
-          borderColor: "#ffa20d",
-          backgroundColor: "#ffa20d",
-        },
-      ],
-    }),
-    [filteredData, chartLabels, selectedContent.value]
-  );
   const [isSecond, setIsSecond] = useState<number>(0);
 
   const temp = useMemo(

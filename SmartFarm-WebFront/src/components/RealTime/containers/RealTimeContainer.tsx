@@ -2,9 +2,6 @@ import RealTime from "../RealTime";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { requestSecureGet } from "@lib/api";
 import useLocalStorage from "@hooks/useLocalStorage";
-import { RealTimeTypes } from "@typedef/components/RealTime/real.time.types";
-import { realTimeListTypes } from "@typedef/components/RealTime/real.time.list.types";
-import { UnitTypes } from "@typedef/components/RealTime/unit.types";
 import useSite from "@hooks/store/useSite";
 
 // 실시간, 기간, 비교에서 사용하는 타입
@@ -22,20 +19,23 @@ export type SummaryTypes = {
   windSpeed: number;
 };
 
+type RealTimeTypes = SummaryTypes & {
+  rateOfOpening: number;
+  openSignal: -1 | 0 | 1;
+  openDataRegTime: string;
+};
+
 const RealTimeContainer = () => {
   const { getToken, getUser } = useLocalStorage();
   const { selectedSite } = useSite();
-  const siteSeq = useMemo(
-    () => (selectedSite ? selectedSite.id : getUser().siteSeq),
-    [getUser, selectedSite]
-  );
-  const [realTimeData, setRealTimeData] = useState<RealTimeTypes>({
+  const [data, setData] = useState<RealTimeTypes>({
     co2: 0,
-    co2RegTime: 0,
+    co2RegTime: "",
     earthTemperature: 0,
-    microRegTime: 0,
+    microRegTime: "",
     rainfall: 0,
     relativeHumidity: 0,
+    siteSeq: 0,
     solarRadiation: 0,
     temperature: 0,
     windDirection: 0,
@@ -44,92 +44,86 @@ const RealTimeContainer = () => {
     openSignal: 0,
     openDataRegTime: "",
   });
-  const contents: realTimeListTypes[] = useMemo(
+  const contents = useMemo(
     () => [
       {
         name: "온도",
-        value: realTimeData.temperature,
+        value: data.temperature,
         unit: "°C",
-        icon: "img.IcTemperature",
+        icon: "temperature",
       },
       {
         name: "습도",
-        value: realTimeData.relativeHumidity,
+        value: data.relativeHumidity,
         unit: "%",
-        icon: "img.IcHumidity",
+        icon: "relativeHumidity",
       },
       {
         name: "일사량",
-        value: realTimeData.solarRadiation,
+        value: data.solarRadiation,
         unit: "W/㎡",
-        icon: "img.IcSun",
+        icon: "solarRadiation",
       },
       {
         name: "CO2농도",
-        value: realTimeData.co2,
+        value: data.co2,
         unit: "ppm",
-        icon: " img.IcCO2",
+        icon: "co2",
       },
       {
         name: "강우량",
-        value: realTimeData.rainfall,
+        value: data.rainfall,
         unit: "mm",
-        icon: "img.IcRain",
+        icon: "rainfall",
       },
       {
         name: "지온",
-        value: realTimeData.earthTemperature,
+        value: data.earthTemperature,
         unit: "°C",
-        icon: "img.IcGeothermal",
+        icon: "earthTemperature",
       },
       {
         name: "풍향",
-        value: realTimeData.windDirection,
+        value: data.windDirection,
         unit: "°",
-        icon: "img.IcWindDirection",
+        icon: "windDirection",
       },
       {
         name: "풍속",
-        value: realTimeData.windSpeed,
+        value: data.windSpeed,
         unit: "m/s",
-        icon: "img.IcWindSpeed",
+        icon: "windSpeed",
       },
     ],
-    [realTimeData]
+    [data]
+  );
+  const siteSeq = useMemo(
+    () => (selectedSite ? selectedSite.id : getUser().siteSeq),
+    [getUser, selectedSite]
   );
 
-  const setClassName = (unit: UnitTypes) => {
-    let clasName: "" | "big" = "";
-
-    if (unit === "°C" || unit === "%" || unit === "°") {
-      clasName = "big";
-    }
-
-    return clasName;
-  };
-
-  const getRealTimeData = useCallback(async () => {
+  const getData = useCallback(async () => {
     const { config, data } = await requestSecureGet<RealTimeTypes>(
       `/v1/site/${siteSeq}/realtime`,
       {},
       getToken()!
     );
     if (config.status >= 200 && config.status < 400) {
-      setRealTimeData(data);
+      setData(data);
     }
   }, [siteSeq, getToken]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      getRealTimeData();
+      getData();
     }, 5000);
     return () => {
       clearInterval(interval);
     };
-  }, [getRealTimeData]);
+  }, [getData]);
 
   useEffect(() => {
-    getRealTimeData();
+    getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -138,12 +132,11 @@ const RealTimeContainer = () => {
   return (
     <RealTime
       contents={contents}
-      setClassName={setClassName}
-      time={{ co2: realTimeData.co2RegTime, micro: realTimeData.microRegTime }}
+      times={{ co2: data.co2RegTime, micro: data.microRegTime }}
       switchgear={{
-        signal: realTimeData.openSignal,
-        rate: realTimeData.rateOfOpening,
-        time: realTimeData.openDataRegTime,
+        signal: data.openSignal,
+        rate: data.rateOfOpening,
+        time: data.openDataRegTime,
       }}
     />
   );

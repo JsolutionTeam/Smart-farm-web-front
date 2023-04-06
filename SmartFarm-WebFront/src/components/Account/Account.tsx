@@ -1,14 +1,31 @@
 import styled from "styled-components";
 import { AccountTypes } from "./containers/AccountContainer";
+import { FiX } from "react-icons/fi";
 
 type Props = {
   accounts: AccountTypes[];
+  filter: {
+    type: string;
+    value: string;
+  };
+  onChangeFilter: (key: "type" | "value", value: string) => void;
+  onKeyPressSearch: () => void;
+  onClickFilterClear: () => void;
   manage: (username?: string) => void;
   deleteAccount: (username: string) => Promise<void>;
 };
 
-const Account = ({ accounts, manage, deleteAccount }: Props) => {
+const Account = ({
+  accounts,
+  filter,
+  onChangeFilter,
+  onKeyPressSearch,
+  onClickFilterClear,
+  manage,
+  deleteAccount,
+}: Props) => {
   const headers = [
+    "관리자명",
     "아이디",
     "농가번호",
     "농가명",
@@ -21,8 +38,32 @@ const Account = ({ accounts, manage, deleteAccount }: Props) => {
   return (
     <Container>
       <header>
-        <input placeholder="검색어를 입력하세요" />
-        <button onClick={() => manage()}>+ 농가등록</button>
+        <Search>
+          <select onChange={(e) => onChangeFilter("type", e.target.value)}>
+            <option value="name">관리자명</option>
+            <option value="siteName">농가명</option>
+            <option value="siteLocation">지역</option>
+            <option value="siteCrop">작물</option>
+          </select>
+          <input
+            value={filter.value}
+            onChange={(e) => onChangeFilter("value", e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                onKeyPressSearch();
+              }
+            }}
+            placeholder="검색어 입력 후 Enter 키를 눌러주세요"
+          />
+          {filter.value && (
+            <button onClick={onClickFilterClear}>
+              <FiX />
+            </button>
+          )}
+        </Search>
+        <button onClick={() => manage()} className="insert">
+          + 농가등록
+        </button>
       </header>
       <Table>
         <thead>
@@ -35,6 +76,7 @@ const Account = ({ accounts, manage, deleteAccount }: Props) => {
         <tbody>
           {accounts.map((account) => (
             <tr key={account.username}>
+              <td>{account.name}</td>
               <td>{account.username}</td>
               <td>{account.site.id}</td>
               <td>{account.site.name}</td>
@@ -73,20 +115,7 @@ export const Container = styled.main`
     align-items: center;
     justify-content: space-between;
 
-    input {
-      width: 400px;
-      height: 40px;
-      padding-left: 15px;
-      border: 1px solid ${({ theme }) => theme.colors.gray2};
-      border-radius: 6px;
-
-      &::placeholder {
-        color: ${({ theme }) => theme.colors.gray3};
-        font-size: 16px;
-      }
-    }
-
-    button {
+    .insert {
       width: 113px;
       height: 40px;
       background-color: ${({ theme }) => theme.colors.primary};
@@ -96,6 +125,79 @@ export const Container = styled.main`
       font-size: 16px;
       font-weight: 500;
       text-align: center;
+    }
+  }
+
+  @media ${({ theme }) => theme.media.mobile} {
+    padding: 0 20px;
+    overflow-x: scroll;
+
+    header {
+      height: 100%;
+      flex-direction: column;
+      align-items: flex-start;
+      margin: 16px 0;
+
+      .insert {
+        align-self: flex-end;
+      }
+    }
+  }
+`;
+
+export const Search = styled.div`
+  width: 400px;
+  height: 40px;
+  ${({ theme }) => theme.flex.row}
+  position: relative;
+  color: ${({ theme }) => theme.colors.gray3};
+
+  select {
+    width: 120px;
+    height: 100%;
+    padding: 0 15px;
+    border: 1px solid ${({ theme }) => theme.colors.gray2};
+    border-right: 0;
+    border-radius: 6px 0 0 6px;
+    font-size: 16px;
+
+    // 화살표 숨기기
+    appearance: none;
+    -webkit-appearance: none; // 크롬
+    -moz-appearance: none; // 파이어폭스
+  }
+
+  input {
+    flex: 1;
+    height: 100%;
+    padding-left: 15px;
+    border: 1px solid ${({ theme }) => theme.colors.gray2};
+    border-radius: 0 6px 6px 0;
+    font-size: 16px;
+
+    &::placeholder {
+      color: ${({ theme }) => theme.colors.gray3};
+    }
+  }
+
+  button {
+    width: 40px;
+    ${({ theme }) => theme.flex.row}
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(0, -50%);
+    background: none;
+    border: none;
+    font-size: 16px;
+  }
+
+  @media ${({ theme }) => theme.media.mobile} {
+    input {
+      width: 100%;
+      margin-bottom: 32px;
     }
   }
 `;
@@ -158,5 +260,9 @@ export const Table = styled.table`
         border-bottom: none;
       }
     }
+  }
+
+  @media ${({ theme }) => theme.media.mobile} {
+    width: 1000px;
   }
 `;
