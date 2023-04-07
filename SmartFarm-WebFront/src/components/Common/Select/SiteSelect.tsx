@@ -32,7 +32,7 @@ const SiteSelect = ({
       </Selected>
       <Options isVisible={isVisible}>
         <Option onClick={onClickClear} selected={!!!selectedSite}>
-          {selectedSite ? selectedSite.name : "농가선택"}
+          농가선택
         </Option>
         {sites.map((site) => (
           <Option
