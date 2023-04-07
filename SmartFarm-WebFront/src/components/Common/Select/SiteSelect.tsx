@@ -28,11 +28,12 @@ const SiteSelect = ({
   return (
     <Container ref={selectRef}>
       <Selected onClick={() => visibleHandler(!isVisible)}>
+        <p>{selectedSite ? selectedSite.name : "농가선택"}</p>
         <FiChevronDown />
       </Selected>
       <Options isVisible={isVisible}>
         <Option onClick={onClickClear} selected={!!!selectedSite}>
-          {selectedSite?.name || "농가선택"}
+          {selectedSite ? selectedSite.name : "농가선택"}
         </Option>
         {sites.map((site) => (
           <Option
@@ -62,8 +63,7 @@ const Selected = styled.button`
   border: none;
   font-size: 20px;
 
-  &::before {
-    content: "농가선택";
+  p {
     margin-right: 5px;
   }
 
@@ -78,8 +78,8 @@ const Selected = styled.button`
     border-radius: 6px;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.08);
 
-    &::before {
-      content: none;
+    p {
+      display: none;
     }
   }
 `;

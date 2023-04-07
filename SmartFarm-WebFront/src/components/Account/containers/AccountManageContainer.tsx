@@ -46,6 +46,13 @@ const AccountManageContainer = () => {
   const onChangeInputs = (e: { target: HTMLInputElement }) => {
     const { name, value } = e.target;
 
+    // 전화번호 숫자만 입력
+    if (name === "phone") {
+      if (!/^[0-9\b]+$/.test(value)) {
+        return;
+      }
+    }
+
     setInputs((prev) => ({
       ...prev,
       [name]: value,
@@ -102,6 +109,11 @@ const AccountManageContainer = () => {
     else if (msgs.username) message = "올바른 아이디를";
     else if (type === "등록하기" && !inputs.password) message = "비밀번호를";
     else if (!inputs.siteName) message = "농가명을";
+    else if (
+      inputs.email &&
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputs.email) === false
+    )
+      message = "올바른 이메일 형식으로";
 
     return message;
   };

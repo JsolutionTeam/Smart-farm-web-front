@@ -6,7 +6,7 @@ import {
   Tr,
   Td,
 } from "@components/Account/components/AccountManage";
-import useOutsideClick from "@hooks/useOutsideClick";
+import useOutsideClick from "@hooks/useOutsideClick2";
 import { SensorManageTypes } from "../containers/SensorManageContainer";
 import { FiChevronDown } from "react-icons/fi";
 import { Option, Options } from "@components/Common/Select/SiteSelect";
@@ -46,12 +46,18 @@ const SensorManage = ({
   previewUrl,
 }: Props) => {
   useOutsideClick({
-    ref: typeSelectRef,
-    func: () => visibleHandler("type", false),
-  });
-  useOutsideClick({
-    ref: siteSelectRef,
-    func: () => visibleHandler("site", false),
+    elements: [
+      {
+        ref: typeSelectRef,
+        isVisible: isVisible.type,
+        func: () => visibleHandler("type", false),
+      },
+      {
+        ref: siteSelectRef,
+        isVisible: isVisible.site,
+        func: () => visibleHandler("site", false),
+      },
+    ],
   });
 
   const types = [
@@ -107,6 +113,17 @@ const SensorManage = ({
           </Td>
         </Tr>
         <Tr>
+          <p>단위</p>
+          <Td>
+            <input
+              name="unit"
+              value={inputs.unit}
+              onChange={onChangeInputs}
+              placeholder="단위를 입력해 주세요"
+            />
+          </Td>
+        </Tr>
+        <Tr>
           <p>모델명*</p>
           <Td>
             <input
@@ -129,7 +146,7 @@ const SensorManage = ({
           </Td>
         </Tr>
         <Tr>
-          <p>IP주소*</p>
+          <p>IP주소</p>
           <Td>
             <input
               name="ip"
@@ -150,6 +167,12 @@ const SensorManage = ({
                 <FiChevronDown />
               </Selected>
               <Options isVisible={isVisible.site} className="options">
+                <Option
+                  onClick={() => onClickSite("", 0)}
+                  selected={inputs.siteSeq === 0}
+                >
+                  농가계정을 선택해 주세요
+                </Option>
                 {sites.map((site) => (
                   <Option
                     key={site.id}

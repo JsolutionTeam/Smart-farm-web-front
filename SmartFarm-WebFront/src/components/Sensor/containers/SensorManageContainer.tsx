@@ -29,7 +29,7 @@ const SensorManageContainer = () => {
   const { getToken } = useLocalStorage();
   const [inputs, setInputs] = useState<SensorManageTypes>({
     imgPath: "",
-    ip: "",
+    ip: "0.0.0.0",
     memo: "",
     modelName: "",
     serialNumber: "",
@@ -110,7 +110,6 @@ const SensorManageContainer = () => {
     if (!inputs.type) message = "센서타입을";
     else if (!inputs.modelName) message = "모델명";
     else if (!inputs.serialNumber) message = "시리얼넘버";
-    else if (!inputs.ip) message = "ip를";
 
     return message;
   };

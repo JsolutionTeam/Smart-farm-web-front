@@ -35,7 +35,7 @@ const AccountManage = ({
               name="name"
               value={inputs.name}
               onChange={onChangeInputs}
-              placeholder="관리자명"
+              placeholder="ex) 홍길동"
             />
           </Td>
         </Tr>
@@ -79,7 +79,7 @@ const AccountManage = ({
                   type="radio"
                   name="role"
                   checked={inputs.role === "ROLE_ADMIN"}
-                  onClick={() => onClickRole("ADMIN")}
+                  onChange={() => onClickRole("ADMIN")}
                 />
                 관리자
               </label>
@@ -88,7 +88,7 @@ const AccountManage = ({
                   type="radio"
                   name="role"
                   checked={inputs.role === "ROLE_USER"}
-                  onClick={() => onClickRole("USER")}
+                  onChange={() => onClickRole("USER")}
                 />
                 사용자
               </label>
@@ -145,10 +145,12 @@ const AccountManage = ({
           <p>전화번호</p>
           <Td>
             <input
+              type="tel"
               name="phone"
               value={inputs.phone}
               onChange={onChangeInputs}
-              placeholder="전화번호"
+              maxLength={12}
+              placeholder="숫자만 입력해 주세요"
             />
           </Td>
         </Tr>
@@ -156,10 +158,11 @@ const AccountManage = ({
           <p>이메일</p>
           <Td>
             <input
+              type="email"
               name="email"
               value={inputs.email}
               onChange={onChangeInputs}
-              placeholder="이메일"
+              placeholder="ex) honggildong@abc.com"
             />
           </Td>
         </Tr>
@@ -235,6 +238,10 @@ export const Tr = styled.article`
     box-shadow: 0 0 0 1px ${({ theme }) => theme.colors.gray2};
     font-weight: 500;
   }
+
+  @media ${({ theme }) => theme.media.mobile} {
+    height: 62px;
+  }
 `;
 
 export const Td = styled.div`
@@ -267,7 +274,6 @@ export const Td = styled.div`
     height: 100%;
     ${({ theme }) => theme.flex.row}
     align-items: center;
-    padding-left: 20px;
     border: none;
 
     label {
