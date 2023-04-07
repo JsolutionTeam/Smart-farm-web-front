@@ -183,7 +183,7 @@ const AccountManage = ({
 export default AccountManage;
 
 export const Container = styled.main`
-  margin-bottom: 120px;
+  margin-bottom: 150px;
   padding: 72px 100px 0;
   background-color: #fff;
 
@@ -240,7 +240,7 @@ export const Tr = styled.article`
   }
 
   @media ${({ theme }) => theme.media.mobile} {
-    height: 62px;
+    height: 88px;
   }
 `;
 

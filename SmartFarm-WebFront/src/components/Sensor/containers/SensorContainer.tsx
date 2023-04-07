@@ -46,7 +46,7 @@ const SensorContainer = () => {
   };
 
   const manage = (id?: number) => {
-    let url = "/site/sensor/manage";
+    let url = "/sensor/manage";
 
     if (id) {
       url += `?sensorDeviceId=${id}`;

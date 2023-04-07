@@ -77,7 +77,7 @@ export default RealTime;
 
 const Container = styled.main`
   ${({ theme }) => theme.flex.row}
-  margin-bottom: 120px;
+  margin-bottom: 150px;
 
   section {
     background-color: #fff;

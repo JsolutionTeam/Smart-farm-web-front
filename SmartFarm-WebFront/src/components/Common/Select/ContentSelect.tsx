@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Options, Option } from "./SiteSelect";
 import useOutsideClick from "@hooks/useOutsideClick";
 import { ContentTypes } from "./containers/ContentSelectContainer";
-import { FiChevronDown } from "react-icons/fi";
 
 type Props = {
   isVisible: boolean;
@@ -61,7 +60,6 @@ const ContentSelect = ({
     <Container ref={selectRef}>
       <Selected onClick={() => visibleHandler(!isVisible)}>
         <p>{selectedContent.name}</p>
-        <FiChevronDown />
       </Selected>
       <Options isVisible={isVisible}>
         {contents.map((content) => (
@@ -102,5 +100,14 @@ const Selected = styled.button`
     font-size: 16px;
     font-weight: 600;
     color: ${({ theme }) => theme.colors.gray4};
+  }
+
+  &:after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    display: block;
+    background: url(/assets/icons/down2.svg) no-repeat;
+    background-position: center;
   }
 `;

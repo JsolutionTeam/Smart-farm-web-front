@@ -65,39 +65,41 @@ const Account = ({
           + 농가등록
         </button>
       </header>
-      <Table>
-        <thead>
-          <tr>
-            {headers.map((th) => (
-              <th key={th}>{th}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {accounts.map((account) => (
-            <tr key={account.username}>
-              <td>{account.name}</td>
-              <td>{account.username}</td>
-              <td>{account.site.id}</td>
-              <td>{account.site.name}</td>
-              <td>{account.site.location}</td>
-              <td>{account.site.crop}</td>
-              <td>
-                <button
-                  onClick={() => manage(account.username)}
-                  className="edit"
-                />
-              </td>
-              <td>
-                <button
-                  onClick={() => deleteAccount(account.username)}
-                  className="delete"
-                />
-              </td>
+      <TableContainer>
+        <Table>
+          <thead>
+            <tr>
+              {headers.map((th) => (
+                <th key={th}>{th}</th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {accounts.map((account) => (
+              <tr key={account.username}>
+                <td>{account.name}</td>
+                <td>{account.username}</td>
+                <td>{account.site.id}</td>
+                <td>{account.site.name}</td>
+                <td>{account.site.location}</td>
+                <td>{account.site.crop}</td>
+                <td>
+                  <button
+                    onClick={() => manage(account.username)}
+                    className="edit"
+                  />
+                </td>
+                <td>
+                  <button
+                    onClick={() => deleteAccount(account.username)}
+                    className="delete"
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </TableContainer>
     </Container>
   );
 };
@@ -105,7 +107,7 @@ const Account = ({
 export default Account;
 
 export const Container = styled.main`
-  margin-bottom: 120px;
+  margin-bottom: 150px;
   padding: 0 60px;
   background-color: #fff;
 
@@ -156,9 +158,11 @@ export const Search = styled.div`
     width: 120px;
     height: 100%;
     padding: 0 15px;
+    background-color: #fff;
     border: 1px solid ${({ theme }) => theme.colors.gray2};
     border-right: 0;
     border-radius: 6px 0 0 6px;
+    color: ${({ theme }) => theme.colors.black};
     font-size: 16px;
 
     // 화살표 숨기기
@@ -195,10 +199,20 @@ export const Search = styled.div`
   }
 
   @media ${({ theme }) => theme.media.mobile} {
-    input {
-      width: 100%;
-      margin-bottom: 32px;
+    width: 100%;
+    margin-bottom: 32px;
+
+    select {
     }
+  }
+`;
+
+export const TableContainer = styled.section`
+  width: fit-content;
+
+  @media ${({ theme }) => theme.media.mobile} {
+    width: 100%;
+    overflow-x: scroll;
   }
 `;
 
@@ -264,5 +278,11 @@ export const Table = styled.table`
 
   @media ${({ theme }) => theme.media.mobile} {
     width: 1000px;
+
+    td {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
 `;

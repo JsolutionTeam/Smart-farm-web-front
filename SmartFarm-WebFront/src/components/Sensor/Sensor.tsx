@@ -1,4 +1,9 @@
-import { Container, Search, Table } from "@components/Account/Account";
+import {
+  Container,
+  Search,
+  Table,
+  TableContainer,
+} from "@components/Account/Account";
 import { SensorTypes } from "./containers/SensorContainer";
 import { FiX } from "react-icons/fi";
 
@@ -62,37 +67,39 @@ const Sensor = ({
           + 센서등록
         </button>
       </header>
-      <Table>
-        <thead>
-          <tr>
-            {headers.map((th) => (
-              <th key={th}>{th}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {sensors.map((sensor) => (
-            <tr key={sensor.sensorDeviceId}>
-              <td>{sensor.type}</td>
-              <td>{sensor.modelName}</td>
-              <td>{sensor.serialNumber}</td>
-              <td>{sensor.siteName}</td>
-              <td>
-                <button
-                  onClick={() => manage(sensor.sensorDeviceId)}
-                  className="edit"
-                />
-              </td>
-              <td>
-                <button
-                  onClick={() => deleteSensor(sensor.sensorDeviceId)}
-                  className="delete"
-                />
-              </td>
+      <TableContainer>
+        <Table>
+          <thead>
+            <tr>
+              {headers.map((th) => (
+                <th key={th}>{th}</th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {sensors.map((sensor) => (
+              <tr key={sensor.sensorDeviceId}>
+                <td>{sensor.type}</td>
+                <td>{sensor.modelName}</td>
+                <td>{sensor.serialNumber}</td>
+                <td>{sensor.siteName}</td>
+                <td>
+                  <button
+                    onClick={() => manage(sensor.sensorDeviceId)}
+                    className="edit"
+                  />
+                </td>
+                <td>
+                  <button
+                    onClick={() => deleteSensor(sensor.sensorDeviceId)}
+                    className="delete"
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </TableContainer>
     </Container>
   );
 };

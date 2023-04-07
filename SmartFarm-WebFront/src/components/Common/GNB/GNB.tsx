@@ -35,7 +35,8 @@ const GNB = () => {
           <NavLink to="/realtime">실시간</NavLink>
           <NavLink to="/period">기간</NavLink>
           <NavLink to="/compare">비교</NavLink>
-          {role === "ROLE_ADMIN" && <NavLink to="/site">농가</NavLink>}
+          {role === "ROLE_ADMIN" && <NavLink to="/account">농가</NavLink>}
+          {role === "ROLE_ADMIN" && <NavLink to="/sensor">센서</NavLink>}
         </nav>
       </Navs>
     </Container>

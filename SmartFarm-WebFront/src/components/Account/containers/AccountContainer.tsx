@@ -47,7 +47,7 @@ const AccountContainer = () => {
   };
 
   const manage = (username?: string) => {
-    let url = "/site/account/manage";
+    let url = "/account/manage";
 
     if (username) {
       url += `?username=${username}`;

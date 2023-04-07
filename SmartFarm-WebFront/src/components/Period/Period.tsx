@@ -53,7 +53,7 @@ export default Period;
 export const Container = styled.main`
   width: 802px;
   ${({ theme }) => theme.flex.col}
-  margin-bottom: 120px;
+  margin-bottom: 150px;
   padding: 40px;
   background-color: #fff;
   border: 1px solid ${({ theme }) => theme.colors.gray2};

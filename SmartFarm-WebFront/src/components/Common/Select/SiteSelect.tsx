@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import useOutsideClick from "@hooks/useOutsideClick";
 import { SiteTypes } from "@store/site/actions";
-import { FiChevronDown } from "react-icons/fi";
 
 type Props = {
   isVisible: boolean;
@@ -29,7 +28,7 @@ const SiteSelect = ({
     <Container ref={selectRef}>
       <Selected onClick={() => visibleHandler(!isVisible)}>
         <p>{selectedSite ? selectedSite.name : "농가선택"}</p>
-        <FiChevronDown />
+        <img src="/assets/icons/down.svg" alt="농가리스트 펼치기" />
       </Selected>
       <Options isVisible={isVisible}>
         <Option onClick={onClickClear} selected={!!!selectedSite}>
@@ -93,6 +92,7 @@ export const Options = styled.div<{ isVisible: boolean }>`
   top: 45px;
   right: 0;
   overflow-y: auto;
+  background-color: #fff;
   border: 1px solid ${({ theme }) => theme.colors.gray2};
   border-radius: 6px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
