@@ -194,10 +194,7 @@ const SensorManage = ({
                 {previewUrl ? (
                   <img src={previewUrl} alt="미리보기" />
                 ) : inputs.imgPath ? (
-                  <img
-                    src={`http://192.168.0.215:18080/${inputs.imgPath}`}
-                    alt="미리보기"
-                  />
+                  <img src={`${inputs.imgPath}`} alt="미리보기" />
                 ) : (
                   ""
                 )}
