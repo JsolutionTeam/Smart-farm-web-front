@@ -190,6 +190,7 @@ const AccountManageContainer = () => {
       setType("상세보기");
       getDataByAccountId(username);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

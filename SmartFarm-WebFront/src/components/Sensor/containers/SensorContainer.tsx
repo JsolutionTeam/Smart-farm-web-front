@@ -92,6 +92,7 @@ const SensorContainer = () => {
 
   useEffect(() => {
     getSensors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reload]);
 
   return (

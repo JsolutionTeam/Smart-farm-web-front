@@ -93,6 +93,7 @@ const AccountContainer = () => {
 
   useEffect(() => {
     getAccounts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reload]);
 
   return (
