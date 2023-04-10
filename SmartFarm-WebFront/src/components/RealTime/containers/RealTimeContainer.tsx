@@ -1,124 +1,145 @@
 import RealTime from "../RealTime";
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { apiRoute, requestSecureGet } from "@lib/api";
-import useToken from "@hooks/useToken";
-import useUser from "@hooks/useUser";
-import useSelected from "@hooks/useSelected";
-import { RealTimeTypes } from "@typedef/components/RealTime/real.time.types";
-import { realTimeListTypes } from "@typedef/components/RealTime/real.time.list.types";
-import { UnitTypes } from "@typedef/components/RealTime/unit.types";
-import img from "@assets/image";
+import { requestSecureGet } from "@lib/api";
+import useLocalStorage from "@hooks/useLocalStorage";
+import useSite from "@hooks/store/useSite";
+
+// 실시간, 기간, 비교에서 사용하는 타입
+export type SummaryTypes = {
+  co2: number;
+  co2RegTime: string;
+  earthTemperature: number;
+  microRegTime: string;
+  rainfall: number;
+  relativeHumidity: number;
+  siteSeq: number;
+  solarRadiation: number;
+  temperature: number;
+  windDirection: number;
+  windSpeed: number;
+};
+
+type RealTimeTypes = SummaryTypes & {
+  rateOfOpening: number;
+  openSignal: -1 | 0 | 1;
+  openDataRegTime: string;
+};
 
 const RealTimeContainer = () => {
-  const { getToken } = useToken();
-  const { getUser } = useUser();
-  const { getSelected } = useSelected();
-  const siteSeq = useMemo(
-    () => (getSelected().id ? getSelected().id : getUser().siteSeq),
-    [getSelected, getUser]
-  );
-  const [realTimeData, setRealTimeData] = useState<RealTimeTypes>({
+  const { getToken, getUser } = useLocalStorage();
+  const { selectedSite } = useSite();
+  const [data, setData] = useState<RealTimeTypes>({
     co2: 0,
-    co2RegTime: 0,
+    co2RegTime: "",
     earthTemperature: 0,
-    microRegTime: 0,
+    microRegTime: "",
     rainfall: 0,
     relativeHumidity: 0,
+    siteSeq: 0,
     solarRadiation: 0,
     temperature: 0,
     windDirection: 0,
     windSpeed: 0,
+    rateOfOpening: 0,
+    openSignal: 0,
+    openDataRegTime: "",
   });
-  const contents: realTimeListTypes[] = useMemo(
+  const contents = useMemo(
     () => [
       {
         name: "온도",
-        value: realTimeData.temperature,
+        value: data.temperature,
         unit: "°C",
-        icon: img.IcTemperature,
+        icon: "temperature",
       },
       {
         name: "습도",
-        value: realTimeData.relativeHumidity,
+        value: data.relativeHumidity,
         unit: "%",
-        icon: img.IcHumidity,
+        icon: "relativeHumidity",
       },
       {
         name: "일사량",
-        value: realTimeData.solarRadiation,
+        value: data.solarRadiation,
         unit: "W/㎡",
-        icon: img.IcSun,
+        icon: "solarRadiation",
       },
       {
         name: "CO2농도",
-        value: realTimeData.co2,
+        value: data.co2,
         unit: "ppm",
-        icon: img.IcCO2,
+        icon: "co2",
       },
       {
         name: "강우량",
-        value: realTimeData.rainfall,
+        value: data.rainfall,
         unit: "mm",
-        icon: img.IcRain,
+        icon: "rainfall",
       },
       {
         name: "지온",
-        value: realTimeData.earthTemperature,
+        value: data.earthTemperature,
         unit: "°C",
-        icon: img.IcGeothermal,
+        icon: "earthTemperature",
       },
       {
         name: "풍향",
-        value: realTimeData.windDirection,
+        value: data.windDirection,
         unit: "°",
-        icon: img.IcWindDirection,
+        icon: "windDirection",
       },
       {
         name: "풍속",
-        value: realTimeData.windSpeed,
+        value: data.windSpeed,
         unit: "m/s",
-        icon: img.IcWindSpeed,
+        icon: "windSpeed",
       },
     ],
-    [realTimeData]
+    [data]
+  );
+  const siteSeq = useMemo(
+    () => (selectedSite ? selectedSite.id : getUser().siteSeq),
+    [getUser, selectedSite]
   );
 
-  const setClassName = (unit: UnitTypes) => {
-    let clasName: "" | "big" = "";
-
-    if (unit === "°C" || unit === "%" || unit === "°") {
-      clasName = "big";
-    }
-
-    return clasName;
-  };
-
-  const getRealTimeData = useCallback(async () => {
-    const { config, data } = await requestSecureGet<RealTimeTypes[]>(
-      apiRoute.site + `${siteSeq}/realtime`,
+  const getData = useCallback(async () => {
+    const { config, data } = await requestSecureGet<RealTimeTypes>(
+      `/v1/site/${siteSeq}/realtime`,
       {},
       getToken()!
     );
     if (config.status >= 200 && config.status < 400) {
-      setRealTimeData(data[0]);
+      setData(data);
     }
   }, [siteSeq, getToken]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      getRealTimeData();
+      getData();
     }, 5000);
     return () => {
       clearInterval(interval);
     };
-  }, [getRealTimeData]);
+  }, [getData]);
 
   useEffect(() => {
-    getRealTimeData();
+    getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <RealTime contents={contents} setClassName={setClassName} />;
+  console.log(selectedSite);
+
+  return (
+    <RealTime
+      contents={contents}
+      times={{ co2: data.co2RegTime, micro: data.microRegTime }}
+      switchgear={{
+        signal: data.openSignal,
+        rate: data.rateOfOpening,
+        time: data.openDataRegTime,
+      }}
+    />
+  );
 };
 
 export default RealTimeContainer;

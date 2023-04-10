@@ -1,44 +1,45 @@
 import Login from "../Login";
 import { useState } from "react";
-import { apiRoute, requestPost } from "@lib/api";
-import useToken from "@hooks/useToken";
-import useUser from "@hooks/useUser";
+import useLocalStorage from "@hooks/useLocalStorage";
+import { requestPost } from "@lib/api";
+
+type LoginResponseTypes = {
+  accessToken: string;
+  refreshToken: string;
+  role: "ROLE_ADMIN" | "ROLE_USER";
+  siteSeq: number;
+};
 
 const LoginContainer = () => {
-  const { setToken } = useToken();
-  const { setUser } = useUser();
-  const [inputs, setInputs] = useState<{ id: string; passwd: string }>({
-    id: "",
-    passwd: "",
+  const { setToken, setRefreshToken, setUser } = useLocalStorage();
+  const [inputs, setInputs] = useState<{
+    [key in "username" | "password"]: string;
+  }>({
+    username: "",
+    password: "",
   });
 
   const onChangeInputs = (e: { target: HTMLInputElement }) => {
     const { name, value } = e.target;
+
     setInputs((inputs) => ({
       ...inputs,
       [name]: value,
     }));
   };
 
-  const onClickLogin = async () => {
-    if (inputs.id && inputs.passwd) {
-      const { config, data } = await requestPost<{
-        accessToken: string;
-        role: "ROLE_ADMIN" | "ROLE_USER";
-        siteSeq: number;
-      }>(
-        apiRoute.auth.login,
+  const login = async () => {
+    if (inputs.username && inputs.password) {
+      const { config, data } = await requestPost<LoginResponseTypes>(
+        "/auth/login",
         {},
-        {
-          username: inputs.id,
-          password: inputs.passwd,
-        }
+        inputs
       );
       if (config.status >= 200 && config.status < 400) {
         setToken(data.accessToken);
+        setRefreshToken(data.refreshToken);
         setUser({
           role: data.role,
-          // siteSeq: 13,
           siteSeq: data.siteSeq,
         });
         window.location.reload();
@@ -50,7 +51,7 @@ const LoginContainer = () => {
     }
   };
 
-  return <Login onChangeInputs={onChangeInputs} onClickLogin={onClickLogin} />;
+  return <Login onChangeInputs={onChangeInputs} login={login} />;
 };
 
 export default LoginContainer;

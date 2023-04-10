@@ -6,7 +6,7 @@ export function getPrevMonth() {
   const startDate = new Date(
     today.getFullYear(),
     today.getMonth() - 1,
-    today.getDate(),
+    today.getDate()
   );
 
   return startDate;
@@ -21,7 +21,7 @@ export function setStartDate(date?: Date) {
     standard.getDate(),
     0,
     0,
-    0,
+    0
   );
 
   return startDate;
@@ -37,7 +37,7 @@ export function setEndDate(date?: Date) {
     standard.getDate(),
     23,
     59,
-    59,
+    59
   );
 
   return endDate;
