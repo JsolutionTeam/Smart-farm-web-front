@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const DEV = "https://sf.j-sol.co.kr/api";
+const DEV = "http://192.168.0.215:18080/api";
 const PROD = "https://sf.j-sol.co.kr/api";
 
 export const API_ORIGIN = process.env.NODE_ENV === "development" ? DEV : PROD;

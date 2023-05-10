@@ -126,7 +126,7 @@ const SensorManageContainer = () => {
 
     if (config.status >= 200 && config.status < 400) {
       alert(`성공적으로 ${type}이 완료되었습니다.`);
-      navigate("/site/sensor");
+      navigate("/sensor");
     } else {
       alert(
         "죄송합니다. 이미지 등록 중 문제가 발생했습니다. 나중에 다시 시도해주세요."
@@ -143,10 +143,18 @@ const SensorManageContainer = () => {
       return;
     }
 
+    const { imgPath, memo, sensorDeviceId, siteName, siteSeq, ...body } =
+      inputs;
+
     const { config, data: id } = await requestSecurePost<number>(
       "/v1/sensor-device",
       {},
-      inputs,
+      siteSeq
+        ? {
+            ...body,
+            siteSeq: siteSeq,
+          }
+        : body,
       getToken()!
     );
 
@@ -155,7 +163,7 @@ const SensorManageContainer = () => {
         uploadImg("등록", id);
       } else {
         alert("성공적으로 등록이 완료되었습니다.");
-        navigate("/site/sensor");
+        navigate("/sensor");
       }
     }
   };
@@ -169,10 +177,13 @@ const SensorManageContainer = () => {
       return;
     }
 
+    const { imgPath, memo, sensorDeviceId, siteName, siteSeq, ...body } =
+      inputs;
+
     const { config } = await requestSecurePut(
       `/v1/sensor-devices/${inputs.sensorDeviceId}`,
       {},
-      inputs,
+      { ...body, siteSeq: siteSeq || null },
       getToken()!
     );
 
@@ -182,7 +193,7 @@ const SensorManageContainer = () => {
           uploadImg("수정", inputs.sensorDeviceId);
         } else {
           alert("성공적으로 수정이 완료되었습니다.");
-          navigate("/site/sensor");
+          navigate("/sensor");
         }
       }
     }
