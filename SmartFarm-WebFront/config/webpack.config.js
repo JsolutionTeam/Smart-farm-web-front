@@ -318,7 +318,7 @@ module.exports = function (webpackEnv) {
         "@hooks": path.resolve(__dirname, "../src/hooks"),
         "@lib": path.resolve(__dirname, "../src/lib"),
         "@routes": path.resolve(__dirname, "../src/routes"),
-        "@stories": path.resolve(__dirname, "../src/stories"),
+        "@store": path.resolve(__dirname, "../src/store"),
         "@styles": path.resolve(__dirname, "../src/styles"),
         "@typedef": path.resolve(__dirname, "../src/typedef"),
         "react-native": "react-native-web",

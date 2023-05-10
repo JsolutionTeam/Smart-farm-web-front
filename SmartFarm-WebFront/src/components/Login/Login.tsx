@@ -1,43 +1,40 @@
 import styled from "styled-components";
-import img from "@assets/image";
 
 type Props = {
   onChangeInputs: (e: { target: HTMLInputElement }) => void;
-  onClickLogin: () => Promise<void>;
+  login: () => Promise<void>;
 };
 
-const Login = ({ onChangeInputs, onClickLogin }: Props) => {
+const Login = ({ onChangeInputs, login }: Props) => {
   return (
     <Container>
       <header>
-        <h3>환경 데이터 모니터링</h3>
+        환경 데이터 <span>모니터링</span>
       </header>
-      <LoginContainer>
-        <p className="subtitle">로그인</p>
-        <Inputs>
-          <input
-            type="text"
-            name="id"
-            onChange={onChangeInputs}
-            autoFocus
-            placeholder="아이디"
-          />
-          <input
-            type="password"
-            name="passwd"
-            onChange={onChangeInputs}
-            onKeyPress={(e) => {
-              if (e.key === "Enter") {
-                onClickLogin();
-              }
-            }}
-            placeholder="비밀번호"
-          />
-          <button type="button" onClick={onClickLogin}>
-            로그인
-          </button>
-        </Inputs>
-      </LoginContainer>
+      <Inputs>
+        <header>로그인</header>
+        <input
+          type="text"
+          name="username"
+          onChange={onChangeInputs}
+          autoFocus
+          placeholder="아이디"
+        />
+        <input
+          type="password"
+          name="password"
+          onChange={onChangeInputs}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              login();
+            }
+          }}
+          placeholder="비밀번호"
+        />
+        <button type="button" onClick={login}>
+          로그인
+        </button>
+      </Inputs>
     </Container>
   );
 };
@@ -45,91 +42,86 @@ const Login = ({ onChangeInputs, onClickLogin }: Props) => {
 export default Login;
 
 const radius = "8px";
-const space = "60px";
 
-export const Container = styled.main`
-  min-height: 100vh;
+const Container = styled.main`
+  width: 100vw;
+  height: 100vh;
+  ${({ theme }) => theme.flex.col}
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.colors.gray1};
 
-  header {
-    line-height: 60px;
-    background-color: #fff;
-    text-align: center;
+  & > header {
+    margin-bottom: 62px;
+    font-size: 28px;
+    font-weight: bold;
+    color: ${({ theme }) => theme.colors.gray4};
 
-    @media ${({ theme }) => theme.media.mobile} {
-      padding-left: 20px;
-      text-align: left;
+    span {
+      color: ${({ theme }) => theme.colors.primary};
     }
   }
 `;
 
-export const LoginContainer = styled.section`
-  width: 500px;
-  ${({ theme }) => theme.flex.col}
-  align-items: center;
-  margin: 0 auto;
-  transform: translate(0, 50%);
+const Inputs = styled.section`
+  width: 536px;
+  ${({ theme }) => theme.flex.col};
+  padding: 40px;
   background-color: #fff;
-  border: 1px solid #d8d8d8;
-  border-radius: ${radius};
+  border-radius: 24px;
+  box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.08);
 
-  .subtitle {
-    margin: 40px 0 20px;
-    font-size: 18px;
+  header {
+    margin-bottom: 32px;
+    font-size: 24px;
     font-weight: 600;
+    color: ${({ theme }) => theme.colors.gray4};
   }
-
-  @media ${({ theme }) => theme.media.mobile} {
-    width: calc(100% - 40px);
-  }
-`;
-
-export const Inputs = styled.section`
-  width: 100%;
-  ${({ theme }) => theme.flex.col}
-  align-items: center;
-  padding: 20px;
 
   input {
-    width: 100%;
-    height: ${space};
-    border: 1px solid #d8d8d8;
-    background-position: 16px center;
+    height: 60px;
+    padding-left: 46px;
+    border: 1px solid ${({ theme }) => theme.colors.gray2};
+    background-position: 20px center;
     background-repeat: no-repeat;
-    padding-left: calc(16px + 18px + 8px);
     font-size: 16px;
 
-    &:first-child {
-      background-image: url(${img.IcId});
+    &:first-of-type {
+      background-image: url(/assets/icons/username.svg);
       border-radius: ${radius} ${radius} 0 0;
     }
 
-    &:nth-child(2) {
-      background-image: url(${img.IcPasswd});
+    &:last-of-type {
+      margin-bottom: 40px;
+      background-image: url(/assets/icons/password.svg);
       border-radius: 0 0 ${radius} ${radius};
     }
 
     &::placeholder {
-      color: #999999;
       font-size: 16px;
+      color: ${({ theme }) => theme.colors.gray3};
     }
 
     &:focus {
+      border-color: ${({ theme }) => theme.colors.primary};
       outline: none;
-      border-color: #45b298;
     }
 
     &:-webkit-direct-focus {
-      border-color: #45b298;
+      border-color: ${({ theme }) => theme.colors.primary};
     }
   }
 
   button {
-    width: 100%;
-    height: ${space};
-    margin-top: 40px;
-    background-color: #45b298;
-    border-radius: ${radius};
+    height: 60px;
+    font-size: 20px;
+    background-color: ${({ theme }) => theme.colors.primary};
+    border: 1px solid ${({ theme }) => theme.colors.primary};
+    border-radius: 6px;
     color: #fff;
-    font-size: 16px;
+  }
+
+  @media ${({ theme }) => theme.media.mobile} {
+    width: calc(100vw - 48px);
   }
 `;

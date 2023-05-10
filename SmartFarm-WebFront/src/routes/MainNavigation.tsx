@@ -1,42 +1,43 @@
 import styled from "styled-components";
 import { useMemo } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import useUser from "@hooks/useUser";
-import Header from "@components/Common/Header/Header";
+import useLocalStorage from "@hooks/useLocalStorage";
 import GNB from "@components/Common/GNB/GNB";
 import RealTimeContainer from "@components/RealTime/containers/RealTimeContainer";
 import PeriodContainer from "@components/Period/containers/PeriodContainer";
 import CompareContainer from "@components/Compare/containers/CompareContainer";
-import SiteContainer from "@components/Site/containers/SiteContainer";
-import SiteManageContainer from "@components/Site/containers/SiteManageContainer";
-import AccountManageContainer from "@components/Site/containers/AccountManageContainer";
+import AccountContainer from "@components/Account/containers/AccountContainer";
+import AccountManageContainer from "@components/Account/containers/AccountManageContainer";
+import SensorContainer from "@components/Sensor/containers/SensorContainer";
+import SensorManageContainer from "@components/Sensor/containers/SensorManageContainer";
+import TableNavigation from "./TableNavigation";
 
 const MainNavigation = () => {
-  const { getUser } = useUser();
+  const { getUser } = useLocalStorage();
   const role = useMemo(() => getUser().role, [getUser]);
 
   return (
     <Container>
-      <Header />
       <GNB />
       <Routes>
         <Route path="/realtime" element={<RealTimeContainer />} />
         <Route path="/period" element={<PeriodContainer />} />
         <Route path="/compare" element={<CompareContainer />} />
         {role === "ROLE_ADMIN" && (
-          <Route path="/site" element={<SiteContainer />} />
+          <Route path="/account" element={<TableNavigation type="농가" />}>
+            <Route index element={<AccountContainer />} />
+            <Route path="manage" element={<AccountManageContainer />} />
+          </Route>
         )}
         {role === "ROLE_ADMIN" && (
-          <Route path="/site/manage" element={<SiteManageContainer />} />
-        )}
-        {role === "ROLE_ADMIN" && (
-          <Route
-            path="/site/account/manage"
-            element={<AccountManageContainer />}
-          />
+          <Route path="/sensor" element={<TableNavigation type="센서" />}>
+            <Route index element={<SensorContainer />} />
+            <Route path="manage" element={<SensorManageContainer />} />
+          </Route>
         )}
         <Route path="*" element={<Navigate to="/realtime" />} />
       </Routes>
+      <Logout>로그아웃하기</Logout>
     </Container>
   );
 };
@@ -44,10 +45,23 @@ const MainNavigation = () => {
 export default MainNavigation;
 
 const Container = styled.section`
-  height: 100%;
+  min-height: 100vh;
   ${({ theme }) => theme.flex.col}
+  align-items: center;
+  background-color: ${({ theme }) => theme.colors.gray1};
+`;
+
+const Logout = styled.p`
+  display: none;
 
   @media ${({ theme }) => theme.media.mobile} {
-    margin-bottom: 40px;
+    display: block;
+    position: absolute;
+    left: 50%;
+    bottom: 100px;
+    transform: translate(-50%, 0);
+    font-size: 16px;
+    color: ${({ theme }) => theme.colors.gray4};
+    text-decoration: underline;
   }
 `;

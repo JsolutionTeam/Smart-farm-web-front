@@ -1,23 +1,20 @@
 import Compare from "../Compare";
 import { useState, useEffect, useCallback, useMemo } from "react";
-import useToken from "@hooks/useToken";
-import useUser from "@hooks/useUser";
-import useSelected from "@hooks/useSelected";
-import { apiRoute, requestSecureGet } from "@lib/api";
+import { requestSecureGet } from "@lib/api";
 import { setStartDate, setEndDate, getPrevMonth } from "@lib/date";
-import { ChartDataTypes } from "@typedef/components/Common/chart.data.types";
-import { ContentTypes } from "@typedef/assets/content.types";
-import { contents } from "@assets/content";
 import { PeriodTypes } from "@typedef/components/Period/period.types";
 import dayjs from "dayjs";
+import useLocalStorage from "@hooks/useLocalStorage";
+import { contents } from "@components/Common/Select/ContentSelect";
+import { ContentTypes } from "@components/Common/Select/containers/ContentSelectContainer";
+import useSite from "@hooks/store/useSite";
 
 const CompareContainer = () => {
-  const { getToken } = useToken();
-  const { getUser } = useUser();
-  const { getSelected } = useSelected();
+  const { getToken, getUser } = useLocalStorage();
+  const { selectedSite } = useSite();
   const siteSeq = useMemo(
-    () => (getSelected().id ? getSelected().id : getUser().siteSeq),
-    [getSelected, getUser]
+    () => (selectedSite ? selectedSite.id : getUser().siteSeq),
+    [getUser, selectedSite]
   );
   const [selectedDate, setSelectedDate] = useState<{
     first: { start: Date; end: Date };
@@ -60,31 +57,27 @@ const CompareContainer = () => {
     [selectedDate.first]
   );
   const [chartLabels, setChartLabels] = useState<string[]>([]);
-  const chartData: ChartDataTypes = useMemo(
-    () => ({
-      labels: chartLabels.map((label, index) => `Day ${index + 1}`),
-      datasets: [
-        {
-          label: "비교1",
-          data: filteredData.first.map((data) =>
-            Math.round(data[selectedContent.value])
-          ),
-          borderColor: "#058b6b",
-          backgroundColor: "#058b6b",
-        },
-        {
-          label: "비교2",
-          data: filteredData.second.map((data) =>
-            Math.round(data[selectedContent.value])
-          ),
-          borderColor: "#ffa20d",
-          backgroundColor: "#ffa20d",
-        },
-      ],
-    }),
-    [filteredData, chartLabels, selectedContent.value]
-  );
   const [isSecond, setIsSecond] = useState<number>(0);
+
+  const temp = useMemo(
+    () => ({
+      categories: chartLabels.map((label, index) => `Day ${index + 1}`),
+      data: {
+        first: filteredData.first.map((data) =>
+          Math.round(data[selectedContent.value])
+        ),
+        second: filteredData.second.map((data) =>
+          Math.round(data[selectedContent.value])
+        ),
+      },
+    }),
+    [
+      chartLabels,
+      filteredData.first,
+      filteredData.second,
+      selectedContent.value,
+    ]
+  );
 
   // 콘텐츠 선택
   const onChangeContent = (content: ContentTypes) => {
@@ -235,10 +228,9 @@ const CompareContainer = () => {
       }
 
       const { config, data } = await requestSecureGet<PeriodTypes[]>(
-        apiRoute.site +
-          `${siteSeq}/summary?startTime=${formatDate(
-            start!
-          )}&endTime=${formatDate(end!)}`,
+        `/v1/site/${siteSeq}/summary?startTime=${formatDate(
+          start!
+        )}&endTime=${formatDate(end!)}`,
         {},
         getToken()!
       );
@@ -282,7 +274,7 @@ const CompareContainer = () => {
       onChangeContent={onChangeContent}
       selectedDate={selectedDate}
       onChangeDate={onChangeDate}
-      chartData={chartData}
+      temp={temp}
     />
   );
 };

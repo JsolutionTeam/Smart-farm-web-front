@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const dev = "http://192.168.0.215:18080/api";
-const prod = "http://39.112.10.37/api";
+const DEV = "https://sf.j-sol.co.kr/api";
+const PROD = "https://sf.j-sol.co.kr/api";
 
-export const API_ORIGIN = process.env.NODE_ENV === "development" ? dev : prod;
+export const API_ORIGIN = process.env.NODE_ENV === "development" ? DEV : PROD;
 
 axios.defaults.baseURL = API_ORIGIN;
 
@@ -24,24 +24,42 @@ axios.interceptors.response.use(
     return res;
   },
   async (error) => {
-    if (error.response.status === 401) {
-      if (localStorage.getItem("@accessToken")) {
-        alert("장시간 미사용으로 로그아웃 되었습니다");
-        localStorage.removeItem("@accessToken");
-        localStorage.removeItem("@user");
+    console.log("interceptors", error);
+    const originalConfig = error.config;
+
+    if (error.response.status === 401 && !originalConfig._retry) {
+      originalConfig._retry = true;
+
+      const { config, data } = await requestPost<{
+        accessToken: "";
+        refreshToken: "";
+      }>(
+        "/auth/refresh",
+        {},
+        {
+          refreshToken: localStorage.getItem("@refreshToken"),
+        }
+      );
+
+      if (config.status >= 200 && config.status < 400) {
+        localStorage.setItem("@accessToken", data.accessToken);
+        localStorage.setItem("@refreshToken", data.refreshToken);
+
         window.location.reload();
+      } else {
+        if (localStorage.getItem("@accessToken")) {
+          alert("장시간 미사용으로 로그아웃 되었습니다.");
+          localStorage.removeItem("@accessToken");
+          localStorage.removeItem("@refreshToken");
+          localStorage.removeItem("@user");
+          window.location.reload();
+        }
       }
     }
+
+    return Promise.reject(error);
   }
 );
-
-export const apiRoute = {
-  auth: {
-    login: "/auth/login",
-    refresh: "/auth/refresh",
-  },
-  site: "/v1/site/",
-};
 
 export type BasicApiResponse<T> = {
   data: T;

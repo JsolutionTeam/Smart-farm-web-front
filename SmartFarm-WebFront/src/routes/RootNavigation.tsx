@@ -1,14 +1,14 @@
 import styled from "styled-components";
 import { Route, Routes } from "react-router";
-import useToken from "@hooks/useToken";
+import useLocalStorage from "@hooks/useLocalStorage";
 import MainNavigation from "./MainNavigation";
 import LoginContainer from "@components/Login/containers/LoginContainer";
 
 const RootNavigation = () => {
-  const { getToken } = useToken();
+  const { getToken } = useLocalStorage();
 
   return (
-    <Container>
+    <Contianer>
       <Routes>
         <Route
           path="*"
@@ -16,35 +16,24 @@ const RootNavigation = () => {
         />
       </Routes>
       <Copyright>
-        Copyright &copy; 환경 데이터 모니터링 All Rights Reserved.
+        Copyright &copy; 스마트팜 혁신밸리 All Rights Reserved.
       </Copyright>
-    </Container>
+    </Contianer>
   );
 };
 
 export default RootNavigation;
 
-const Container = styled.section`
-  width: 100vw;
-  height: 100%;
-  min-height: 100vh;
-  background-color: #edf1f2;
+const Contianer = styled.div`
   position: relative;
 `;
 
 // 카피라이트
-const Copyright = styled.p`
+const Copyright = styled.div`
   position: absolute;
   left: 50%;
   bottom: 40px;
   transform: translate(-50%, 0);
-  color: #999;
-
-  @media ${({ theme }) => theme.media.mobile} {
-    position: relative;
-    width: 100%;
-    /* margin-top: ; */
-    font-size: 12px;
-    text-align: center;
-  }
+  font-size: 16px;
+  color: ${({ theme }) => theme.colors.gray3};
 `;
