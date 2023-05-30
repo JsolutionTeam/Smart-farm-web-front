@@ -135,7 +135,7 @@ const AccountManageContainer = () => {
 
     if (config.status >= 200 && config.status < 400) {
       alert("성공적으로 등록이 완료되었습니다.");
-      navigate("/site/account");
+      navigate("/account");
     }
   };
 
@@ -156,7 +156,7 @@ const AccountManageContainer = () => {
 
     if (config.status >= 200 && config.status < 400) {
       alert("성공적으로 수정이 완료되었습니다.");
-      navigate("/site/account");
+      navigate("/account");
     }
   };
 
@@ -190,6 +190,7 @@ const AccountManageContainer = () => {
       setType("상세보기");
       getDataByAccountId(username);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

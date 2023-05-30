@@ -116,18 +116,17 @@ const RealTimeContainer = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       getData();
-    }, 5000);
+    }, 3000);
+
     return () => {
       clearInterval(interval);
     };
-  }, [getData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [siteSeq]);
 
   useEffect(() => {
     getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  console.log(selectedSite);
+  }, [getData]);
 
   return (
     <RealTime

@@ -1,5 +1,3 @@
-import { DefaultTheme } from "styled-components";
-
 // 디바이스별 분기점
 const media = {
   mobile: `screen and (max-width: 480px)`,
