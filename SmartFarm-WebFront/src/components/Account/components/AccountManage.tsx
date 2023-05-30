@@ -170,7 +170,7 @@ const AccountManage = ({
           </Td>
         </Tr>
         <Tr>
-          <p>전송 주기*</p>
+          <p>수신 주기*</p>
           <Td>
             <input
               name="siteDelay"
@@ -178,7 +178,7 @@ const AccountManage = ({
               min="60"
               value={inputs.siteDelay}
               onChange={onChangeInputs}
-              placeholder="전송주기를 입력해주세요. (단위: 초, 최소: 60)"
+              placeholder="수신 주기를 입력해주세요. (단위: 초, 최소: 60)"
             />
           </Td>
         </Tr>
