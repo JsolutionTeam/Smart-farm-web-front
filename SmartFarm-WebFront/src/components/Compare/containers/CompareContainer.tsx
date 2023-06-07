@@ -185,6 +185,7 @@ const CompareContainer = () => {
             co2: 0,
             co2RegTime: 0,
             earthTemperature: 0,
+            earthHumidity: 0,
             microRegTime: "",
             rainfall: 0,
             relativeHumidity: 0,
@@ -192,6 +193,8 @@ const CompareContainer = () => {
             temperature: 0,
             windDirection: 0,
             windSpeed: 0,
+            cropTemperature: 0,
+            cropHumidity: 0,
           });
         }
       }

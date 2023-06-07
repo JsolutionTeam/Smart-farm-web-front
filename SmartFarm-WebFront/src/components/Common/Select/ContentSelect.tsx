@@ -38,6 +38,10 @@ export const contents: ContentTypes[] = [
     value: "earthTemperature",
   },
   {
+    name: "대지 습도",
+    value: "earthHumidity",
+  },
+  {
     name: "풍향",
     value: "windDirection",
   },
@@ -45,6 +49,15 @@ export const contents: ContentTypes[] = [
     name: "풍속",
     value: "windSpeed",
   },
+  {
+    name: "작물 근접 온도",
+    value: "cropTemperature",
+  },
+  {
+    name: "작물 근접 습도",
+    value: "cropHumidity",
+  },
+
 ];
 
 const ContentSelect = ({
@@ -81,7 +94,7 @@ export default ContentSelect;
 const radius = "6px";
 
 const Container = styled.div`
-  width: 136px;
+  width: 148px;
   position: relative;
 `;
 

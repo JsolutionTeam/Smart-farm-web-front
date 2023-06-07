@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { AccountManageTypes } from "../containers/AccountManageContainer";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   type: "등록하기" | "상세보기";
@@ -24,6 +25,8 @@ const AccountManage = ({
   insert,
   update,
 }: Props) => {
+  const navigate = useNavigate();
+
   return (
     <Container>
       <header>농가 {type}</header>
@@ -166,9 +169,34 @@ const AccountManage = ({
             />
           </Td>
         </Tr>
+        <Tr>
+          <p>수신 주기*</p>
+          <Td>
+            <input
+              name="siteDelay"
+              // type="number"
+              min="60"
+              value={inputs.siteDelay}
+              onChange={onChangeInputs}
+              placeholder="수신 주기를 입력해주세요. (단위: 초, 최소: 60)"
+            />
+          </Td>
+        </Tr>
+        <Tr>
+          <p>apiKey</p>
+          <Td>
+            <input
+              name="siteApiKey"
+              value={inputs.siteApiKey}
+              onChange={onChangeInputs}
+              placeholder="제공 받은 apiKey를 입력해 주세요"
+            />
+          </Td>
+        </Tr>
       </TableContainer>
       <Buttons>
-        <button>취소</button>
+        <button
+          onClick={()=>navigate('/account')}>취소</button>
         <button
           onClick={type === "등록하기" ? insert : update}
           className="active"

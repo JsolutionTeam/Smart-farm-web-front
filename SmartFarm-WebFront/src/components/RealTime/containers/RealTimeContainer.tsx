@@ -9,6 +9,7 @@ export type SummaryTypes = {
   co2: number;
   co2RegTime: string;
   earthTemperature: number;
+  earthHumidity: number; // 대지 수분 함수율
   microRegTime: string;
   rainfall: number;
   relativeHumidity: number;
@@ -17,6 +18,8 @@ export type SummaryTypes = {
   temperature: number;
   windDirection: number;
   windSpeed: number;
+  cropTemperature: number; // 작물 근접 온도
+  cropHumidity: number; // 작물 근접 습도
 };
 
 type RealTimeTypes = SummaryTypes & {
@@ -32,6 +35,7 @@ const RealTimeContainer = () => {
     co2: 0,
     co2RegTime: "",
     earthTemperature: 0,
+    earthHumidity: 0,
     microRegTime: "",
     rainfall: 0,
     relativeHumidity: 0,
@@ -40,6 +44,8 @@ const RealTimeContainer = () => {
     temperature: 0,
     windDirection: 0,
     windSpeed: 0,
+    cropTemperature: 0,
+    cropHumidity: 0,
     rateOfOpening: 0,
     openSignal: 0,
     openDataRegTime: "",
@@ -83,6 +89,12 @@ const RealTimeContainer = () => {
         icon: "earthTemperature",
       },
       {
+        name: "대지습도",
+        value: data.earthHumidity,
+        unit: "%",
+        icon: "earthHumidity",
+      },
+      {
         name: "풍향",
         value: data.windDirection,
         unit: "°",
@@ -93,6 +105,18 @@ const RealTimeContainer = () => {
         value: data.windSpeed,
         unit: "m/s",
         icon: "windSpeed",
+      },
+      {
+        name: "작물 근접 온도",
+        value: data.cropTemperature,
+        unit: "°C",
+        icon: "cropTemperature",
+      },
+      {
+        name: "작물 근접 습도",
+        value: data.cropHumidity,
+        unit: "%",
+        icon: "cropHumidity",
       },
     ],
     [data]
@@ -116,18 +140,17 @@ const RealTimeContainer = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       getData();
-    }, 5000);
+    }, 3000);
+
     return () => {
       clearInterval(interval);
     };
-  }, [getData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [siteSeq]);
 
   useEffect(() => {
     getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  console.log(selectedSite);
+  }, [getData]);
 
   return (
     <RealTime

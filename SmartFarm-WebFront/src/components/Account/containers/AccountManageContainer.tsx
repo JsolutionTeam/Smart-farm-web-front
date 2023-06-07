@@ -20,6 +20,8 @@ export type AccountManageTypes = {
   siteLocation: string; // 지역
   siteName: string; // 농가명
   username: string; // 아이디
+  siteApiKey: string;
+  siteDelay: number;
 };
 
 const AccountManageContainer = () => {
@@ -37,6 +39,8 @@ const AccountManageContainer = () => {
     siteCrop: "",
     siteLocation: "",
     siteName: "",
+    siteApiKey: "",
+    siteDelay: 60,
     username: "",
   });
   const [msgs, setMsgs] = useState<{ [inputs in "username"]: string }>({
@@ -52,11 +56,16 @@ const AccountManageContainer = () => {
         return;
       }
     }
-
-    setInputs((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    if(name === "siteDelay")
+      setInputs((prev) => ({
+        ...prev,
+        siteDelay: parseInt(value),
+      }));
+    else
+      setInputs((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
   };
 
   const onChangeMsgs = (input: "username", msg: string) => {
@@ -114,6 +123,8 @@ const AccountManageContainer = () => {
       /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputs.email) === false
     )
       message = "올바른 이메일 형식으로";
+    else if(!inputs.siteDelay) message = "수신 주기(단위: 초, 최소: 60)를"
+    else if(inputs.siteDelay < 60) message = "수신 주기는 최소 60초로"
 
     return message;
   };
@@ -179,6 +190,8 @@ const AccountManageContainer = () => {
         siteLocation: data.site.location,
         siteName: data.site.name,
         username: data.username,
+        siteApiKey: data.site.apiKey,
+        siteDelay: data.site.delay,
       });
     }
   };

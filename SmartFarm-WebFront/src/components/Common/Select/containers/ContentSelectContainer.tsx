@@ -7,12 +7,15 @@ export type ContentTypes = {
     | "co2"
     | "co2RegTime"
     | "earthTemperature"
+    | "earthHumidity"
     | "rainfall"
     | "relativeHumidity"
     | "solarRadiation"
     | "temperature"
     | "windDirection"
-    | "windSpeed";
+    | "windSpeed"
+    | "cropTemperature"
+    | "cropHumidity";
 };
 
 type Props = {
