@@ -102,11 +102,12 @@ const Container = styled.main`
 
 const ContentContainer = styled.section`
   width: 941px;
-  height: 750px;
+  height: 831px;
   padding: 40px;
-
+  /* overflow: scroll; */
+  /* overflow-x: hidden; */
   header {
-    margin-bottom: 90px;
+    margin-bottom: 40px;
   }
 
   @media ${({ theme }) => theme.media.mobile} {
@@ -131,7 +132,7 @@ const Contents = styled.article`
 const Content = styled.div`
   ${({ theme }) => theme.flex.col}
   align-items: center;
-  padding: 20px;
+  padding: 15px;
   background-color: ${({ theme }) => theme.colors.primaryBackground};
   border: 1px solid ${({ theme }) => theme.colors.gray2};
   border-radius: 8px;

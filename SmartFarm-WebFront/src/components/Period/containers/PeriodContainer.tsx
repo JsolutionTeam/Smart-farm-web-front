@@ -126,6 +126,7 @@ const PeriodContainer = () => {
           co2: 0,
           co2RegTime: "",
           earthTemperature: 0,
+          earthHumidity: 0,
           microRegTime: "",
           rainfall: 0,
           relativeHumidity: 0,
@@ -134,6 +135,8 @@ const PeriodContainer = () => {
           temperature: 0,
           windDirection: 0,
           windSpeed: 0,
+          cropTemperature: 0,
+          cropHumidity: 0,
         };
       }
     });
