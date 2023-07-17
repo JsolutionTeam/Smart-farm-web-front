@@ -2,8 +2,9 @@ import axios from "axios";
 
 const DEV = "http://192.168.0.215:18080/api";
 const PROD = "https://sf.j-sol.co.kr/api";
+const SMARTFARM = "http://39.112.10.37/api";
 
-export const API_ORIGIN = process.env.NODE_ENV === "development" ? DEV : PROD;
+export const API_ORIGIN = process.env.NODE_ENV === "development" ? DEV : SMARTFARM;
 
 axios.defaults.baseURL = API_ORIGIN;
 
