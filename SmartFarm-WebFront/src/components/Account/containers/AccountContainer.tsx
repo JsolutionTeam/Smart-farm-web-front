@@ -4,16 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useLocalStorage from "@hooks/useLocalStorage";
 import { requestSecureDelete, requestSecureGet } from "@lib/api";
 import { SiteTypes } from "@store/site/actions";
-
-export type AccountTypes = {
-  address: ""; // 주소
-  email: ""; // 이메일
-  name: ""; // 관리자명
-  phone: ""; // 전화번호
-  role: "ROLE_ADMIN" | "ROLE_USER";
-  site: SiteTypes;
-  username: string; // 아이디 (관리자명)
-};
+import {AccountTypes} from "@typedef/components/Site/account.types";
 
 const AccountContainer = () => {
   const navigate = useNavigate();
