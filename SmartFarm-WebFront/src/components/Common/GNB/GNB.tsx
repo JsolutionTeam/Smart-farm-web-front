@@ -27,7 +27,7 @@ const GNB = () => {
           // 눌렀을때 실시간 페이지로 넘어가게
           navigate("/realtime");
         }}>
-          환경 데이터 <span>모니터링</span>
+          경상북도 환경 데이터 <span>모니터링</span>
         </p>
         {role === "ROLE_ADMIN" && (
           <SiteSelect>
