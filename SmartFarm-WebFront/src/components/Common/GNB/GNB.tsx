@@ -78,6 +78,9 @@ const Header = styled.header`
     span {
       color: ${({theme}) => theme.colors.primary};
     }
+    @media ${({theme}) => theme.media.mobile} {
+      margin-top: 28px;
+    }
   }
 
   .mouseHover {
@@ -86,7 +89,10 @@ const Header = styled.header`
 
   @media ${({theme}) => theme.media.mobile} {
     justify-content: space-between;
-    padding: 20px;
+    align-items: flex-start;
+
+    padding: 10px;
+    margin-bottom: 0px;
   }
 `;
 
@@ -97,6 +103,7 @@ const SiteSelect = styled.div`
   @media ${({ theme }) => theme.media.mobile} {
     position: relative;
     right: 0;
+    margin-top: 28px;
   }
 `;
 
@@ -156,11 +163,13 @@ const Logout = styled.button`
   
   display: flex;
   flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 
   @media ${({ theme }) => theme.media.mobile} {
-    display: none;
+    position: absolute;
+    left: 4px;
+    
   }
 `;
