@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import useLocalStorage from "@hooks/useLocalStorage";
 import GNB from "@components/Common/GNB/GNB";
@@ -13,8 +13,15 @@ import SensorManageContainer from "@components/Sensor/containers/SensorManageCon
 import TableNavigation from "./TableNavigation";
 
 const MainNavigation = () => {
-  const { getUser } = useLocalStorage();
+  const { clearToken, getUser, clearUser } = useLocalStorage();
+
   const role = useMemo(() => getUser().role, [getUser]);
+
+  const logout = useCallback(() => {
+    clearToken();
+    clearUser();
+    window.location.reload();
+  },[clearToken,clearUser])
 
   return (
     <Container>
@@ -37,7 +44,7 @@ const MainNavigation = () => {
         )}
         <Route path="*" element={<Navigate to="/realtime" />} />
       </Routes>
-      <Logout>로그아웃하기</Logout>
+      <Logout onClick={logout}>로그아웃하기</Logout>
     </Container>
   );
 };
