@@ -1,28 +1,33 @@
 import styled from "styled-components";
-import { useMemo } from "react";
-import { NavLink } from "react-router-dom";
+import { useCallback, useMemo } from "react";
+import {NavLink, useNavigate} from "react-router-dom";
 import useLocalStorage from "@hooks/useLocalStorage";
 import SiteSelectContainer from "../Select/containers/SiteSelectContainer";
 import { FiLogOut } from "react-icons/fi";
 
 const GNB = () => {
+  const navigate = useNavigate();
   const { clearToken, getUser, clearUser } = useLocalStorage();
   const role = useMemo(() => getUser().role, [getUser]);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     clearToken();
     clearUser();
     window.location.reload();
-  };
+  },[clearToken,clearUser])
 
   return (
     <Container>
       <Header>
         <Logout onClick={logout}>
+          로그아웃
           <FiLogOut />
         </Logout>
-        <p>
-          환경 데이터 <span>모니터링</span>
+        <p className="mouseHover" onClick={() => {
+          // 눌렀을때 실시간 페이지로 넘어가게
+          navigate("/realtime");
+        }}>
+          경상북도 환경 데이터 <span>모니터링</span>
         </p>
         {role === "ROLE_ADMIN" && (
           <SiteSelect>
@@ -59,7 +64,7 @@ const Container = styled.section`
 const Header = styled.header`
   width: 100%;
   height: 90px;
-  ${({ theme }) => theme.flex.row}
+  ${({theme}) => theme.flex.row}
   align-items: center;
   justify-content: center;
   margin-bottom: 22px;
@@ -68,14 +73,23 @@ const Header = styled.header`
   & > p {
     font-size: 28px;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors.gray4};
+    color: ${({theme}) => theme.colors.gray4};
 
     span {
-      color: ${({ theme }) => theme.colors.primary};
+      color: ${({theme}) => theme.colors.primary};
+    }
+    @media ${({theme}) => theme.media.mobile} {
+      justify-content: space-between;
+      padding: 20px;
+      font-size: 24px;
     }
   }
 
-  @media ${({ theme }) => theme.media.mobile} {
+  .mouseHover {
+    cursor: pointer;
+  }
+
+  @media ${({theme}) => theme.media.mobile} {
     justify-content: space-between;
     padding: 20px;
   }
@@ -144,6 +158,12 @@ const Logout = styled.button`
   font-size: 16px;
   background: none;
   border: none;
+  
+  display: flex;
+  flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
 
   @media ${({ theme }) => theme.media.mobile} {
     display: none;

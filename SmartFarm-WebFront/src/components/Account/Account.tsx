@@ -1,107 +1,109 @@
 import styled from "styled-components";
-import { AccountTypes } from "./containers/AccountContainer";
-import { FiX } from "react-icons/fi";
+import {FiX} from "react-icons/fi";
+import {AccountTypes, roleKor} from "@typedef/components/Site/account.types";
 
 type Props = {
-  accounts: AccountTypes[];
-  filter: {
-    type: string;
-    value: string;
-  };
-  onChangeFilter: (key: "type" | "value", value: string) => void;
-  onKeyPressSearch: () => void;
-  onClickFilterClear: () => void;
-  manage: (username?: string) => void;
-  deleteAccount: (username: string) => Promise<void>;
+    accounts: AccountTypes[];
+    filter: {
+        type: string;
+        value: string;
+    };
+    onChangeFilter: (key: "type" | "value", value: string) => void;
+    onKeyPressSearch: () => void;
+    onClickFilterClear: () => void;
+    manage: (username?: string) => void;
+    deleteAccount: (username: string) => Promise<void>;
 };
 
 const Account = ({
-  accounts,
-  filter,
-  onChangeFilter,
-  onKeyPressSearch,
-  onClickFilterClear,
-  manage,
-  deleteAccount,
-}: Props) => {
-  const headers = [
-    "관리자명",
-    "아이디",
-    "농가번호",
-    "농가명",
-    "지역",
-    "작물",
-    "수정",
-    "삭제",
-  ];
+                     accounts,
+                     filter,
+                     onChangeFilter,
+                     onKeyPressSearch,
+                     onClickFilterClear,
+                     manage,
+                     deleteAccount,
+                 }: Props) => {
+    const headers = [
+        "관리자명",
+        "아이디",
+        "권한",
+        "농가번호",
+        "농가명",
+        "지역",
+        "작물",
+        "수정",
+        "삭제",
+    ];
 
-  return (
-    <Container>
-      <header>
-        <Search>
-          <select onChange={(e) => onChangeFilter("type", e.target.value)}>
-            <option value="name">관리자명</option>
-            <option value="siteName">농가명</option>
-            <option value="siteLocation">지역</option>
-            <option value="siteCrop">작물</option>
-          </select>
-          <input
-            value={filter.value}
-            onChange={(e) => onChangeFilter("value", e.target.value)}
-            onKeyPress={(e) => {
-              if (e.key === "Enter") {
-                onKeyPressSearch();
-              }
-            }}
-            placeholder="검색어 입력 후 Enter 키를 눌러주세요"
-          />
-          {filter.value && (
-            <button onClick={onClickFilterClear}>
-              <FiX />
-            </button>
-          )}
-        </Search>
-        <button onClick={() => manage()} className="insert">
-          + 농가등록
-        </button>
-      </header>
-      <TableContainer>
-        <Table>
-          <thead>
-            <tr>
-              {headers.map((th) => (
-                <th key={th}>{th}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {accounts.map((account) => (
-              <tr key={account.username}>
-                <td>{account.name}</td>
-                <td>{account.username}</td>
-                <td>{account.site.id}</td>
-                <td>{account.site.name}</td>
-                <td>{account.site.location}</td>
-                <td>{account.site.crop}</td>
-                <td>
-                  <button
-                    onClick={() => manage(account.username)}
-                    className="edit"
-                  />
-                </td>
-                <td>
-                  <button
-                    onClick={() => deleteAccount(account.username)}
-                    className="delete"
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </TableContainer>
-    </Container>
-  );
+    return (
+        <Container>
+            <header>
+                <Search>
+                    <select onChange={(e) => onChangeFilter("type", e.target.value)}>
+                        <option value="name">관리자명</option>
+                        <option value="siteName">농가명</option>
+                        <option value="siteLocation">지역</option>
+                        <option value="siteCrop">작물</option>
+                    </select>
+                    <input
+                        value={filter.value}
+                        onChange={(e) => onChangeFilter("value", e.target.value)}
+                        onKeyPress={(e) => {
+                            if (e.key === "Enter") {
+                                onKeyPressSearch();
+                            }
+                        }}
+                        placeholder="검색어 입력 후 Enter 키를 눌러주세요"
+                    />
+                    {filter.value && (
+                        <button onClick={onClickFilterClear}>
+                            <FiX/>
+                        </button>
+                    )}
+                </Search>
+                <button onClick={() => manage()} className="insert">
+                    + 농가등록
+                </button>
+            </header>
+            <TableContainer>
+                <Table>
+                    <thead>
+                    <tr>
+                        {headers.map((th) => (
+                            <th key={th}>{th}</th>
+                        ))}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {accounts.map((account) => (
+                        <tr key={account.username}>
+                            <td>{account.name}</td>
+                            <td>{account.username}</td>
+                            <td>{roleKor(account.role)}</td>
+                            <td>{account.site?.id}</td>
+                            <td>{account.site?.name}</td>
+                            <td>{account.site?.location}</td>
+                            <td>{account.site?.crop}</td>
+                            <td>
+                                <button
+                                    onClick={() => manage(account.username)}
+                                    className="edit"
+                                />
+                            </td>
+                            <td>
+                                <button
+                                    onClick={() => deleteAccount(account.username)}
+                                    className="delete"
+                                />
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </Table>
+            </TableContainer>
+        </Container>
+    );
 };
 
 export default Account;
@@ -113,14 +115,14 @@ export const Container = styled.main`
 
   header {
     height: 72px;
-    ${({ theme }) => theme.flex.row}
+    ${({theme}) => theme.flex.row}
     align-items: center;
     justify-content: space-between;
 
     .insert {
       width: 113px;
       height: 40px;
-      background-color: ${({ theme }) => theme.colors.primary};
+      background-color: ${({theme}) => theme.colors.primary};
       border: none;
       border-radius: 6px;
       color: #fff;
@@ -130,7 +132,7 @@ export const Container = styled.main`
     }
   }
 
-  @media ${({ theme }) => theme.media.mobile} {
+  @media ${({theme}) => theme.media.mobile} {
     padding: 0 20px;
     overflow-x: scroll;
 
@@ -150,19 +152,19 @@ export const Container = styled.main`
 export const Search = styled.div`
   width: 400px;
   height: 40px;
-  ${({ theme }) => theme.flex.row}
+  ${({theme}) => theme.flex.row}
   position: relative;
-  color: ${({ theme }) => theme.colors.gray3};
+  color: ${({theme}) => theme.colors.gray3};
 
   select {
     width: 120px;
     height: 100%;
     padding: 0 15px;
     background-color: #fff;
-    border: 1px solid ${({ theme }) => theme.colors.gray2};
+    border: 1px solid ${({theme}) => theme.colors.gray2};
     border-right: 0;
     border-radius: 6px 0 0 6px;
-    color: ${({ theme }) => theme.colors.black};
+    color: ${({theme}) => theme.colors.black};
     font-size: 16px;
 
     // 화살표 숨기기
@@ -175,18 +177,18 @@ export const Search = styled.div`
     flex: 1;
     height: 100%;
     padding-left: 15px;
-    border: 1px solid ${({ theme }) => theme.colors.gray2};
+    border: 1px solid ${({theme}) => theme.colors.gray2};
     border-radius: 0 6px 6px 0;
     font-size: 16px;
 
     &::placeholder {
-      color: ${({ theme }) => theme.colors.gray3};
+      color: ${({theme}) => theme.colors.gray3};
     }
   }
 
   button {
     width: 40px;
-    ${({ theme }) => theme.flex.row}
+    ${({theme}) => theme.flex.row}
     align-items: center;
     justify-content: center;
     position: absolute;
@@ -198,7 +200,7 @@ export const Search = styled.div`
     font-size: 16px;
   }
 
-  @media ${({ theme }) => theme.media.mobile} {
+  @media ${({theme}) => theme.media.mobile} {
     width: 100%;
     margin-bottom: 32px;
 
@@ -210,7 +212,7 @@ export const Search = styled.div`
 export const TableContainer = styled.section`
   width: fit-content;
 
-  @media ${({ theme }) => theme.media.mobile} {
+  @media ${({theme}) => theme.media.mobile} {
     width: 100%;
     overflow-x: scroll;
   }
@@ -222,10 +224,10 @@ export const Table = styled.table`
 
   thead {
     line-height: 72px;
-    border-bottom: 1px solid ${({ theme }) => theme.colors.gray2};
-    color: ${({ theme }) => theme.colors.gray3};
+    border-bottom: 1px solid ${({theme}) => theme.colors.gray2};
+    color: ${({theme}) => theme.colors.gray3};
     font-size: 20px;
-    font-weight: 500s;
+    font-weight: 500;
     text-align: left;
 
     th {
@@ -239,7 +241,7 @@ export const Table = styled.table`
   tbody {
     tr {
       height: 72px;
-      border-bottom: 1px solid ${({ theme }) => theme.colors.gray2};
+      border-bottom: 1px solid ${({theme}) => theme.colors.gray2};
       font-size: 20px;
 
       td {
@@ -254,7 +256,7 @@ export const Table = styled.table`
           height: 40px;
           display: block;
           margin: auto;
-          background-color: ${({ theme }) => theme.colors.primaryBackground};
+          background-color: ${({theme}) => theme.colors.primaryBackground};
           border: none;
           border-radius: 6px;
           background-repeat: no-repeat;
@@ -276,7 +278,7 @@ export const Table = styled.table`
     }
   }
 
-  @media ${({ theme }) => theme.media.mobile} {
+  @media ${({theme}) => theme.media.mobile} {
     width: 1000px;
 
     td {
