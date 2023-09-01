@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import {NavLink, useNavigate} from "react-router-dom";
 import useLocalStorage from "@hooks/useLocalStorage";
 import SiteSelectContainer from "../Select/containers/SiteSelectContainer";
@@ -10,11 +10,11 @@ const GNB = () => {
   const { clearToken, getUser, clearUser } = useLocalStorage();
   const role = useMemo(() => getUser().role, [getUser]);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     clearToken();
     clearUser();
     window.location.reload();
-  };
+  },[clearToken,clearUser])
 
   return (
     <Container>
@@ -27,7 +27,7 @@ const GNB = () => {
           // 눌렀을때 실시간 페이지로 넘어가게
           navigate("/realtime");
         }}>
-          환경 데이터 <span>모니터링</span>
+          경상북도 환경 데이터 <span>모니터링</span>
         </p>
         {role === "ROLE_ADMIN" && (
           <SiteSelect>
@@ -77,6 +77,11 @@ const Header = styled.header`
 
     span {
       color: ${({theme}) => theme.colors.primary};
+    }
+    @media ${({theme}) => theme.media.mobile} {
+      justify-content: space-between;
+      padding: 20px;
+      font-size: 24px;
     }
   }
 

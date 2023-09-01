@@ -9,7 +9,7 @@ const Login = ({ onChangeInputs, login }: Props) => {
   return (
     <Container>
       <header>
-        환경 데이터 <span>모니터링</span>
+       경상북도 환경 데이터 <span>모니터링</span>
       </header>
       <Inputs>
         <header>로그인</header>
