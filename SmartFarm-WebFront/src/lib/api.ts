@@ -6,7 +6,7 @@ const apiAddress = {
     SMARTFARM: "http://39.112.10.37/api",
 }
 
-export const API_ORIGIN = process.env.NODE_ENV === "development" ? apiAddress.DEV : apiAddress.SMARTFARM;
+export const API_ORIGIN = process.env.NODE_ENV === "development" ? apiAddress.DEV : apiAddress.PROD;
 
 axios.defaults.baseURL = API_ORIGIN;
 
