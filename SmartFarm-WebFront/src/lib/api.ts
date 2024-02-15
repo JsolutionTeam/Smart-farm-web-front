@@ -2,7 +2,7 @@ import axios from "axios";
 
 const apiAddress = {
     DEV: "http://192.168.0.215:18080/api",
-    PROD: "https://sf.j-sol.co.kr/api",
+  PROD: 'https://api-sf.j-sol.co.kr/api',
     SMARTFARM: "http://39.112.10.37/api",
 }
 
