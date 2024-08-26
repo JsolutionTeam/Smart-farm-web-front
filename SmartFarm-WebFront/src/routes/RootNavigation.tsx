@@ -15,9 +15,10 @@ const RootNavigation = () => {
           element={getToken() ? <MainNavigation /> : <LoginContainer />}
         />
       </Routes>
-      <Copyright>
-        Copyright &copy; 스마트팜 혁신밸리 All Rights Reserved.
-      </Copyright>
+      {/* 2024-08-26 경북농기원 박사님 요청으로 제거, 관련없는 내용이라 삭제요청받음 */}
+      {/*<Copyright>*/}
+      {/*  Copyright &copy; 스마트팜 혁신밸리 All Rights Reserved.*/}
+      {/*</Copyright>*/}
     </Contianer>
   );
 };
