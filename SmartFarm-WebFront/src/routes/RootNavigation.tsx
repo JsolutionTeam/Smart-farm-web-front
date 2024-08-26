@@ -30,11 +30,11 @@ const Contianer = styled.div`
 `;
 
 // 카피라이트
-const Copyright = styled.div`
-  position: absolute;
-  left: 50%;
-  bottom: 40px;
-  transform: translate(-50%, 0);
-  font-size: 16px;
-  color: ${({ theme }) => theme.colors.gray3};
-`;
+// const Copyright = styled.div`
+//   position: absolute;
+//   left: 50%;
+//   bottom: 40px;
+//   transform: translate(-50%, 0);
+//   font-size: 16px;
+//   color: ${({ theme }) => theme.colors.gray3};
+// `;
