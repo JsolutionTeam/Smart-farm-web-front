@@ -8,7 +8,6 @@ type Props = {
     inputs: AccountManageTypes;
     onChangeInputs: (e: { target: HTMLInputElement }) => void;
     validationUsername: () => Promise<void>;
-    validationSiteSeq: () => Promise<void>;
     onClickClearUsername: () => void;
     onClickClearSiteSeq: () => void;
     onClickRole: (selected: "ADMIN" | "USER") => void;
@@ -22,7 +21,6 @@ const AccountManage = ({
                            inputs,
                            onChangeInputs,
                            validationUsername,
-                           validationSiteSeq,
                            onClickClearUsername,
                            onClickClearSiteSeq,
                            onClickRole,
@@ -39,7 +37,7 @@ const AccountManage = ({
             <header>농가 {type}</header>
             <TableContainer>
                 <Tr>
-                    <p>사용자명*</p>
+                    <p>사용자명 *</p>
                     <Td>
                         <input
                             name="name"
@@ -117,8 +115,6 @@ const AccountManage = ({
                             name="siteSeq"
                             value={inputs.siteSeq || ''}
                             onChange={onChangeInputs}
-                            onBlur={validationSiteSeq}
-                            placeholder="중복저장되지 않습니다!"
                             // type이 등록하기가 아니라면 수정불가
                             disabled={type !== "등록하기"}
                         />

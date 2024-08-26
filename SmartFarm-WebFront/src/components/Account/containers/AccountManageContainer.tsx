@@ -26,7 +26,7 @@ const AccountManageContainer = () => {
         siteLocation: "",
         siteName: "",
         siteApiKey: "",
-        siteDelay: 60,
+        siteDelay: 600,
     });
     const [msgs, setMsgs] = useState<{ username: string; siteSeq: string }>({
         username: "",
