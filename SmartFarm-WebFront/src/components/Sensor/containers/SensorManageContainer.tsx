@@ -201,7 +201,7 @@ const SensorManageContainer = () => {
 
   const getSites = async () => {
     const { config, data } = await requestSecureGet<SiteTypes[]>(
-      "/v1/site/list",
+      "/v1/sites",
       {},
       getToken()!
     );

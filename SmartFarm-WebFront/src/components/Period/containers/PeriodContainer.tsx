@@ -167,7 +167,7 @@ const PeriodContainer = () => {
 
     const getData = async () => {
       const { config, data } = await requestSecureGet<SummaryTypes[]>(
-        `/v1/site/${siteSeq}/summary?${formatDate()}`,
+        `/v1/sites/${siteSeq}/summary?${formatDate()}`,
         {},
         getToken()!
       );

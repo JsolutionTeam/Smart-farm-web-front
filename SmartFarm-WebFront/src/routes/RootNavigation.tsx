@@ -15,9 +15,10 @@ const RootNavigation = () => {
           element={getToken() ? <MainNavigation /> : <LoginContainer />}
         />
       </Routes>
-      <Copyright>
-        Copyright &copy; 스마트팜 혁신밸리 All Rights Reserved.
-      </Copyright>
+      {/* 2024-08-26 경북농기원 박사님 요청으로 제거, 관련없는 내용이라 삭제요청받음 */}
+      {/*<Copyright>*/}
+      {/*  Copyright &copy; 스마트팜 혁신밸리 All Rights Reserved.*/}
+      {/*</Copyright>*/}
     </Contianer>
   );
 };
@@ -29,11 +30,11 @@ const Contianer = styled.div`
 `;
 
 // 카피라이트
-const Copyright = styled.div`
-  position: absolute;
-  left: 50%;
-  bottom: 40px;
-  transform: translate(-50%, 0);
-  font-size: 16px;
-  color: ${({ theme }) => theme.colors.gray3};
-`;
+// const Copyright = styled.div`
+//   position: absolute;
+//   left: 50%;
+//   bottom: 40px;
+//   transform: translate(-50%, 0);
+//   font-size: 16px;
+//   color: ${({ theme }) => theme.colors.gray3};
+// `;

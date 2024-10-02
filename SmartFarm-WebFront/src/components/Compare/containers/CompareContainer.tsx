@@ -231,7 +231,7 @@ const CompareContainer = () => {
       }
 
       const { config, data } = await requestSecureGet<PeriodTypes[]>(
-        `/v1/site/${siteSeq}/summary?startTime=${formatDate(
+        `/v1/sites/${siteSeq}/summary?startTime=${formatDate(
           start!
         )}&endTime=${formatDate(end!)}`,
         {},
