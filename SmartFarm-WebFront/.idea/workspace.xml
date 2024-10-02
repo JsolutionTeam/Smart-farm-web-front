@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1980ee07-c310-4a40-b527-c5bb9fbecc11" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Common/Select/containers/SiteSelectContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Common/Select/containers/SiteSelectContainer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Compare/containers/CompareContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Compare/containers/CompareContainer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Period/containers/PeriodContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Period/containers/PeriodContainer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/RealTime/containers/RealTimeContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/RealTime/containers/RealTimeContainer.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Sensor/containers/SensorManageContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Sensor/containers/SensorManageContainer.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -113,7 +115,7 @@
       <updated>1724647755988</updated>
       <workItem from="1724647757055" duration="158000" />
       <workItem from="1725930203745" duration="1257000" />
-      <workItem from="1727834501778" duration="295000" />
+      <workItem from="1727834501778" duration="412000" />
     </task>
     <servers />
   </component>
