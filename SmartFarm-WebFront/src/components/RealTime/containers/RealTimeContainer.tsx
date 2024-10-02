@@ -128,7 +128,7 @@ const RealTimeContainer = () => {
 
   const getData = useCallback(async () => {
     const { config, data } = await requestSecureGet<RealTimeTypes>(
-      `/v1/site/${siteSeq}/realtime`,
+      `/v1/sites/${siteSeq}/realtime`,
       {},
       getToken()!
     );
