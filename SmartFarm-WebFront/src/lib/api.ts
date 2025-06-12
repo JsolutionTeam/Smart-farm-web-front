@@ -5,7 +5,8 @@ const apiAddress = {
   PROD: 'https://api-sf.j-sol.co.kr/api',
     // SMARTFARM: "http://39.112.10.37/api",
   // 2024.10.17 IP 변경
-  SMARTFARM: "http://39.116.53.5/api",
+  // 2025.06.12 IP 변경
+  SMARTFARM: "http://218.234.194.134/api",
 }
 
 export const API_ORIGIN = process.env.NODE_ENV === "development" ? apiAddress.DEV : apiAddress.SMARTFARM;
